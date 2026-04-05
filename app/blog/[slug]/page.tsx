@@ -9,6 +9,12 @@ import {
 } from "@/lib/blogs";
 import { DEFAULT_OG_IMAGE_PATH, SITE_URL } from "@/lib/site";
 
+/** ISR: refresh article + slug list cache at most every 10s. */
+export const revalidate = 10;
+
+/** Allow new posts at URLs not in `generateStaticParams` (on-demand). */
+export const dynamicParams = true;
+
 type PageProps = {
   params: Promise<{ slug: string }>;
 };

@@ -1,5 +1,12 @@
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { supabase, isSupabaseConfigured } from "@/lib/supabaseClient";
+
+/** Matches `export const revalidate` on blog routes; override with BLOG_REVALIDATE_SECONDS. */
+const BLOG_REVALIDATE_SECONDS = Math.max(
+  1,
+  Number(process.env.BLOG_REVALIDATE_SECONDS ?? "10"),
+);
 
 const LINGUATUDE_SITE_KEY =
   process.env.NEXT_PUBLIC_BLOG_SITE_KEY ?? "linguatude";
@@ -217,7 +224,7 @@ async function loadLinguatudeBlogPageSeo(
   }
 }
 
-export async function getBlogIndexDataForLinguatude(): Promise<BlogIndexDataForLinguatude> {
+async function fetchBlogIndexDataForLinguatudeUncached(): Promise<BlogIndexDataForLinguatude> {
   const siteId = await getSiteIdForLinguatude();
 
   if (!siteId) {
@@ -281,7 +288,16 @@ export async function getBlogIndexDataForLinguatude(): Promise<BlogIndexDataForL
   };
 }
 
-export async function getBlogBySlugForLinguatude(
+/** Supabase-backed index; Data Cache revalidate mirrors `fetch(..., { next: { revalidate } })`. */
+export async function getBlogIndexDataForLinguatude(): Promise<BlogIndexDataForLinguatude> {
+  return unstable_cache(
+    () => fetchBlogIndexDataForLinguatudeUncached(),
+    ["blog-index", LINGUATUDE_SITE_KEY],
+    { revalidate: BLOG_REVALIDATE_SECONDS },
+  )();
+}
+
+async function fetchBlogBySlugForLinguatudeUncached(
   slug: string,
 ): Promise<BlogPostRow | null> {
   const siteId = await getSiteIdForLinguatude();
@@ -307,6 +323,16 @@ export async function getBlogBySlugForLinguatude(
   };
 }
 
+export async function getBlogBySlugForLinguatude(
+  slug: string,
+): Promise<BlogPostRow | null> {
+  return unstable_cache(
+    () => fetchBlogBySlugForLinguatudeUncached(slug),
+    ["blog-post", LINGUATUDE_SITE_KEY, slug],
+    { revalidate: BLOG_REVALIDATE_SECONDS },
+  )();
+}
+
 export async function getBlogsForConfiguredSite(): Promise<BlogListRow[]> {
   try {
     const data = await getBlogIndexDataForLinguatude();
@@ -328,17 +354,27 @@ export async function getBlogBySlugForConfiguredSite(
   return getBlogBySlugForLinguatude(slug);
 }
 
-export async function getBlogSlugsForConfiguredSite(): Promise<
+async function fetchBlogSlugsForConfiguredSiteUncached(): Promise<
   { slug: string; display_date: string | null }[]
 > {
   const siteId = await getSiteIdForLinguatude();
   if (!siteId) return [];
 
+  const data = await execPostgrestWithRetries("fetch blog slugs", () =>
+    supabase.from("blogs").select("slug, display_date").eq("site_id", siteId),
+  );
+  return (data ?? []) as { slug: string; display_date: string | null }[];
+}
+
+export async function getBlogSlugsForConfiguredSite(): Promise<
+  { slug: string; display_date: string | null }[]
+> {
   try {
-    const data = await execPostgrestWithRetries("fetch blog slugs", () =>
-      supabase.from("blogs").select("slug, display_date").eq("site_id", siteId),
-    );
-    return (data ?? []) as { slug: string; display_date: string | null }[];
+    return await unstable_cache(
+      () => fetchBlogSlugsForConfiguredSiteUncached(),
+      ["blog-slugs", LINGUATUDE_SITE_KEY],
+      { revalidate: BLOG_REVALIDATE_SECONDS },
+    )();
   } catch (e) {
     if (process.env.BUILD_SKIP_BLOGS_ON_SUPABASE_ERROR === "1") {
       console.warn(

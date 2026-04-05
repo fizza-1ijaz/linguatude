@@ -5,7 +5,8 @@ import { BlogListingClient } from "@/app/components/blog-listing-client";
 import { getBlogIndexDataForLinguatudeOrEmpty } from "@/lib/blogs";
 import { DEFAULT_OG_IMAGE_PATH, SITE_URL } from "@/lib/site";
 
-export const dynamic = "force-static";
+/** ISR: refresh blog index from Supabase at most every 10s in production (`next start`). */
+export const revalidate = 10;
 
 export async function generateMetadata(): Promise<Metadata> {
   const indexData = await getBlogIndexDataForLinguatudeOrEmpty();
