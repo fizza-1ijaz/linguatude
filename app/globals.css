@@ -1,26 +1,276 @@
 @import "tailwindcss";
 
+/*
+  Design system — EdTech palette derived from Linguatude brand (navy + warm orange + sky accent).
+  8px grid: prefer spacing in 0.5rem steps (gap-2, p-4, py-6, etc.).
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary: #132a4a;
+  --primary-mid: #1a3a5c;
+  --primary-deep: #0a1628;
+  --secondary: #0ea5e9;
+  --accent: #ea580c;
+  --accent-hover: #c2410c;
+
+  --background: #f4f7fb;
+  --surface: #ffffff;
+  --surface-muted: #e8edf4;
+  --foreground: #0f172a;
+  --muted: #5e6b7a;
+  --border: #c8d4e4;
+
+  --on-brand: #f8fafc;
+
+  /* Legacy aliases (components) */
+  --brand-navy: var(--primary);
+  --brand-navy-mid: var(--primary-mid);
+  --brand-navy-deep: var(--primary-deep);
+  --accent-secondary: var(--secondary);
+  --accent-soft: color-mix(in srgb, var(--accent) 14%, transparent);
+  --accent-ring: color-mix(in srgb, var(--accent) 35%, transparent);
+  --accent-secondary-soft: color-mix(in srgb, var(--secondary) 14%, transparent);
+
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --primary: #0d1829;
+    --primary-mid: #152238;
+    --primary-deep: #060a10;
+    --secondary: #38bdf8;
+    --accent: #f97316;
+    --accent-hover: #fb923c;
+
+    --background: #0b1120;
+    --surface: #1e293b;
+    --surface-muted: #132032;
+    --foreground: #f1f5f9;
+    --muted: #94a8bc;
+    --border: #334155;
+
+    --on-brand: #f1f5f9;
+
+    --accent-soft: color-mix(in srgb, var(--accent) 14%, transparent);
+    --accent-ring: color-mix(in srgb, var(--accent) 40%, transparent);
+    --accent-secondary-soft: color-mix(in srgb, var(--secondary) 12%, transparent);
   }
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
 body {
-  background: var(--background);
+  min-height: 100%;
+  line-height: 1.6;
+  background-color: var(--background);
+  background-image:
+    radial-gradient(
+      ellipse 100% 70% at 0% -10%,
+      color-mix(in srgb, var(--accent) 8%, transparent),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 80% 60% at 100% 5%,
+      color-mix(in srgb, var(--primary) 6%, transparent),
+      transparent 50%
+    ),
+    linear-gradient(180deg, var(--background) 0%, var(--surface-muted) 140%);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-image:
+      radial-gradient(
+        ellipse 100% 70% at 0% -10%,
+        color-mix(in srgb, var(--accent) 10%, transparent),
+        transparent 55%
+      ),
+      radial-gradient(
+        ellipse 80% 60% at 100% 5%,
+        color-mix(in srgb, var(--secondary) 5%, transparent),
+        transparent 50%
+      ),
+      linear-gradient(180deg, var(--background) 0%, var(--primary-deep) 120%);
+  }
+}
+
+h1,
+h2 {
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--foreground);
+}
+
+/* Fluid blog grid — auto-fit cards from 300px */
+.blog-grid-fluid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: var(--space-3);
+}
+
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-coming-soon-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Stacked “bubbly” depth: repeated offsets down-right (reference-style). */
+.hero-coming-soon-wrap {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0.35rem 0.75rem 1.15rem 0.4rem;
+}
+
+.hero-coming-soon {
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  font-size: clamp(2.125rem, 9.5vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--accent) 92%, white 8%);
+  text-shadow:
+    1px 1px 0 color-mix(in srgb, var(--accent-hover) 92%, black 8%),
+    2px 2px 0 color-mix(in srgb, var(--accent-hover) 78%, black 22%),
+    3px 3px 0 color-mix(in srgb, var(--accent) 65%, var(--primary) 35%),
+    4px 4px 0 color-mix(in srgb, var(--accent) 48%, var(--primary) 52%),
+    5px 5px 0 color-mix(in srgb, var(--primary) 42%, var(--accent) 58%),
+    6px 6px 0 color-mix(in srgb, var(--primary) 58%, black 42%),
+    7px 7px 14px color-mix(in srgb, var(--primary) 45%, transparent);
+  animation: hero-coming-soon-float 3.8s ease-in-out infinite;
+}
+
+.hero-headline {
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+@media (min-width: 640px) {
+  .hero-coming-soon {
+    letter-spacing: 0.07em;
+    font-size: clamp(2.5rem, 8vw, 4.75rem);
+  }
+}
+
+@media (max-height: 560px) {
+  .hero-coming-soon-wrap {
+    padding-bottom: 0.5rem;
+  }
+
+  .hero-coming-soon {
+    font-size: clamp(1.75rem, 7vw, 3rem);
+    text-shadow:
+      1px 1px 0 color-mix(in srgb, var(--accent-hover) 92%, black 8%),
+      2px 2px 0 color-mix(in srgb, var(--accent-hover) 78%, black 22%),
+      3px 3px 0 color-mix(in srgb, var(--accent) 55%, var(--primary) 45%),
+      4px 4px 0 color-mix(in srgb, var(--primary) 52%, var(--accent) 48%),
+      5px 5px 10px color-mix(in srgb, var(--primary) 45%, transparent);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  /* Same orange face as light; slightly brighter for contrast on dark UI. */
+  .hero-coming-soon {
+    color: color-mix(in srgb, var(--accent) 82%, white 18%);
+    text-shadow:
+      1px 1px 0 color-mix(in srgb, var(--accent-hover) 88%, black 12%),
+      2px 2px 0 color-mix(in srgb, var(--accent-hover) 72%, black 28%),
+      3px 3px 0 color-mix(in srgb, var(--accent) 58%, var(--primary-deep) 42%),
+      4px 4px 0 color-mix(in srgb, var(--accent) 42%, var(--primary-deep) 58%),
+      5px 5px 0 color-mix(in srgb, var(--primary-deep) 55%, var(--accent) 45%),
+      6px 6px 0 color-mix(in srgb, var(--primary-deep) 78%, black 22%),
+      7px 7px 20px color-mix(in srgb, black 50%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-coming-soon {
+    animation: none;
+  }
+}
+
+/* Landing page — section atmosphere + shared patterns */
+.landing-section-mesh {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 90% 55% at 100% -5%,
+      color-mix(in srgb, var(--secondary) 14%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 70% 45% at 0% 105%,
+      color-mix(in srgb, var(--accent) 10%, transparent),
+      transparent 55%
+    );
+  opacity: 0.85;
+}
+
+@media (prefers-color-scheme: dark) {
+  .landing-section-mesh {
+    opacity: 0.55;
+    background:
+      radial-gradient(
+        ellipse 90% 55% at 100% -5%,
+        color-mix(in srgb, var(--secondary) 18%, transparent),
+        transparent 58%
+      ),
+      radial-gradient(
+        ellipse 70% 45% at 0% 105%,
+        color-mix(in srgb, var(--accent) 12%, transparent),
+        transparent 55%
+      );
+  }
+}
+
+.landing-h2-rule {
+  height: 0.3rem;
+  width: 2.75rem;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    var(--accent),
+    color-mix(in srgb, var(--secondary) 75%, var(--accent) 25%)
+  );
 }

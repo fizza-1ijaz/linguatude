@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local launch list (server action writes JSONL here)
+/data/*.jsonl
