@@ -79,8 +79,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} min-h-dvh antialiased`}>
-      <body className="flex min-h-dvh w-full min-w-0 flex-col overflow-x-hidden font-sans pl-[env(safe-area-inset-left,0px)] pr-[env(safe-area-inset-right,0px)] pb-[env(safe-area-inset-bottom,0px)]">
+    <html
+      lang="en"
+      className={`${inter.variable} min-h-dvh antialiased`}
+      suppressHydrationWarning
+    >
+      <body
+        className="flex min-h-dvh w-full min-w-0 flex-col overflow-x-hidden font-sans pl-[env(safe-area-inset-left,0px)] pr-[env(safe-area-inset-right,0px)] pb-[env(safe-area-inset-bottom,0px)]"
+        suppressHydrationWarning
+      >
         <CookieConsent>
           {children}
           <SiteFooter />
