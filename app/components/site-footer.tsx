@@ -3,6 +3,47 @@ import Link from "next/link";
 
 const SKYEN_SYSTEMS_URL =
   process.env.NEXT_PUBLIC_SKYEN_SYSTEMS_URL ?? "https://skyensolutions.com";
+const INSTAGRAM_URL = "https://www.instagram.com/Linguatude";
+const FACEBOOK_URL = "https://www.facebook.com/Linguatude";
+
+function InstagramIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      className="h-4.5 w-4.5"
+    >
+      <rect
+        x="3.25"
+        y="3.25"
+        width="17.5"
+        height="17.5"
+        rx="5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <circle cx="12" cy="12" r="4.1" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="17.1" cy="6.9" r="1.15" fill="currentColor" />
+    </svg>
+  );
+}
+
+function FacebookIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      className="h-4.5 w-4.5"
+    >
+      <path
+        d="M13.5 8.2V6.6c0-.9.6-1.6 1.7-1.6H17V2.5h-1.9c-2.7 0-4.5 1.8-4.5 4.5v1.2H8.8v2.8h1.8v10h3.1v-10h2.6l.4-2.8h-3.2Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -25,6 +66,32 @@ export function SiteFooter() {
             <span className="truncate font-medium text-[var(--on-brand)]">
               Linguatude
             </span>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-2 lg:justify-end">
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Linguatude on Instagram"
+              className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/6 px-3 py-1.5 text-sm font-medium text-[var(--on-brand)]/88 transition hover:border-[var(--accent)]/45 hover:bg-white/10 hover:text-[var(--on-brand)]"
+            >
+              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[var(--accent-soft)] text-[var(--accent)] ring-1 ring-white/10">
+                <InstagramIcon />
+              </span>
+              Instagram
+            </a>
+            <a
+              href={FACEBOOK_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Linguatude on Facebook"
+              className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/6 px-3 py-1.5 text-sm font-medium text-[var(--on-brand)]/88 transition hover:border-[var(--secondary)]/45 hover:bg-white/10 hover:text-[var(--on-brand)]"
+            >
+              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[var(--accent-secondary-soft)] text-[var(--secondary)] ring-1 ring-white/10">
+                <FacebookIcon />
+              </span>
+              Facebook
+            </a>
           </div>
           <nav
             className="flex w-full min-w-0 flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[var(--on-brand)] lg:w-auto lg:shrink-0 lg:justify-end"
