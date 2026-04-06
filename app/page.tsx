@@ -122,11 +122,11 @@ export default function Home() {
         >
           <div className="landing-section-mesh opacity-60 [background:radial-gradient(ellipse_80%_50%_at_0%_0%,color-mix(in_srgb,var(--accent)_12%,transparent),transparent_55%),radial-gradient(ellipse_70%_50%_at_100%_100%,color-mix(in_srgb,var(--secondary)_12%,transparent),transparent_50%)]" aria-hidden />
           <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 animate-[fade-in-up_0.8s_ease-out_both]" style={{ animationDelay: '200ms' }}>
-            <div className="flex flex-col gap-3 sm:gap-4">
+            <div className="flex flex-col items-center gap-3 text-center sm:gap-4">
               <span className="landing-h2-rule" aria-hidden />
               <h2
                 id="what-is-heading"
-                className="max-w-4xl text-balance text-3xl font-extrabold leading-[1.1] tracking-tight text-[var(--foreground)] sm:text-4xl"
+                className="mx-auto max-w-4xl text-balance text-3xl font-extrabold leading-[1.1] tracking-tight text-[var(--foreground)] sm:text-4xl"
               >
                 Test-specific preparation. Personalised by AI. Built around your
                 life.
