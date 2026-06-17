@@ -67,8 +67,9 @@ async function execPostgrestWithRetries<T>(
   throw new Error(`${label}: ${truncateForError(lastMsg)}`);
 }
 
+/** DB column is `date_published`; exposed to the app as `display_date`. */
 const BLOG_SEO_FIELDS =
-  "slug, title, description, meta_title, meta_description, cover_image_url, display_date, author_name, keywords, article_section";
+  "slug, title, description, meta_title, meta_description, cover_image_url, date_published, author_name, keywords, article_section";
 
 export type BlogListRow = {
   id: string;
@@ -134,6 +135,15 @@ const DEFAULT_INDEX_SEO: BlogIndexSeo = {
   empty_state_message:
     "The first articles are on their way — covering IELTS preparation, TOEFL strategies, PTE Academic practice, and what AI can genuinely do to help you prepare for an English proficiency test. Check back soon.",
 };
+
+type BlogRowFromDb = {
+  date_published?: string | null;
+  display_date?: string | null;
+};
+
+function normalizeDisplayDate(row: BlogRowFromDb): string | null {
+  return row.date_published ?? row.display_date ?? null;
+}
 
 function normalizeCategory(value: unknown): BlogCategoryRef | null {
   if (!value || Array.isArray(value) || typeof value !== "object") return null;
@@ -253,7 +263,8 @@ async function fetchBlogIndexDataForLinguatudeUncached(): Promise<BlogIndexDataF
           `id, ${BLOG_SEO_FIELDS}, category:blog_categories(id, name, slug)`,
         )
         .eq("site_id", siteId)
-        .order("display_date", { ascending: false }),
+        .eq("status", "published")
+        .order("date_published", { ascending: false }),
     ),
   ]);
 
@@ -273,12 +284,17 @@ async function fetchBlogIndexDataForLinguatudeUncached(): Promise<BlogIndexDataF
 
   const posts = (
     (postsData ?? []) as Array<
-      Omit<BlogListRow, "category"> & { category: unknown }
+      Omit<BlogListRow, "category" | "display_date"> &
+        BlogRowFromDb & { category: unknown }
     >
-  ).map((row) => ({
-    ...row,
-    category: normalizeCategory(row.category),
-  }));
+  ).map((row) => {
+    const { date_published: _datePublished, ...rest } = row;
+    return {
+      ...rest,
+      display_date: normalizeDisplayDate(row),
+      category: normalizeCategory(row.category),
+    };
+  });
 
   return {
     site_id: siteId,
@@ -311,14 +327,18 @@ async function fetchBlogBySlugForLinguatudeUncached(
       )
       .eq("site_id", siteId)
       .eq("slug", slug)
+      .eq("status", "published")
       .maybeSingle(),
   );
 
   if (!row) return null;
 
-  const typedRow = row as Omit<BlogPostRow, "category"> & { category: unknown };
+  const typedRow = row as Omit<BlogPostRow, "category" | "display_date"> &
+    BlogRowFromDb & { category: unknown };
+  const { date_published: _datePublished, ...rest } = typedRow;
   return {
-    ...typedRow,
+    ...rest,
+    display_date: normalizeDisplayDate(typedRow),
     category: normalizeCategory(typedRow.category),
   };
 }
@@ -361,9 +381,18 @@ async function fetchBlogSlugsForConfiguredSiteUncached(): Promise<
   if (!siteId) return [];
 
   const data = await execPostgrestWithRetries("fetch blog slugs", () =>
-    supabase.from("blogs").select("slug, display_date").eq("site_id", siteId),
+    supabase
+      .from("blogs")
+      .select("slug, date_published")
+      .eq("site_id", siteId)
+      .eq("status", "published"),
   );
-  return (data ?? []) as { slug: string; display_date: string | null }[];
+  return (
+    (data ?? []) as Array<{ slug: string; date_published: string | null }>
+  ).map((row) => ({
+    slug: row.slug,
+    display_date: row.date_published,
+  }));
 }
 
 export async function getBlogSlugsForConfiguredSite(): Promise<
