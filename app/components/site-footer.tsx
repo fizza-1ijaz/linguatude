@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const SKYEN_SYSTEMS_URL =
-  process.env.NEXT_PUBLIC_SKYEN_SYSTEMS_URL ?? "https://skyensolutions.com";
+  process.env.NEXT_PUBLIC_SKYEN_SYSTEMS_URL ?? "https://skyensystems.com";
 const INSTAGRAM_URL = "https://www.instagram.com/Linguatude";
 const FACEBOOK_URL = "https://www.facebook.com/Linguatude";
 
