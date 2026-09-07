@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BlogPostContent } from "@/app/components/blog-post-content";
 import { SiteHeader } from "@/app/components/site-header";
 import { buildBlogPostingJsonLd } from "@/lib/blogSchema";
 import {
@@ -90,37 +91,41 @@ export default async function BlogPostPage({ params }: PageProps) {
   if (!blog) {
     if (slug === "coming-soon") {
       return (
-        <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col bg-white">
           <SiteHeader />
           <main className="flex min-h-0 w-full min-w-0 flex-1 flex-col">
-            <section className="border-b border-[var(--border)] bg-[var(--surface)]/70 py-10 sm:py-12">
-              <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-                <p className="text-sm font-semibold uppercase tracking-wide text-[var(--accent)]">
-                  Blog
+            <section className="home-hero relative isolate overflow-hidden">
+              <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
+                <Link
+                  href="/blog"
+                  className="inline-flex items-center gap-2 text-lg font-bold text-[#2D5BFF]"
+                >
+                  Back to blog
+                </Link>
+                <p className="mt-6 inline-flex rounded-lg bg-[#f0eeff] px-6 py-2.5 text-base font-semibold text-[#2D5BFF]">
+                  Article
                 </p>
-                <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[var(--foreground)] sm:text-4xl">
+                <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-[#111827] sm:text-5xl">
                   Coming soon
                 </h1>
-                <p className="mt-3 text-[var(--muted)]">
+                <p className="mt-4 text-lg text-[#4b5563]">
                   New articles will appear here once they are published.
                 </p>
               </div>
             </section>
-            <section className="flex-1 py-10 sm:py-12">
-              <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-                <article className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/70 p-6 sm:p-8">
-                  <p className="text-[var(--muted)]">
-                    We&apos;re working on new content. Check back soon.
-                  </p>
-                  <p className="mt-4">
-                    <Link
-                      href="/blog"
-                      className="font-semibold text-[var(--accent)] underline decoration-[var(--accent)]/40 underline-offset-2 transition hover:decoration-[var(--accent)]"
-                    >
-                      View all articles
-                    </Link>
-                  </p>
-                </article>
+            <section className="px-4 pb-14 sm:px-6 lg:px-8">
+              <div className="mx-auto max-w-4xl rounded-3xl border border-[#c5c7cb] bg-white p-8 shadow-sm">
+                <p className="text-[#6b7280]">
+                  We&apos;re working on new content. Check back soon.
+                </p>
+                <div className="mt-8 flex justify-center">
+                  <Link
+                    href="/blog"
+                    className="inline-flex rounded-full border-2 border-[#2D5BFF] px-6 py-3 text-base font-semibold text-[#2D5BFF]"
+                  >
+                    Back to blogs
+                  </Link>
+                </div>
               </div>
             </section>
           </main>
@@ -133,7 +138,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   const jsonLd = buildBlogPostingJsonLd(blog);
 
   return (
-    <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+    <div className="flex min-h-0 min-w-0 flex-1 flex-col bg-white">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -142,71 +147,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       />
       <SiteHeader />
       <main className="flex min-h-0 w-full min-w-0 flex-1 flex-col">
-        <section className="border-b border-[var(--border)] bg-[var(--surface)]/70 py-10 sm:py-12">
-          <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-            <p className="text-sm font-semibold text-[var(--muted)]">
-              {blog.category?.name ? `Blog · ${blog.category.name}` : "Blog"}
-            </p>
-            <h1 className="mt-2 text-balance text-3xl font-extrabold tracking-tight text-[var(--foreground)] sm:text-4xl">
-              {blog.title}
-            </h1>
-            {blog.description && (
-              <p className="mt-3 text-pretty text-base text-[var(--muted)] sm:text-lg">
-                {blog.description}
-              </p>
-            )}
-            {blog.display_date && (
-              <p className="mt-3 text-sm text-[var(--muted)]">
-                <time dateTime={blog.display_date}>
-                  {new Date(blog.display_date).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </time>
-                {blog.author_name ? ` · ${blog.author_name}` : null}
-              </p>
-            )}
-          </div>
-        </section>
-
-        <section className="flex-1 py-10 sm:py-14">
-          <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-            <article className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/70 p-6 shadow-sm shadow-[var(--primary)]/[0.06] backdrop-blur-sm sm:p-8">
-              {blog.cover_image_url && (
-                <div className="mb-8">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={blog.cover_image_url}
-                    alt=""
-                    className="h-auto w-full rounded-xl object-cover"
-                  />
-                </div>
-              )}
-              {blog.content ? (
-                <div
-                  className="blog-content"
-                  dangerouslySetInnerHTML={{ __html: blog.content }}
-                />
-              ) : (
-                <p className="text-sm text-[var(--muted)]">
-                  Content for this article has not been added yet.
-                </p>
-              )}
-              <nav
-                className="mt-10 border-t border-[var(--border)] pt-8"
-                aria-label="Related pages"
-              >
-                <Link
-                  href="/blog"
-                  className="text-sm font-semibold text-[var(--accent)] underline decoration-[var(--accent)]/40 underline-offset-2 transition hover:decoration-[var(--accent)]"
-                >
-                  All articles
-                </Link>
-              </nav>
-            </article>
-          </div>
-        </section>
+        <BlogPostContent blog={blog} />
       </main>
     </div>
   );

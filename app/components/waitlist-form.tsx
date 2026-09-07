@@ -91,7 +91,7 @@ export function WaitlistForm({ variant }: Props) {
   if (status === "success") {
     return (
       <p
-        className="text-sm text-[var(--accent)]"
+        className="text-sm text-[#2D5BFF]"
         role="status"
         aria-live="polite"
       >
@@ -119,12 +119,12 @@ export function WaitlistForm({ variant }: Props) {
           required
           placeholder="Your email address"
           disabled={status === "loading"}
-          className="min-h-11 flex-1 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 text-[var(--foreground)] placeholder:text-[var(--muted)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent-ring)] disabled:opacity-60"
+          className="min-h-11 flex-1 rounded-xl border border-[#e2e8f0] bg-white px-4 text-[#1e1b4b] placeholder:text-[#6b7280] outline-none transition focus:border-[#2D5BFF] focus:ring-2 focus:ring-[#2D5BFF]/25 disabled:opacity-60"
         />
         <button
           type="submit"
           disabled={status === "loading"}
-          className="min-h-11 w-full shrink-0 touch-manipulation rounded-xl bg-[var(--accent)] px-6 font-medium text-white shadow-sm shadow-[var(--accent)]/20 transition hover:bg-[var(--accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:opacity-60 sm:w-auto"
+          className="min-h-11 w-full shrink-0 touch-manipulation rounded-xl bg-[#2D5BFF] px-6 font-semibold text-white shadow-sm shadow-[#2D5BFF]/25 transition hover:bg-[#244FE6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2D5BFF] disabled:opacity-60 sm:w-auto"
         >
           {status === "loading" ? "…" : "Notify Me"}
         </button>

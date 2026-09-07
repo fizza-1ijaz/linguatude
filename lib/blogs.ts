@@ -129,9 +129,8 @@ const DEFAULT_INDEX_SEO: BlogIndexSeo = {
     "The Linguatude Blog — IELTS, TOEFL, PTE Preparation & English Learning",
   description:
     "Guides, tips, and research-backed articles on IELTS, TOEFL, PTE Academic, and Cambridge English preparation — plus honest perspectives on AI in language learning.",
-  headline: "Prepare Smarter. Every Article Here Has One Goal — Getting You Ready.",
-  subheadline:
-    "Guides, exam insights, and practical advice on IELTS, TOEFL, PTE Academic, Cambridge English, and the role of AI in language test preparation.",
+  headline: "The Linguatude blog",
+  subheadline: "Strategy, score maths and honest prep advice.",
   empty_state_message:
     "The first articles are on their way — covering IELTS preparation, TOEFL strategies, PTE Academic practice, and what AI can genuinely do to help you prepare for an English proficiency test. Check back soon.",
 };

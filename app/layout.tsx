@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { CookieConsent } from "@/components/CookieConsent";
-import { SiteFooter } from "@/app/components/site-footer";
+import { SiteChrome } from "@/app/components/site-chrome";
 import "./globals.css";
 
 const inter = Inter({
@@ -38,8 +38,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#132a4a" },
-    { media: "(prefers-color-scheme: dark)", color: "#0d1829" },
+    { media: "(prefers-color-scheme: light)", color: "#2D5BFF" },
+    { media: "(prefers-color-scheme: dark)", color: "#1e1b4b" },
   ],
 };
 
@@ -89,8 +89,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <CookieConsent>
-          {children}
-          <SiteFooter />
+          <SiteChrome>{children}</SiteChrome>
         </CookieConsent>
       </body>
     </html>

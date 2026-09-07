@@ -5,19 +5,19 @@
   8px grid: prefer spacing in 0.5rem steps (gap-2, p-4, py-6, etc.).
 */
 :root {
-  --primary: #132a4a;
-  --primary-mid: #1a3a5c;
-  --primary-deep: #0a1628;
-  --secondary: #0ea5e9;
-  --accent: #ea580c;
-  --accent-hover: #c2410c;
+  --primary: #2d5bff;
+  --primary-mid: #244fe6;
+  --primary-deep: #1e1b4b;
+  --secondary: #2d5bff;
+  --accent: #2d5bff;
+  --accent-hover: #244fe6;
 
-  --background: #f4f7fb;
+  --background: #ffffff;
   --surface: #ffffff;
-  --surface-muted: #e8edf4;
-  --foreground: #0f172a;
-  --muted: #5e6b7a;
-  --border: #c8d4e4;
+  --surface-muted: #eaf0fd;
+  --foreground: #1e1b4b;
+  --muted: #64748b;
+  --border: #e2e8f0;
 
   --on-brand: #f8fafc;
 
@@ -44,12 +44,12 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --primary: #0d1829;
-    --primary-mid: #152238;
-    --primary-deep: #060a10;
-    --secondary: #38bdf8;
-    --accent: #f97316;
-    --accent-hover: #fb923c;
+    --primary: #2d5bff;
+    --primary-mid: #60a5fa;
+    --primary-deep: #0b1120;
+    --secondary: #60a5fa;
+    --accent: #2d5bff;
+    --accent-hover: #60a5fa;
 
     --background: #0b1120;
     --surface: #1e293b;
@@ -76,37 +76,8 @@ html {
 body {
   min-height: 100%;
   line-height: 1.6;
-  background-color: var(--background);
-  background-image:
-    radial-gradient(
-      ellipse 100% 70% at 0% -10%,
-      color-mix(in srgb, var(--accent) 8%, transparent),
-      transparent 55%
-    ),
-    radial-gradient(
-      ellipse 80% 60% at 100% 5%,
-      color-mix(in srgb, var(--primary) 6%, transparent),
-      transparent 50%
-    ),
-    linear-gradient(180deg, var(--background) 0%, var(--surface-muted) 140%);
+  background-color: #ffffff;
   color: var(--foreground);
-}
-
-@media (prefers-color-scheme: dark) {
-  body {
-    background-image:
-      radial-gradient(
-        ellipse 100% 70% at 0% -10%,
-        color-mix(in srgb, var(--accent) 10%, transparent),
-        transparent 55%
-      ),
-      radial-gradient(
-        ellipse 80% 60% at 100% 5%,
-        color-mix(in srgb, var(--secondary) 5%, transparent),
-        transparent 50%
-      ),
-      linear-gradient(180deg, var(--background) 0%, var(--primary-deep) 120%);
-  }
 }
 
 h1,
@@ -174,6 +145,45 @@ h2 {
 .hero-headline {
   word-break: normal;
   overflow-wrap: normal;
+}
+
+/* Home hero — Figma MKT-001 */
+.home-hero {
+  background-color: #f6f7fd;
+  background-image:
+    radial-gradient(
+      ellipse 70% 80% at 70% 35%,
+      rgba(51, 122, 248, 0.35) 0%,
+      rgba(142, 178, 246, 0.22) 35%,
+      rgba(246, 247, 253, 0.4) 65%,
+      transparent 80%
+    ),
+    linear-gradient(180deg, #ffffff 0%, #f6f7fd 55%, #eaf0fd 100%);
+}
+
+/* Features / Pricing heroes — Figma MKT-006 / MKT-007 */
+.mkt-hero {
+  background-color: #ffffff;
+  background-image:
+    radial-gradient(
+      ellipse 85% 70% at 50% 45%,
+      rgba(186, 208, 255, 0.55) 0%,
+      rgba(237, 242, 255, 0.45) 42%,
+      rgba(255, 255, 255, 0.9) 72%,
+      #ffffff 100%
+    ),
+    linear-gradient(180deg, #ffffff 0%, #f5f8ff 48%, #edf2ff 100%);
+}
+
+/* Auth screens — Figma AUTH-001 / AUTH-002 / AUTH-003 */
+@media (min-width: 768px) {
+  .auth-shell {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .auth-brand {
+    display: flex;
+  }
 }
 
 @media (min-width: 640px) {
@@ -270,30 +280,34 @@ h2 {
 
 /* CMS HTML from Supabase `blogs.content` */
 .blog-content {
-  font-size: 0.9375rem;
-  line-height: 1.65;
-  color: var(--muted);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: #4b5563;
 }
 
 .blog-content > * + * {
-  margin-top: 1rem;
+  margin-top: 1.25rem;
 }
 
 .blog-content :where(h1, h2, h3, h4) {
-  color: var(--foreground);
+  color: #111827;
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.25;
 }
 
 .blog-content :where(h2) {
+  margin-top: 2rem;
+  font-size: 1.5rem;
+}
+
+.blog-content :where(h3) {
   margin-top: 1.75rem;
   font-size: 1.25rem;
 }
 
-.blog-content :where(h3) {
-  margin-top: 1.35rem;
-  font-size: 1.1rem;
+.blog-content :where(p) {
+  color: #4b5563;
 }
 
 .blog-content :where(ul, ol) {
@@ -302,29 +316,34 @@ h2 {
 }
 
 .blog-content :where(li) {
-  margin-top: 0.35rem;
+  margin-top: 0.4rem;
 }
 
 .blog-content :where(a) {
-  color: var(--accent);
+  color: #2d5bff;
   font-weight: 500;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 .blog-content :where(a:hover) {
-  color: var(--accent-hover);
+  color: #244fe6;
 }
 
 .blog-content :where(img) {
   max-width: 100%;
   height: auto;
-  border-radius: 0.75rem;
+  border-radius: 1rem;
 }
 
 .blog-content :where(blockquote) {
-  margin: 1rem 0;
-  padding-left: 1rem;
-  border-left: 3px solid var(--accent-soft);
-  color: var(--foreground);
+  margin: 1.5rem 0;
+  border-left: 4px solid #2d5bff;
+  border-radius: 0 0.75rem 0.75rem 0;
+  background: #eaf0fd;
+  padding: 1.25rem 1.5rem;
+  color: #111827;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.6;
 }

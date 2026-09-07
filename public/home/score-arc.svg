@@ -1,0 +1,11 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="64.0001" height="64.0001" viewBox="0 0 64.0001 64.0001" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Simple CSS Arc representation">
+<path id="Ellipse 1" d="M32.4355 63.9971C14.7641 64.2376 0.243531 50.107 0.00302509 32.4355C-0.23748 14.7641 13.8931 0.243531 31.5646 0.00302509C49.2361 -0.23748 63.7566 13.8931 63.9971 31.5646C64.2376 49.2361 50.107 63.7566 32.4355 63.9971ZM31.7138 10.9658C20.0969 11.1239 10.8077 20.6694 10.9658 32.2863C11.1239 43.9032 20.6694 53.1924 32.2863 53.0343C43.9032 52.8762 53.1924 43.3307 53.0343 31.7138C52.8762 20.0969 43.3307 10.8077 31.7138 10.9658Z" fill="url(#paint0_linear_0_65)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_65" x1="63.9971" y1="31.5646" x2="0.00302509" y2="32.4355" gradientUnits="userSpaceOnUse">
+<stop offset="0.331631" stop-color="#D9D9D9"/>
+<stop offset="0.331731" stop-color="#2D5BFF"/>
+</linearGradient>
+</defs>
+</svg>
