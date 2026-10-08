@@ -1,18 +1,17 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { isSupabaseConfigured, supabase } from "@/lib/supabaseClient";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const fieldClass =
-  "w-full rounded-xl border border-[#e5e7eb] bg-white px-4 py-[0.95rem] text-base text-[#1e1b4b] outline-none transition placeholder:text-[#9ca3af] focus:border-[#2D5BFF] focus:ring-2 focus:ring-[#2D5BFF]/20";
+  "w-full rounded-lg border border-[#d1d5db] bg-white px-4 py-3 text-[0.95rem] text-[#141b2b] outline-none transition placeholder:text-[#747686] focus:border-[#2D5BFF] focus:ring-2 focus:ring-[#2D5BFF]/20";
 
 export function ForgotPasswordForm() {
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
-    "idle",
-  );
+  const router = useRouter();
+  const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -30,7 +29,9 @@ export function ForgotPasswordForm() {
     setStatus("loading");
 
     if (!isSupabaseConfigured) {
-      setStatus("success");
+      router.push(
+        `/forgot-password/check-email?email=${encodeURIComponent(email)}`,
+      );
       return;
     }
 
@@ -39,7 +40,9 @@ export function ForgotPasswordForm() {
         redirectTo: `${window.location.origin}/reset-password`,
       });
       if (error) throw error;
-      setStatus("success");
+      router.push(
+        `/forgot-password/check-email?email=${encodeURIComponent(email)}`,
+      );
     } catch (err) {
       setStatus("error");
       setErrorMessage(
@@ -50,27 +53,11 @@ export function ForgotPasswordForm() {
     }
   }
 
-  if (status === "success") {
-    return (
-      <div
-        className="rounded-xl border border-[#c1ebd1] bg-[#eaf6ee] p-5"
-        role="status"
-        aria-live="polite"
-      >
-        <p className="text-lg font-bold text-[#1e1b4b]">Check your email</p>
-        <p className="mt-2 text-sm leading-6 text-[#4b5563]">
-          If an account exists for that address, we&apos;ve sent a link to reset
-          your password.
-        </p>
-      </div>
-    );
-  }
-
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col" noValidate>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
       {errorMessage ? (
         <p
-          className="mb-5 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+          className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
           role="alert"
         >
           {errorMessage}
@@ -80,7 +67,7 @@ export function ForgotPasswordForm() {
       <div>
         <label
           htmlFor="forgot-email"
-          className="block text-sm font-semibold text-[#1e1b4b]"
+          className="block text-sm font-semibold tracking-[0.01em] text-[#141b2b]"
         >
           Email address
         </label>
@@ -98,9 +85,9 @@ export function ForgotPasswordForm() {
       <button
         type="submit"
         disabled={status === "loading"}
-        className="mt-6 inline-flex h-[3.25rem] w-full items-center justify-center rounded-xl bg-[#2D5BFF] text-base font-semibold text-white shadow-[0_4px_6px_-1px_rgba(76,36,251,0.2)] transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/60 disabled:opacity-60"
+        className="inline-flex h-[3.25rem] w-full items-center justify-center rounded-lg bg-[#2b5ce6] text-sm font-semibold tracking-[0.01em] text-white transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/60 disabled:opacity-60"
       >
-        {status === "loading" ? "Sending…" : "Send reset link"}
+        {status === "loading" ? "Sending…" : "Send Reset Link"}
       </button>
     </form>
   );

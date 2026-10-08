@@ -55,7 +55,7 @@ export function SignupForm() {
     setStatus("loading");
 
     if (!isSupabaseConfigured) {
-      setStatus("success");
+      window.location.href = "/onboarding";
       return;
     }
 
@@ -68,8 +68,7 @@ export function SignupForm() {
         },
       });
       if (error) throw error;
-      setStatus("success");
-      form.reset();
+      window.location.href = "/onboarding";
     } catch (err) {
       setStatus("error");
       setErrorMessage(
@@ -96,7 +95,7 @@ export function SignupForm() {
         <div className="mt-4 flex flex-wrap gap-3">
           {isSupabaseConfigured ? (
             <Link
-              href="/signin"
+              href="/login"
               className="inline-flex rounded-xl bg-[#2D5BFF] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#244FE6]"
             >
               Sign in
@@ -121,7 +120,7 @@ export function SignupForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3" noValidate>
       {errorMessage ? (
         <p
           className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
@@ -131,116 +130,118 @@ export function SignupForm() {
         </p>
       ) : null}
 
-      <div>
-        <label
-          htmlFor="signup-name"
-          className="block text-sm font-semibold text-[#1e1b4b]"
-        >
-          Full Name
-        </label>
-        <input
-          id="signup-name"
-          name="fullName"
-          type="text"
-          autoComplete="name"
-          placeholder="Jane Doe"
-          required
-          className="mt-2 w-full rounded-xl border border-[#e5e7eb] bg-white px-4 py-3.5 text-base text-[#1e1b4b] outline-none transition placeholder:text-[#9ca3af] focus:border-[#2D5BFF] focus:ring-2 focus:ring-[#2D5BFF]/20"
-        />
-      </div>
-
-      <div>
-        <label
-          htmlFor="signup-email"
-          className="block text-sm font-semibold text-[#1e1b4b]"
-        >
-          Email address
-        </label>
-        <input
-          id="signup-email"
-          name="email"
-          type="email"
-          autoComplete="email"
-          placeholder="jane@example.com"
-          required
-          className="mt-2 w-full rounded-xl border border-[#e5e7eb] bg-white px-4 py-3.5 text-base text-[#1e1b4b] outline-none transition placeholder:text-[#9ca3af] focus:border-[#2D5BFF] focus:ring-2 focus:ring-[#2D5BFF]/20"
-        />
-      </div>
-
-      <div>
-        <label
-          htmlFor="signup-password"
-          className="block text-sm font-semibold text-[#1e1b4b]"
-        >
-          Password
-        </label>
-        <div className="relative mt-2">
-          <input
-            id="signup-password"
-            name="password"
-            type={showPassword ? "text" : "password"}
-            autoComplete="new-password"
-            placeholder="••••••••"
-            required
-            className="w-full rounded-xl border border-[#e5e7eb] bg-white px-4 py-3.5 pr-12 text-base text-[#1e1b4b] outline-none transition placeholder:text-[#9ca3af] focus:border-[#2D5BFF] focus:ring-2 focus:ring-[#2D5BFF]/20"
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1.5 transition hover:bg-[#f3f4f6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/40"
-            aria-label={showPassword ? "Hide password" : "Show password"}
+      <div className="grid gap-3 sm:grid-cols-2 sm:gap-3.5">
+        <div>
+          <label
+            htmlFor="signup-name"
+            className="block text-sm font-semibold text-[#1e1b4b]"
           >
-            <Image
-              src={showPassword ? "/auth/eye-off.svg" : "/auth/eye.svg"}
-              alt=""
-              width={22}
-              height={15}
-              className="h-[15px] w-[22px]"
-            />
-          </button>
-        </div>
-        <p className="mt-2 text-xs font-medium text-[#6b7280]">
-          Minimum 8 characters, one uppercase, one number
-        </p>
-      </div>
-
-      <div>
-        <label
-          htmlFor="signup-confirm"
-          className="block text-sm font-semibold text-[#1e1b4b]"
-        >
-          Confirm Password
-        </label>
-        <div className="relative mt-2">
+            Full Name
+          </label>
           <input
-            id="signup-confirm"
-            name="confirmPassword"
-            type={showConfirm ? "text" : "password"}
-            autoComplete="new-password"
-            placeholder="••••••••"
+            id="signup-name"
+            name="fullName"
+            type="text"
+            autoComplete="name"
+            placeholder="Jane Doe"
             required
-            className="w-full rounded-xl border border-[#e5e7eb] bg-white px-4 py-3.5 pr-12 text-base text-[#1e1b4b] outline-none transition placeholder:text-[#9ca3af] focus:border-[#2D5BFF] focus:ring-2 focus:ring-[#2D5BFF]/20"
+            className="mt-1.5 w-full rounded-xl border border-[#e5e7eb] bg-white px-3.5 py-2.5 text-[0.95rem] text-[#1e1b4b] outline-none transition placeholder:text-[#9ca3af] focus:border-[#2D5BFF] focus:ring-2 focus:ring-[#2D5BFF]/20"
           />
-          <button
-            type="button"
-            onClick={() => setShowConfirm((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1.5 transition hover:bg-[#f3f4f6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/40"
-            aria-label={
-              showConfirm ? "Hide confirm password" : "Show confirm password"
-            }
+        </div>
+
+        <div>
+          <label
+            htmlFor="signup-email"
+            className="block text-sm font-semibold text-[#1e1b4b]"
           >
-            <Image
-              src={showConfirm ? "/auth/eye-off.svg" : "/auth/eye.svg"}
-              alt=""
-              width={22}
-              height={15}
-              className="h-[15px] w-[22px]"
+            Email address
+          </label>
+          <input
+            id="signup-email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            placeholder="jane@example.com"
+            required
+            className="mt-1.5 w-full rounded-xl border border-[#e5e7eb] bg-white px-3.5 py-2.5 text-[0.95rem] text-[#1e1b4b] outline-none transition placeholder:text-[#9ca3af] focus:border-[#2D5BFF] focus:ring-2 focus:ring-[#2D5BFF]/20"
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="signup-password"
+            className="block text-sm font-semibold text-[#1e1b4b]"
+          >
+            Password
+          </label>
+          <div className="relative mt-1.5">
+            <input
+              id="signup-password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="new-password"
+              placeholder="••••••••"
+              required
+              className="w-full rounded-xl border border-[#e5e7eb] bg-white px-3.5 py-2.5 pr-11 text-[0.95rem] text-[#1e1b4b] outline-none transition placeholder:text-[#9ca3af] focus:border-[#2D5BFF] focus:ring-2 focus:ring-[#2D5BFF]/20"
             />
-          </button>
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-md p-1.5 transition hover:bg-[#f3f4f6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/40"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              <Image
+                src={showPassword ? "/auth/eye-off.svg" : "/auth/eye.svg"}
+                alt=""
+                width={22}
+                height={15}
+                className="h-[15px] w-[22px]"
+              />
+            </button>
+          </div>
+          <p className="mt-1 text-xs font-medium text-[#6b7280]">
+            Min 8 chars, 1 uppercase, 1 number
+          </p>
+        </div>
+
+        <div>
+          <label
+            htmlFor="signup-confirm"
+            className="block text-sm font-semibold text-[#1e1b4b]"
+          >
+            Confirm Password
+          </label>
+          <div className="relative mt-1.5">
+            <input
+              id="signup-confirm"
+              name="confirmPassword"
+              type={showConfirm ? "text" : "password"}
+              autoComplete="new-password"
+              placeholder="••••••••"
+              required
+              className="w-full rounded-xl border border-[#e5e7eb] bg-white px-3.5 py-2.5 pr-11 text-[0.95rem] text-[#1e1b4b] outline-none transition placeholder:text-[#9ca3af] focus:border-[#2D5BFF] focus:ring-2 focus:ring-[#2D5BFF]/20"
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirm((v) => !v)}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-md p-1.5 transition hover:bg-[#f3f4f6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/40"
+              aria-label={
+                showConfirm ? "Hide confirm password" : "Show confirm password"
+              }
+            >
+              <Image
+                src={showConfirm ? "/auth/eye-off.svg" : "/auth/eye.svg"}
+                alt=""
+                width={22}
+                height={15}
+                className="h-[15px] w-[22px]"
+              />
+            </button>
+          </div>
         </div>
       </div>
 
-      <label className="flex items-start gap-3 text-sm leading-5 text-[#4b5563]">
+      <label className="flex items-start gap-2.5 text-sm leading-5 text-[#4b5563]">
         <input
           type="checkbox"
           name="terms"
@@ -267,7 +268,7 @@ export function SignupForm() {
       <button
         type="submit"
         disabled={status === "loading"}
-        className="mt-1 inline-flex h-[3.25rem] w-full items-center justify-center rounded-xl bg-[#2D5BFF] text-base font-semibold text-white shadow-[0_4px_6px_-1px_rgba(76,36,251,0.2)] transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/60 disabled:opacity-60"
+        className="mt-0.5 inline-flex h-11 w-full items-center justify-center rounded-xl bg-[#2D5BFF] text-[0.95rem] font-semibold text-white shadow-[0_4px_6px_-1px_rgba(76,36,251,0.2)] transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/60 disabled:opacity-60"
       >
         {status === "loading" ? "Creating account…" : "Create account"}
       </button>

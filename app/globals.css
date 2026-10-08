@@ -73,6 +73,20 @@ html {
   overflow-x: clip;
 }
 
+/* Diagnostic test: scroll without visible scrollbars */
+html.hide-scrollbar,
+html.hide-scrollbar body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html.hide-scrollbar::-webkit-scrollbar,
+html.hide-scrollbar body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 body {
   min-height: 100%;
   line-height: 1.6;
@@ -175,7 +189,14 @@ h2 {
     linear-gradient(180deg, #ffffff 0%, #f5f8ff 48%, #edf2ff 100%);
 }
 
-/* Auth screens — Figma AUTH-001 / AUTH-002 / AUTH-003 */
+/* Auth screens — Figma AUTH-001 … AUTH-005: lock to viewport */
+body:has(.auth-shell),
+body:has(.onboarding-shell) {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+}
+
 @media (min-width: 768px) {
   .auth-shell {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -183,6 +204,24 @@ h2 {
 
   .auth-brand {
     display: flex;
+  }
+}
+
+/* Keep auth content fitting shorter laptop viewports */
+@media (max-height: 780px) {
+  .auth-brand {
+    padding-block: 1.25rem;
+  }
+
+  .auth-brand .auth-brand-copy {
+    font-size: 1.5rem;
+    line-height: 1.2;
+  }
+
+  .auth-brand .auth-brand-sub {
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+    line-height: 1.4;
   }
 }
 
