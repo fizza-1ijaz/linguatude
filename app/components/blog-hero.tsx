@@ -14,25 +14,9 @@ export function BlogHero({
 
   return (
     <section
-      className="home-hero relative isolate overflow-hidden"
+      className="mkt-hero relative isolate overflow-hidden"
       aria-labelledby="blog-heading"
     >
-      <div
-        className="pointer-events-none absolute inset-y-0 right-0 hidden w-[70%] opacity-20 lg:block"
-        aria-hidden
-      >
-        <div className="relative h-full w-full">
-          <Image
-            src="/blog/hero-collage.png"
-            alt=""
-            fill
-            priority
-            className="object-contain object-right-top"
-            sizes="70vw"
-          />
-        </div>
-      </div>
-
       <div className="relative mx-auto w-full max-w-6xl px-4 pb-12 pt-12 sm:px-6 sm:pb-14 sm:pt-14 lg:px-8 lg:pb-16 lg:pt-16">
         <div className="max-w-lg animate-[fade-in-up_0.75s_ease-out_both]">
           <span className="flex size-16 items-center justify-center rounded-full bg-white shadow-sm">
@@ -79,7 +63,7 @@ export function BlogHero({
                   alt=""
                   width={16}
                   height={16}
-                  className="size-full"
+                  className="size-full brightness-0 invert"
                 />
               </span>
             </Link>

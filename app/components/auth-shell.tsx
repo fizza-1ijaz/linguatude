@@ -8,31 +8,52 @@ type AuthShellProps = {
   topSlot?: React.ReactNode;
   /** Wider card for multi-field forms that need two columns */
   wide?: boolean;
+  contentClassName?: string;
 };
 
-export function AuthShell({ children, topSlot, wide = false }: AuthShellProps) {
+export function AuthShell({
+  children,
+  topSlot,
+  wide = false,
+  contentClassName,
+}: AuthShellProps) {
+  const widthClass =
+    contentClassName ??
+    (wide ? "max-w-[560px]" : "max-w-[min(100%,28rem)] lg:max-w-[30rem]");
+
   return (
     <div className="auth-shell grid h-dvh max-h-dvh w-full min-w-0 flex-1 overflow-hidden bg-[#f3f4f8] md:grid-cols-2">
       <AuthBrandPanel />
 
       <main className="relative flex h-full min-h-0 w-full min-w-0 flex-col justify-center overflow-hidden px-4 py-3 sm:px-6 md:px-6 md:py-4 lg:px-10 lg:py-5">
-        <div className="mb-3 flex shrink-0 justify-center md:hidden">
+        <div className="relative mb-3 shrink-0 overflow-hidden rounded-2xl bg-[linear-gradient(180deg,#2B5CE6_0%,#1A3DA8_100%)] px-5 py-4 md:hidden">
+          <div className="pointer-events-none absolute inset-0" aria-hidden>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/Complex%20Geometry%20Composition.svg"
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover object-center"
+            />
+          </div>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-[#1e1b4b] transition hover:opacity-80"
+            className="relative z-10 inline-flex items-center gap-2 text-white"
           >
-            <span className="relative h-6 w-[1.833rem] shrink-0 overflow-hidden">
+            <span className="relative size-8 shrink-0 overflow-hidden rounded-lg">
               <Image
-                src="/home/logo-mark.svg"
+                src="/linguatude.webp"
                 alt=""
-                width={30}
-                height={24}
-                className="size-full"
+                width={32}
+                height={32}
+                className="size-full object-cover"
                 priority
               />
             </span>
-            <span className="text-lg font-bold tracking-tight">Linguatude</span>
+            <span className="text-base font-bold tracking-tight">Linguatude</span>
           </Link>
+          <p className="relative z-10 mt-2.5 max-w-xs text-base font-extrabold leading-snug text-white sm:text-lg">
+            Your AI coach for English tests
+          </p>
         </div>
 
         {topSlot ? (
@@ -41,11 +62,7 @@ export function AuthShell({ children, topSlot, wide = false }: AuthShellProps) {
           </div>
         ) : null}
 
-        <div
-          className={`mx-auto w-full shrink ${wide ? "max-w-[560px]" : "max-w-[520px]"}`}
-        >
-          {children}
-        </div>
+        <div className={`mx-auto w-full shrink ${widthClass}`}>{children}</div>
       </main>
     </div>
   );
@@ -60,7 +77,7 @@ export function AuthCard({
 }) {
   return (
     <div
-      className={`w-full rounded-2xl border border-[rgba(195,197,215,0.3)] bg-white p-5 shadow-[0_4px_4px_rgba(0,0,0,0.25),0_4px_12px_rgba(17,24,39,0.05)] sm:p-8 ${className}`}
+      className={`auth-card w-full rounded-2xl border border-[rgba(195,197,215,0.3)] bg-white p-5 shadow-[0_4px_4px_rgba(0,0,0,0.25),0_4px_12px_rgba(17,24,39,0.05)] sm:p-8 ${className}`}
     >
       {children}
     </div>

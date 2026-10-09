@@ -43,7 +43,8 @@ export function IeltsGeneralHero() {
             </h1>
 
             <p className="mt-3 max-w-lg text-pretty text-base font-medium leading-6 text-[#4b5563] sm:mt-4 sm:text-lg sm:leading-7">
-              Letters, everyday reading and migration-ready bands
+              Letters, everyday reading and band-focused practice for life and
+              work
             </p>
 
             <div className="mt-5 flex w-full flex-col items-stretch gap-3 sm:mt-6 sm:flex-row sm:items-center sm:gap-4">
@@ -71,23 +72,23 @@ export function IeltsGeneralHero() {
             </div>
           </div>
 
-          <div className="relative mx-auto w-full max-w-[22rem] animate-[fade-in-up_0.85s_ease-out_both] sm:max-w-[26rem] lg:mx-0 lg:ml-auto lg:max-w-[28rem]">
-            <div className="relative h-[min(32svh,16rem)] w-full overflow-hidden rounded-[2rem] sm:h-[min(36svh,18rem)] sm:rounded-[2.5rem] lg:h-[min(38svh,19.5rem)] lg:rounded-[3.5rem]">
+          <div className="relative mx-auto w-full max-w-[28rem] animate-[fade-in-up_0.85s_ease-out_both] sm:max-w-[32rem] lg:mx-0 lg:ml-auto lg:max-w-none">
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] lg:rounded-[3.5rem]">
               <Image
                 src="/ielts-general/hero-sydney.png"
                 alt="Sydney Harbour with Opera House and Harbour Bridge"
                 fill
                 priority
                 className="object-cover object-center"
-                sizes="(max-width: 1024px) 90vw, 448px"
+                sizes="(max-width: 1024px) 90vw, 520px"
               />
             </div>
 
             <aside
-              className="absolute bottom-2 left-1 z-[2] flex max-w-[min(100%,18rem)] items-start gap-3 rounded-xl border border-white/50 bg-white/80 p-3 shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1)] sm:bottom-3 sm:left-2 sm:max-w-[min(100%,20rem)] sm:gap-3.5 sm:p-3.5 animate-[fade-in-up_0.95s_ease-out_both]"
+              className="absolute bottom-0 left-1/2 z-[2] flex w-[min(100%,22rem)] -translate-x-1/2 translate-y-1/2 items-start justify-center gap-3 rounded-xl border border-white/50 bg-white/90 p-3.5 text-center shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1)] sm:gap-3.5 sm:p-4 animate-[fade-in-up_0.95s_ease-out_both]"
               aria-label="Everyday situations focus"
             >
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[#e3dffc] sm:size-10">
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#e3dffc]">
                 <Image
                   src="/ielts-general/float-icon.svg"
                   alt=""
@@ -96,13 +97,13 @@ export function IeltsGeneralHero() {
                   className="size-5"
                 />
               </span>
-              <div>
+              <div className="min-w-0 flex-1 text-center">
                 <p className="text-xs font-semibold leading-snug text-[#1a1e38] sm:text-[0.8125rem]">
                   Built for everyday situations you&apos;ll actually use in
                   Australia.
                 </p>
                 <span
-                  className="mt-1.5 block h-1 w-7 rounded-full bg-[#4328eb]"
+                  className="mx-auto mt-1.5 block h-1 w-7 rounded-full bg-[#4328eb]"
                   aria-hidden
                 />
               </div>
@@ -110,7 +111,7 @@ export function IeltsGeneralHero() {
           </div>
         </div>
 
-        <div className="relative z-10 mx-auto mt-5 w-full max-w-4xl shrink-0 rounded-2xl bg-[#2D5BFF] p-3 text-white shadow-[0_4px_8px_rgba(0,0,0,0.25)] sm:mt-6 sm:p-4 animate-[fade-in-up_0.85s_ease-out_both]">
+        <div className="relative z-10 mx-auto mt-12 w-full max-w-4xl shrink-0 rounded-2xl bg-[#2D5BFF] p-3 text-white shadow-[0_4px_8px_rgba(0,0,0,0.25)] sm:mt-14 sm:p-4 animate-[fade-in-up_0.85s_ease-out_both]">
           <ul className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-0">
             {TRUST_ITEMS.map((item, index) => (
               <li

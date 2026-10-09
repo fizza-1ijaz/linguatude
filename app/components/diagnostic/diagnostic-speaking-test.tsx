@@ -3,6 +3,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
+  DiagnosticSectionHeading,
+  DiagnosticTipBanner,
+} from "@/app/components/diagnostic/diagnostic-ui";
+import {
   DiagnosticTestShell,
   useHideScrollbar,
 } from "@/app/components/diagnostic/diagnostic-test-shell";
@@ -49,9 +53,11 @@ export function DiagnosticSpeakingTest() {
     const state = readOnboardingState();
     if (
       !state.exam ||
-      (state.exam === "ukvi" && !state.ukviLevel) ||
+      !state.dailyMinutes ||
       !state.experienceDone ||
-      !state.goalsDone
+      !state.goalsDone ||
+      !state.studyDaysDone ||
+      !state.focusDone
     ) {
       router.replace(ONBOARDING_ROUTES.diagnostic);
       return;
@@ -118,24 +124,13 @@ export function DiagnosticSpeakingTest() {
       canSubmit
       onSubmit={finishDiagnostic}
       submitLabel="Submit section"
-      footerMessage="The test will submit your response automatically and move to the next section."
     >
-      <h1 className="text-xl font-semibold sm:text-[1.375rem]">
-        <span className="text-[#2b5ce6]">Speaking</span>
-        <span className="text-[#9CA3AF]"> · </span>
-        <span className="font-medium text-[#6B7280]">Section 4 of 4</span>
-      </h1>
+      <DiagnosticSectionHeading skill="Speaking" section="Section 4 of 4" />
 
-      <div className="mt-4 flex items-start gap-3 rounded-xl bg-[#2b5ce6] px-4 py-3.5 text-white sm:px-5">
-        <InfoIcon className="mt-0.5 size-5 shrink-0" />
-        <p className="text-sm font-medium sm:text-base">
-          Read the question. You have 10 seconds to prepare, then 60 seconds to
-          speak your answer.
-        </p>
-      </div>
-
-      <div className="mt-5 grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_19rem] lg:gap-5 xl:grid-cols-[minmax(0,1fr)_21rem]">
-        <section className="overflow-hidden rounded-xl border border-[#E5E7EB] bg-white shadow-sm">
+      <div className="mt-4 grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_19rem] lg:gap-5 xl:grid-cols-[minmax(0,1fr)_21rem]">
+        <div className="min-w-0 space-y-4">
+          <DiagnosticTipBanner title="Read the question. You have 10 seconds to prepare, then 60 seconds to speak your answer." />
+          <section className="overflow-hidden rounded-xl border border-[#E5E7EB] bg-white shadow-sm">
           <div className="border-b border-[#E5E7EB] px-5 py-5 sm:px-6">
             <p className="text-sm font-semibold text-[#2b5ce6]">
               Speaking Question
@@ -274,8 +269,9 @@ export function DiagnosticSpeakingTest() {
             </div>
           </div>
         </section>
+        </div>
 
-        <aside className="space-y-4 lg:sticky lg:top-[5.25rem]">
+        <aside className="flex flex-col gap-4 lg:sticky lg:top-[5.25rem]">
           <section className="rounded-xl border border-[#E5E7EB] bg-white p-5 shadow-sm">
             <div className="flex items-center gap-2 text-sm font-semibold text-[#2b5ce6]">
               <ClockIcon className="size-4" />
@@ -343,20 +339,6 @@ export function DiagnosticSpeakingTest() {
         </aside>
       </div>
     </DiagnosticTestShell>
-  );
-}
-
-function InfoIcon({ className = "size-5" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 20 20" fill="none" aria-hidden>
-      <circle cx="10" cy="10" r="8" stroke="white" strokeWidth="1.6" />
-      <path
-        d="M10 9v4.5M10 6.5h.01"
-        stroke="white"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-      />
-    </svg>
   );
 }
 

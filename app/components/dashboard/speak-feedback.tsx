@@ -125,7 +125,7 @@ export function SpeakFeedback() {
                 {BAND_METRICS.map((m) => (
                   <div
                     key={m.label}
-                    className="relative rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-3"
+                    className="relative rounded-xl border border-[#E2E8F0] bg-white px-3 py-3 text-center"
                   >
                     <span className="absolute right-2 top-2 text-[#CBD5E1]">
                       <InfoIcon />
@@ -145,8 +145,11 @@ export function SpeakFeedback() {
         <div className="grid gap-4 sm:grid-cols-3 lg:gap-5">
           <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.22)]">
             <div className="flex items-start gap-3">
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#DCFCE7] text-[#16A34A]">
-                <TurtleIcon />
+              <span
+                className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#DCFCE7] text-xl leading-none"
+                aria-hidden
+              >
+                🐢
               </span>
               <div>
                 <p className="text-sm font-semibold text-[#64748B]">Pace</p>
@@ -241,7 +244,8 @@ export function SpeakFeedback() {
                   YOU SAID
                 </p>
                 <p className="mt-1 text-sm leading-6 text-[#334155]">
-                  Basically, it was a very nice place with a lot of history.
+                  &ldquo;Basically, it was a very nice place with a lot of
+                  history.&rdquo;
                 </p>
               </div>
               <div className="text-left sm:border-l sm:border-[#E2E8F0] sm:pl-6">
@@ -249,23 +253,24 @@ export function SpeakFeedback() {
                   TRY INSTEAD
                 </p>
                 <p className="mt-1 text-sm font-medium leading-6 text-[#2b5ce6]">
-                  It was a really pleasant place with a lot of history.
+                  &ldquo;It was a really pleasant place with a lot of
+                  history.&rdquo;
                 </p>
               </div>
             </div>
           </section>
 
-          <section className="flex flex-col rounded-2xl border border-[#BFDBFE]/80 bg-[#EFF6FF] p-4 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.18)] sm:p-4">
+          <section className="flex min-h-[18rem] flex-1 flex-col rounded-2xl border border-[#BFDBFE]/80 bg-[#EFF6FF] p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.18)] sm:min-h-[20rem] sm:p-6">
             <Link
               href="/dashboard/speak/session"
               className="text-sm font-semibold text-[#2b5ce6] transition hover:underline"
             >
               Next question →
             </Link>
-            <p className="mt-4 text-center text-sm font-bold leading-6 text-[#141B2B] sm:text-base sm:leading-7">
+            <p className="mt-6 text-center text-sm font-bold leading-6 text-[#141B2B] sm:mt-8 sm:text-base sm:leading-7">
               What do you like most about the area where you grew up?
             </p>
-            <div className="mt-4 flex flex-col items-center">
+            <div className="mt-auto flex flex-col items-center pt-8">
               <Link
                 href="/dashboard/speak/session"
                 className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#2b5ce6] text-sm font-semibold text-white shadow-sm transition hover:bg-[#244FE6]"
@@ -282,7 +287,7 @@ export function SpeakFeedback() {
 
         <div className="flex justify-center pt-2">
           <Link
-            href="/dashboard/speak/exam"
+            href="/dashboard/speak/session-complete"
             className="inline-flex h-12 min-w-[12rem] items-center justify-center rounded-xl bg-[#2b5ce6] px-8 text-sm font-semibold text-white shadow-sm transition hover:bg-[#244FE6]"
           >
             End Session
@@ -354,40 +359,6 @@ function InfoIcon() {
         d="M6 5.2V8.5M6 3.6h.01"
         stroke="currentColor"
         strokeWidth="1.2"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function TurtleIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="size-6" fill="none" aria-hidden>
-      <ellipse
-        cx="12"
-        cy="13"
-        rx="7"
-        ry="4.5"
-        fill="currentColor"
-        opacity="0.25"
-      />
-      <path
-        d="M5.5 13c0-3.2 2.9-5.5 6.5-5.5s6.5 2.3 6.5 5.5c0 1.4-.6 2.6-1.6 3.5H7.1C6.1 15.6 5.5 14.4 5.5 13Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-      <circle cx="19" cy="11.5" r="2.2" stroke="currentColor" strokeWidth="1.5" />
-      <path
-        d="M18.2 10.2h1.2M7 16.2 5.5 18M10 16.8V19M14 16.8V19M17 16.2 18.5 18"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-      <path
-        d="M9.5 11.5h5M10.5 13.5h3"
-        stroke="currentColor"
-        strokeWidth="1.3"
         strokeLinecap="round"
       />
     </svg>

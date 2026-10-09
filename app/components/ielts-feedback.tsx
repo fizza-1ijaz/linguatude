@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { SpeakingAudioPlayer } from "@/app/components/speaking-audio-player";
+import { getIeltsSpeakingSample } from "@/lib/content";
 
 const COACH_POINTS = [
   "Filler-word detection",
@@ -7,10 +9,6 @@ const COACH_POINTS = [
 ] as const;
 
 const FILLERS = ["Well", "uh", "actually", "you know", "um"] as const;
-
-const WAVE = [
-  8, 16, 8, 24, 32, 24, 16, 32, 24, 8, 16, 8, 16, 8, 24, 32, 24, 8, 16, 8, 24, 8, 8,
-] as const;
 
 function Chip({
   children,
@@ -33,6 +31,8 @@ function Chip({
 }
 
 export function IeltsFeedback() {
+  const sample = getIeltsSpeakingSample();
+
   return (
     <section
       id="feedback"
@@ -112,7 +112,7 @@ export function IeltsFeedback() {
                   </p>
                 </div>
                 <p className="text-sm font-bold tracking-wide text-[#777589]">
-                  00:45
+                  {sample.durationLabel}
                 </p>
               </div>
 
@@ -124,28 +124,11 @@ export function IeltsFeedback() {
                 <Chip tone="orange">um</Chip> and saves time.
               </p>
 
-              <div className="mt-6 flex items-center gap-4 border-t border-[rgba(199,196,219,0.2)] pt-6">
-                <span className="flex size-10 shrink-0 items-center justify-center overflow-clip rounded-full bg-[#e3dfff]">
-                  <Image
-                    src="/ielts/play-btn.svg"
-                    alt=""
-                    width={11}
-                    height={14}
-                    className="h-3.5 w-[11px]"
-                  />
-                </span>
-                <div className="flex h-8 flex-1 items-center gap-0.5 opacity-60" aria-hidden>
-                  {WAVE.map((h, i) => (
-                    <span
-                      key={i}
-                      className={`w-1 rounded-full ${
-                        i < 17 ? "bg-[#2D5BFF]" : "bg-[#777589]"
-                      }`}
-                      style={{ height: `${h}px` }}
-                    />
-                  ))}
-                </div>
-              </div>
+              <SpeakingAudioPlayer
+                transcript={sample.transcript}
+                audioSrc={sample.audioSrc}
+                durationLabel={sample.durationLabel}
+              />
             </div>
 
             <div className="flex flex-col gap-6 rounded-2xl border border-[rgba(199,196,219,0.3)] bg-[#eaf0fd] p-6 shadow-[0_4px_4px_rgba(0,0,0,0.25)]">

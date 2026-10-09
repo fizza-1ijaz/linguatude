@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const SECTIONS = [
@@ -27,43 +28,57 @@ export function TermsPageContent() {
   return (
     <>
       <section
-        className="home-hero relative isolate overflow-hidden"
+        className="mkt-hero relative isolate overflow-hidden"
         aria-labelledby="terms-heading"
       >
-        <div className="relative mx-auto w-full max-w-6xl px-4 pb-14 pt-14 sm:px-6 sm:pb-16 sm:pt-16 lg:px-8 lg:pb-20 lg:pt-[8rem]">
-          <div className="max-w-xl animate-[fade-in-up_0.75s_ease-out_both]">
-            <p className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.3px] text-[#2D5BFF]">
-              <span className="size-2 rounded-full bg-[#2D5BFF]" aria-hidden />
-              Get in touch
-            </p>
+        <div className="relative mx-auto w-full max-w-6xl px-4 pb-14 pt-12 sm:px-6 sm:pb-16 sm:pt-14 lg:px-8 lg:pb-20 lg:pt-16">
+          <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-6">
+            <div className="relative z-10 max-w-xl animate-[fade-in-up_0.75s_ease-out_both]">
+              <p className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.3px] text-[#2D5BFF]">
+                <span className="size-2 rounded-full bg-[#2D5BFF]" aria-hidden />
+                Get in touch
+              </p>
 
-            <h1
-              id="terms-heading"
-              className="mt-4 text-balance text-4xl font-bold tracking-[-0.025em] text-[#1e1b4b] sm:text-5xl"
-            >
-              Terms of Service
-            </h1>
-
-            <p className="mt-4 text-lg font-bold leading-6 text-[#6b7280] sm:text-xl">
-              Last updated 23 Jul 2026
-            </p>
-
-            <div className="mt-6">
-              <Link
-                href="/#start"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#2D5BFF] px-8 py-3.5 text-base font-semibold text-white shadow-[0_4px_6px_-1px_rgba(76,36,251,0.2)] transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/60"
+              <h1
+                id="terms-heading"
+                className="mt-4 text-balance text-4xl font-bold tracking-[-0.025em] text-[#1e1b4b] sm:text-5xl"
               >
-                Start free
-                <svg viewBox="0 0 16 16" className="size-4" fill="none" aria-hidden>
-                  <path
-                    d="M3 8h9M9 4.5 12.5 8 9 11.5"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </Link>
+                Terms of Service
+              </h1>
+
+              <p className="mt-4 text-lg font-bold leading-6 text-[#6b7280] sm:text-xl">
+                Last updated 23 Jul 2026
+              </p>
+
+              <div className="mt-6">
+                <Link
+                  href="/#start"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#2D5BFF] px-8 py-3.5 text-base font-semibold text-white shadow-[0_4px_6px_-1px_rgba(76,36,251,0.2)] transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/60"
+                >
+                  Start free
+                  <svg viewBox="0 0 16 16" className="size-4" fill="none" aria-hidden>
+                    <path
+                      d="M3 8h9M9 4.5 12.5 8 9 11.5"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Link>
+              </div>
+            </div>
+
+            <div
+              className="pointer-events-none relative mx-auto w-full max-w-[48rem] scale-110 lg:max-w-none lg:origin-center lg:scale-[1.25]"
+              aria-hidden
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/tos/tos-hero.svg"
+                alt=""
+                className="h-auto w-full object-contain object-center"
+              />
             </div>
           </div>
         </div>
@@ -72,15 +87,14 @@ export function TermsPageContent() {
       <section className="bg-white px-4 py-12 sm:px-6 sm:py-14 lg:px-8 lg:pb-20">
         <div className="mx-auto max-w-5xl">
           <div className="flex flex-col gap-5 rounded-2xl border border-[#e5e7eb] bg-[#eaf0fd] p-6 sm:flex-row sm:items-start sm:gap-7 sm:p-8">
-            <span className="flex size-14 shrink-0 items-center justify-center rounded-full bg-[#2D5BFF] text-white">
-              <svg viewBox="0 0 24 24" className="size-7" fill="none" aria-hidden>
-                <path
-                  d="M12 8v5M12 16.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
+            <span className="flex size-14 shrink-0 items-center justify-center rounded-full bg-[#e3dfff]">
+              <Image
+                src="/tos/icon-message.svg"
+                alt=""
+                width={24}
+                height={24}
+                className="size-6"
+              />
             </span>
             <div>
               <h2 className="text-xl font-bold text-[#1e1b4b] sm:text-2xl">
@@ -110,8 +124,8 @@ export function TermsPageContent() {
             ))}
           </div>
 
-          <div className="mt-10 flex flex-col gap-5 rounded-2xl border border-[#e5e7eb] bg-[#f4f6f9] p-6 shadow-sm sm:flex-row sm:items-start sm:gap-6 sm:p-8">
-            <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#e8e8fc] text-[#2D5BFF]">
+          <div className="mt-10 flex flex-col gap-5 rounded-2xl border border-[#c7d2fe] bg-[#eaf0fd] p-6 shadow-sm sm:flex-row sm:items-start sm:gap-6 sm:p-8">
+            <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#dbe3ff] text-[#2D5BFF]">
               <svg viewBox="0 0 24 24" className="size-6" fill="none" aria-hidden>
                 <path
                   d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"

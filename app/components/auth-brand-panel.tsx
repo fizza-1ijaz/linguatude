@@ -3,28 +3,27 @@ import Link from "next/link";
 
 export function AuthBrandPanel() {
   return (
-    <aside className="auth-brand relative hidden h-full min-h-0 overflow-hidden md:flex md:flex-col md:justify-between md:px-8 md:py-6 lg:px-10 lg:py-8 xl:px-12">
+    <aside className="auth-brand relative hidden h-full min-h-0 overflow-hidden bg-[linear-gradient(180deg,#2B5CE6_0%,#1A3DA8_100%)] md:flex md:flex-col md:justify-between md:px-8 md:py-6 lg:px-10 lg:py-8 xl:px-12">
       <div className="pointer-events-none absolute inset-0" aria-hidden>
-        <div className="absolute inset-0 bg-[#1e1b4b]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_70%_at_20%_10%,rgba(45,91,255,0.55)_0%,transparent_55%),radial-gradient(ellipse_60%_50%_at_85%_75%,rgba(142,178,246,0.35)_0%,transparent_50%),linear-gradient(160deg,#2430a0_0%,#1e1b4b_45%,#15205c_100%)]" />
-        <div className="absolute -right-16 top-10 size-[16rem] rounded-full bg-[#2D5BFF]/25 blur-3xl" />
-        <div className="absolute bottom-16 left-8 size-56 rounded-full bg-[#8eb2f6]/20 blur-3xl" />
-        <div className="absolute left-[12%] top-[28%] h-20 w-[70%] rotate-[-8deg] rounded-full border border-white/10 bg-white/5" />
-        <div className="absolute bottom-[16%] right-[-5%] size-64 rounded-full border border-white/10 bg-white/5" />
-        <div className="absolute left-[28%] top-[48%] size-32 rounded-full border border-white/15 bg-[#2D5BFF]/20" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/Complex%20Geometry%20Composition.svg"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        />
       </div>
 
       <Link
         href="/"
         className="relative z-10 inline-flex items-center gap-2.5 text-white transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
       >
-        <span className="relative h-6 w-[1.833rem] shrink-0 overflow-hidden">
+        <span className="relative size-8 shrink-0 overflow-hidden rounded-lg sm:size-9">
           <Image
-            src="/home/logo-mark.svg"
+            src="/linguatude.webp"
             alt=""
-            width={30}
-            height={24}
-            className="size-full brightness-0 invert"
+            width={36}
+            height={36}
+            className="size-full object-cover"
             priority
           />
         </span>

@@ -5,7 +5,7 @@ import { SiteHeader } from "@/app/components/site-header";
 export const metadata: Metadata = {
   title: "PTE vs IELTS Score Guide | Linguatude",
   description:
-    "PTE vs IELTS score concordance for Australian migration. Compare Competent, Proficient and Superior English levels, DHA points, and how to pick your test.",
+    "Compare indicative PTE and IELTS scores and understand Australian English requirements, migration points, and how to choose the right exam.",
   alternates: { canonical: "/pte-vs-ielts" },
 };
 

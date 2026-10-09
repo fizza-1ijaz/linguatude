@@ -1,5 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
+import {
+  formatPteTestFeeHeadline,
+  formatVerifiedDate,
+  getPteTestFee,
+} from "@/lib/content";
 
 const MODULES = [
   {
@@ -41,33 +46,41 @@ const MODULES = [
 ] as const;
 
 export function PteModules() {
+  const fee = getPteTestFee();
+  const feeHeadline = formatPteTestFeeHeadline();
+  const verified = formatVerifiedDate(fee.lastVerified);
+
   return (
     <section className="bg-white py-12 sm:py-16" aria-labelledby="modules-heading">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="flex items-start gap-4 rounded-xl border border-[#e2e8f0] bg-[#bed4fa] px-4 py-4 shadow-[0_4px_4px_rgba(0,0,0,0.25)] sm:items-center sm:px-5 sm:py-4">
-          <span className="flex size-10 shrink-0 items-center justify-center overflow-clip rounded-full bg-white">
-            <Image
-              src="/pte/fee-info.svg"
-              alt=""
-              width={20}
-              height={20}
-              className="size-5"
-            />
-          </span>
-          <div>
-            <p className="text-base font-semibold leading-5 text-[#111827] sm:text-xl">
-              Test fee ~A$490 — verify at Pearson checkout.
-            </p>
-            <p className="mt-1 text-sm leading-4 text-[#434656]">
-              Fees may change. Please confirm the latest price at Pearson before
-              booking your test.
-            </p>
+        {feeHeadline ? (
+          <div className="flex items-start gap-4 rounded-xl border border-[#e2e8f0] bg-[#bed4fa] px-4 py-4 shadow-[0_4px_4px_rgba(0,0,0,0.25)] sm:items-center sm:px-5 sm:py-4">
+            <span className="flex size-10 shrink-0 items-center justify-center overflow-clip rounded-full bg-white">
+              <Image
+                src="/pte/fee-info.svg"
+                alt=""
+                width={20}
+                height={20}
+                className="size-5"
+              />
+            </span>
+            <div>
+              <p className="text-base font-semibold leading-5 text-[#111827] sm:text-xl">
+                {feeHeadline}
+              </p>
+              <p className="mt-1 text-sm leading-4 text-[#434656]">
+                {fee.disclaimer}
+                {verified ? ` Last verified ${verified}.` : null}
+              </p>
+            </div>
           </div>
-        </div>
+        ) : null}
 
         <h2
           id="modules-heading"
-          className="mt-12 text-center text-balance text-2xl font-bold tracking-tight text-[#1e293b] sm:mt-14"
+          className={`text-center text-balance text-2xl font-bold tracking-tight text-[#1e293b] ${
+            feeHeadline ? "mt-12 sm:mt-14" : ""
+          }`}
         >
           Everything you need for PTE success
         </h2>

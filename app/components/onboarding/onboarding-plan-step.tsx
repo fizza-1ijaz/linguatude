@@ -13,7 +13,7 @@ import {
   writeOnboardingState,
 } from "@/app/components/onboarding/onboarding-state";
 
-const STUDY_OPTIONS = [10, 20, 30] as const;
+const STUDY_OPTIONS = [15, 30, 45, 60] as const;
 
 const QUEUE = [
   {
@@ -22,7 +22,7 @@ const QUEUE = [
     minutes: 15,
     tag: "Writing",
     border: "border-l-[#2b5ce6]",
-    iconBg: "bg-[#EEF2FF]",
+    iconBg: "bg-[#2b5ce6]",
     tagBg: "bg-[#EEF2FF] text-[#2b5ce6]",
     icon: "/ielts-general/icon-pencil.svg",
     gradient:
@@ -33,30 +33,31 @@ const QUEUE = [
     desc: "Academic passage techniques",
     minutes: 12,
     tag: "Reading",
-    border: "border-l-[#8B5CF6]",
-    iconBg: "bg-[#F3E8FF]",
+    border: "border-l-[#7C3AED]",
+    iconBg: "bg-[#7C3AED]",
     tagBg: "bg-[#F3E8FF] text-[#7C3AED]",
     icon: "/ielts-general/icon-book.svg",
     gradient:
-      "linear-gradient(135deg, rgba(139,92,246,0.16) 0%, rgba(139,92,246,0.04) 45%, #ffffff 100%)",
+      "linear-gradient(135deg, rgba(124,58,237,0.16) 0%, rgba(124,58,237,0.04) 45%, #ffffff 100%)",
   },
   {
     title: "Listening: Note-taking",
     desc: "Section 3 lecture practice",
     minutes: 20,
     tag: "Listening",
-    border: "border-l-[#22C55E]",
-    iconBg: "bg-[#ECFDF5]",
+    border: "border-l-[#16A34A]",
+    iconBg: "bg-[#16A34A]",
     tagBg: "bg-[#ECFDF5] text-[#16A34A]",
     icon: "/contact/icon-headphones.svg",
     gradient:
-      "linear-gradient(135deg, rgba(34,197,94,0.16) 0%, rgba(34,197,94,0.04) 45%, #ffffff 100%)",
+      "linear-gradient(135deg, rgba(22,163,74,0.16) 0%, rgba(22,163,74,0.04) 45%, #ffffff 100%)",
   },
 ] as const;
 
 function weeksForDailyMinutes(minutes: number) {
-  if (minutes <= 10) return 16;
-  if (minutes <= 20) return 11;
+  if (minutes <= 15) return 16;
+  if (minutes <= 30) return 11;
+  if (minutes <= 45) return 9;
   return 8;
 }
 
@@ -75,9 +76,11 @@ export function OnboardingPlanStep() {
     const state = readOnboardingState();
     if (
       !state.exam ||
-      (state.exam === "ukvi" && !state.ukviLevel) ||
+      !state.dailyMinutes ||
       !state.experienceDone ||
-      !state.goalsDone
+      !state.goalsDone ||
+      !state.studyDaysDone ||
+      !state.focusDone
     ) {
       router.replace(ONBOARDING_ROUTES.diagnostic);
       return;
@@ -85,6 +88,16 @@ export function OnboardingPlanStep() {
     const overall =
       calculateIeltsOverall(state.targetScores) ?? DEFAULT_TARGET_BAND;
     setTargetBand(overall);
+    const mapped =
+      ([15, 30, 45, 60] as const).find((n) => n === state.dailyMinutes) ??
+      (state.dailyMinutes <= 20
+        ? 15
+        : state.dailyMinutes <= 35
+          ? 30
+          : state.dailyMinutes <= 50
+            ? 45
+            : 60);
+    setDailyMinutes(mapped);
     setReady(true);
   }, [router]);
 
@@ -107,7 +120,7 @@ export function OnboardingPlanStep() {
   }
 
   return (
-    <OnboardingWideShell step={7} contentClassName="bg-[#E8EEF8]">
+    <OnboardingWideShell step={8} contentClassName="bg-[#E8EEF8]">
       <div className="mx-auto max-w-4xl">
         <header className="text-center">
           <div className="mx-auto mb-4 flex size-14 items-center justify-center rounded-full bg-[#EEF2FF]">
@@ -145,15 +158,7 @@ export function OnboardingPlanStep() {
             hint="Estimated duration"
           />
           <SummaryCol
-            icon={
-              <Image
-                src="/ielts-general/icon-pencil.svg"
-                alt=""
-                width={16}
-                height={16}
-                className="size-4 opacity-70"
-              />
-            }
+            icon={<GreyPencilIcon className="size-4 text-[#94A3B8]" />}
             iconBg="bg-[#F1F5F9]"
             label="Starting focus"
             value="Writing"
@@ -168,7 +173,7 @@ export function OnboardingPlanStep() {
             </h2>
             <Link
               href="/dashboard"
-              className="text-sm font-semibold text-[#2b5ce6] transition hover:text-[#244fe6]"
+              className="inline-flex items-center rounded-lg bg-white px-3 py-1.5 text-sm font-semibold text-[#2b5ce6] shadow-sm ring-1 ring-[#E5E7EB] transition hover:bg-[#F8FAFC] hover:text-[#244fe6]"
             >
               View full plan →
             </Link>
@@ -189,7 +194,7 @@ export function OnboardingPlanStep() {
                       alt=""
                       width={16}
                       height={16}
-                      className="size-4"
+                      className="size-4 brightness-0 invert"
                     />
                   </span>
                   <span className="text-xs font-semibold text-[#94A3B8]">
@@ -221,14 +226,17 @@ export function OnboardingPlanStep() {
               <p className="text-sm font-semibold text-[#111827] sm:text-base">
                 How much time can you study each day?
               </p>
-              <div className="mt-3 grid grid-cols-3 gap-2">
+              <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
                 {STUDY_OPTIONS.map((mins) => {
                   const selected = dailyMinutes === mins;
                   return (
                     <button
                       key={mins}
                       type="button"
-                      onClick={() => setDailyMinutes(mins)}
+                      onClick={() => {
+                        setDailyMinutes(mins);
+                        writeOnboardingState({ dailyMinutes: mins });
+                      }}
                       className={`inline-flex h-11 items-center justify-center gap-1.5 rounded-xl text-sm font-semibold transition ${
                         selected
                           ? "bg-[#2b5ce6] text-white shadow-sm"
@@ -255,7 +263,7 @@ export function OnboardingPlanStep() {
                   in approximately <span className="font-bold">{weeks} weeks.</span>
                 </span>
               </p>
-              <p className="mt-2 text-xs leading-5 text-[#94A3B8]">
+              <p className="mt-2 text-xs leading-5 text-[#111827]">
                 This is an estimate based on average learner progress. Individual
                 results vary.
               </p>
@@ -377,6 +385,20 @@ function CalendarIcon({ className = "size-4" }: { className?: string }) {
         strokeWidth="1.4"
         strokeLinecap="round"
       />
+    </svg>
+  );
+}
+
+function GreyPencilIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" aria-hidden>
+      <path
+        d="M3.5 12.5h2.2L12 6.2a1.4 1.4 0 0 0-2-2L3.5 10.7v1.8Z"
+        stroke="currentColor"
+        strokeWidth="1.35"
+        strokeLinejoin="round"
+      />
+      <path d="M9 5l2 2" stroke="currentColor" strokeWidth="1.35" />
     </svg>
   );
 }

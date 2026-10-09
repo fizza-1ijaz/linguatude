@@ -3,6 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
+  DiagnosticSectionHeading,
+  DiagnosticTipBanner,
+} from "@/app/components/diagnostic/diagnostic-ui";
+import {
   DiagnosticTestShell,
   useHideScrollbar,
 } from "@/app/components/diagnostic/diagnostic-test-shell";
@@ -81,9 +85,11 @@ export function DiagnosticReadingTest() {
     const state = readOnboardingState();
     if (
       !state.exam ||
-      (state.exam === "ukvi" && !state.ukviLevel) ||
+      !state.dailyMinutes ||
       !state.experienceDone ||
-      !state.goalsDone
+      !state.goalsDone ||
+      !state.studyDaysDone ||
+      !state.focusDone
     ) {
       router.replace(ONBOARDING_ROUTES.diagnostic);
       return;
@@ -120,23 +126,13 @@ export function DiagnosticReadingTest() {
       canSubmit
       onSubmit={submitSection}
     >
-      <h1 className="text-xl font-semibold sm:text-[1.375rem]">
-        <span className="text-[#2b5ce6]">Reading</span>
-        <span className="text-[#9CA3AF]"> · </span>
-        <span className="font-medium text-[#6B7280]">Section 2 of 4</span>
-      </h1>
+      <DiagnosticSectionHeading skill="Reading" section="Section 2 of 4" />
 
-      <div className="mt-4 flex items-start gap-3 rounded-xl bg-[#2b5ce6] px-4 py-3.5 text-white sm:px-5">
-        <LightbulbIcon className="mt-0.5 size-5 shrink-0" />
-        <div>
-          <p className="text-sm font-bold sm:text-base">
-            Read the passage and answer the questions.
-          </p>
-          <p className="mt-0.5 text-sm text-white/90">
-            You have 3 minutes to read the passage and answer all the questions.
-          </p>
-        </div>
-      </div>
+      <DiagnosticTipBanner
+        className="mt-4"
+        title="Read the passage and answer the questions."
+        description="You have 3 minutes to read the passage and answer all the questions."
+      />
 
       <div className="mt-5 grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,0.42fr)_minmax(0,0.58fr)] lg:gap-6">
         {/* Left: passage + section info */}
@@ -155,37 +151,43 @@ export function DiagnosticReadingTest() {
             </p>
           </article>
 
-          <aside className="rounded-xl border border-[#BFDBFE] bg-[#EFF6FF] p-5">
+          <aside className="rounded-2xl border border-[#BFDBFE] bg-[#F8FAFF] p-5 sm:p-6">
             <div className="flex items-center gap-2 text-sm font-semibold text-[#2b5ce6]">
-              <span className="flex size-6 items-center justify-center rounded-full bg-[#2b5ce6] text-xs font-bold text-white">
+              <span className="flex size-6 items-center justify-center rounded-full bg-[#2b5ce6] text-[0.6875rem] font-bold leading-none text-white">
                 i
               </span>
-              Section Info
+              Section info
             </div>
-            <h3 className="mt-3 text-base font-bold text-[#111827]">Reading</h3>
+            <h3 className="mt-3 text-lg font-bold text-[#111827]">Reading</h3>
             <p className="mt-1 text-sm leading-6 text-[#4B5563]">
-              Read the passage carefully, then choose one answer for each
-              question.
+              Read the passage carefully and answer the questions based on it.
             </p>
-            <ul className="mt-4 space-y-2.5 border-t border-[#BFDBFE] pt-3 text-sm text-[#374151]">
-              <li className="flex items-start gap-2.5">
-                <ClockMini className="mt-0.5 size-4 shrink-0 text-[#2b5ce6]" />
-                <span>
-                  Section time: <strong>3 minutes</strong>
+            <ul className="mt-4 space-y-3 border-t border-[#E5E7EB] pt-4 text-sm">
+              <li className="flex items-center justify-between gap-3">
+                <span className="inline-flex items-center gap-2 text-[#374151]">
+                  <ClockMini className="size-4 shrink-0 text-[#6B7280]" />
+                  Section time
                 </span>
+                <span className="font-bold text-[#111827]">3 minutes</span>
               </li>
-              <li className="flex items-start gap-2.5">
-                <DocMini className="mt-0.5 size-4 shrink-0 text-[#2b5ce6]" />
-                <span>
-                  Questions: <strong>3 questions</strong>
+              <li className="flex items-center justify-between gap-3">
+                <span className="inline-flex items-center gap-2 text-[#374151]">
+                  <QuestionMini className="size-4 shrink-0 text-[#6B7280]" />
+                  Questions
                 </span>
+                <span className="font-bold text-[#111827]">3 questions</span>
               </li>
-              <li className="flex items-start gap-2.5">
-                <ListMini className="mt-0.5 size-4 shrink-0 text-[#2b5ce6]" />
-                <span>
-                  Answer type: <strong>Multiple choice</strong>
+              <li className="flex items-start justify-between gap-3">
+                <span className="inline-flex items-center gap-2 text-[#374151]">
+                  <CheckMini className="size-4 shrink-0 text-[#6B7280]" />
+                  Answer type
+                </span>
+                <span className="text-right">
+                  <span className="block font-bold text-[#111827]">
+                    Multiple choice
+                  </span>
                   <span className="mt-0.5 block text-xs font-normal text-[#6B7280]">
-                    one answer per question
+                    (one answer per question)
                   </span>
                 </span>
               </li>
@@ -205,7 +207,7 @@ export function DiagnosticReadingTest() {
               {QUESTIONS.map((q, qi) => (
                 <div key={q.id}>
                   <div className="flex items-start gap-3">
-                    <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#2b5ce6] text-sm font-bold text-white">
+                    <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#DBEAFE] text-sm font-bold text-[#1E40AF]">
                       {qi + 1}
                     </span>
                     <p className="pt-0.5 text-sm font-bold leading-6 text-[#111827] sm:text-base">
@@ -213,7 +215,7 @@ export function DiagnosticReadingTest() {
                     </p>
                   </div>
 
-                  <div className="mt-3 flex flex-col gap-2.5 pl-0 sm:pl-10">
+                  <div className="mt-3 overflow-hidden rounded-xl border border-[#E5E7EB] bg-white">
                     {q.options.map((opt, oi) => {
                       const selected = answers[q.id] === oi;
                       return (
@@ -223,14 +225,12 @@ export function DiagnosticReadingTest() {
                           onClick={() =>
                             setAnswers((prev) => ({ ...prev, [q.id]: oi }))
                           }
-                          className={`flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition ${
-                            selected
-                              ? "border-[#2b5ce6] bg-[#EFF6FF]"
-                              : "border-[#E5E7EB] bg-white hover:bg-[#F9FAFB]"
-                          }`}
+                          className={`flex w-full items-center gap-3 px-3.5 py-3.5 text-left transition first:pt-3.5 last:pb-3.5 hover:bg-[#F9FAFB] ${
+                            oi > 0 ? "border-t border-[#E5E7EB]" : ""
+                          } ${selected ? "bg-[#F8FAFF]" : "bg-white"}`}
                         >
                           <span
-                            className={`size-4 shrink-0 rounded border-2 ${
+                            className={`flex size-4 shrink-0 items-center justify-center rounded-full border-2 ${
                               selected
                                 ? "border-[#2b5ce6] bg-[#2b5ce6] shadow-[inset_0_0_0_2px_white]"
                                 : "border-[#D1D5DB] bg-white"
@@ -257,20 +257,6 @@ export function DiagnosticReadingTest() {
   );
 }
 
-function LightbulbIcon({ className = "size-5" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.8c.6.45 1 1.15 1 1.9V17h5v-1.3c0-.75.4-1.45 1-1.9A6 6 0 0 0 12 3z"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 function ClockMini({ className = "size-4" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -285,27 +271,36 @@ function ClockMini({ className = "size-4" }: { className?: string }) {
   );
 }
 
-function DocMini({ className = "size-4" }: { className?: string }) {
+function QuestionMini({ className = "size-4" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="12" cy="12" r="8.25" stroke="currentColor" strokeWidth="1.75" />
       <path
-        d="M7 3.5h7l4 4V20.5a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-16a1 1 0 0 1 1-1z"
+        d="M9.5 9.5a2.5 2.5 0 1 1 3.6 2.25c-.7.4-1.1.9-1.1 1.75V14"
         stroke="currentColor"
         strokeWidth="1.75"
+        strokeLinecap="round"
       />
-      <path d="M14 3.5v4h4" stroke="currentColor" strokeWidth="1.75" />
+      <path
+        d="M12 17h.01"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
 
-function ListMini({ className = "size-4" }: { className?: string }) {
+function CheckMini({ className = "size-4" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="12" cy="12" r="8.25" stroke="currentColor" strokeWidth="1.75" />
       <path
-        d="M9 7h11M9 12h11M9 17h11M4 7h.01M4 12h.01M4 17h.01"
+        d="m8 12.2 2.4 2.4L16 9"
         stroke="currentColor"
         strokeWidth="1.75"
         strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

@@ -126,10 +126,10 @@ export function ContactPageContent() {
   return (
     <>
       <section
-        className="home-hero relative isolate overflow-hidden"
+        className="mkt-hero relative isolate overflow-hidden"
         aria-labelledby="contact-hero-heading"
       >
-        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[48%] lg:block" aria-hidden>
+        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[48%] opacity-50 lg:block" aria-hidden>
           <div className="relative h-full w-full">
             <Image
               src="/contact/hero-envelope.png"

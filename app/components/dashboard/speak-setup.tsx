@@ -78,20 +78,23 @@ export function SpeakSetup() {
       }
     >
       <div className="w-full space-y-6 lg:space-y-7">
-        <button
-          type="button"
+        <Link
+          href="/dashboard/speak/microphone"
           className="flex w-full items-center gap-3 rounded-2xl border border-[#FED7AA] bg-[#FFF1E6] px-4 py-3.5 text-left transition hover:bg-[#FFE8D6]"
         >
-          <span className="flex size-9 shrink-0 items-center justify-center text-[#C2410C]/70">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-white text-[#C2410C]">
             <MicMutedIcon />
           </span>
           <span className="min-w-0 flex-1 text-sm font-medium text-[#9A3412]">
             Microphone access is needed for speaking practice. Tap to enable.
           </span>
-          <span className="shrink-0 text-[#C2410C]/60" aria-hidden>
+          <span
+            className="flex size-8 shrink-0 items-center justify-center rounded-full bg-white/50 text-[#C2410C]"
+            aria-hidden
+          >
             <ChevronRightIcon />
           </span>
-        </button>
+        </Link>
 
         <section>
           <h2 className="text-base font-bold text-[#141B2B]">
@@ -129,10 +132,10 @@ export function SpeakSetup() {
                   key={item.id}
                   type="button"
                   onClick={() => setQuestionType(item.id)}
-                  className={`relative rounded-2xl border p-4 text-left transition sm:p-5 ${
+                  className={`relative rounded-2xl border p-4 text-center transition sm:p-5 ${
                     selected
                       ? "border-[#2b5ce6] bg-[#EEF2FF]"
-                      : "border-transparent bg-[#F8FAFC] hover:bg-[#F1F5F9]"
+                      : "border-[#E2E8F0] bg-[#F1F5F9] hover:border-[#BFDBFE] hover:bg-[#E2E8F0]"
                   }`}
                 >
                   {selected ? (
@@ -140,7 +143,7 @@ export function SpeakSetup() {
                       <CheckIcon />
                     </span>
                   ) : null}
-                  <span className="flex size-10 items-center justify-center rounded-xl text-[#2b5ce6]">
+                  <span className="mx-auto flex size-10 items-center justify-center rounded-xl bg-white text-[#2b5ce6] shadow-sm ring-1 ring-[#E2E8F0]/80">
                     <Icon />
                   </span>
                   <p className="mt-3 text-sm font-bold text-[#141B2B]">
@@ -167,13 +170,13 @@ export function SpeakSetup() {
               Change in Settings →
             </Link>
           </div>
-          <div className="mt-3 flex items-center gap-3 rounded-2xl border border-[#BFDBFE] bg-[#F8FAFC] px-4 py-4">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl text-[#2b5ce6]">
+          <div className="mt-3 flex items-center gap-3 rounded-2xl border border-[#E2E8F0] bg-white px-4 py-4">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#DBEAFE] text-[#2b5ce6]">
               <VoiceDeliveryIcon />
             </span>
-            <p className="text-sm leading-6 text-[#475569]">
+            <p className="text-sm leading-6 text-[#64748B]">
               <span className="font-bold text-[#141B2B]">Voice (current)</span>
-              {": "}
+              <br />
               Questions will be spoken aloud by the AI coach.
             </p>
           </div>

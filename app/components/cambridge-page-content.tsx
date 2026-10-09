@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CambridgeWaitlistForm } from "@/app/components/cambridge-waitlist-form";
+import { FlightTrail } from "@/app/components/flight-trail";
 
 const TRUST_ITEMS = [
   {
@@ -45,7 +46,7 @@ export function CambridgePageContent() {
   return (
     <>
       <section
-        className="home-hero relative isolate overflow-hidden"
+        className="mkt-hero-bottom relative isolate overflow-hidden"
         aria-labelledby="cambridge-hero-heading"
       >
         <div className="mx-auto w-full max-w-6xl px-4 pb-6 pt-10 sm:px-6 sm:pt-14 lg:px-8 lg:pt-12">
@@ -94,14 +95,18 @@ export function CambridgePageContent() {
             </div>
 
             <div className="relative mx-auto w-full max-w-[32rem] animate-[fade-in-up_0.85s_ease-out_both] lg:max-w-none">
-              <div className="pointer-events-none absolute -left-2 top-2 z-[2] hidden size-16 sm:block sm:size-20 lg:left-0 lg:top-4">
-                <span className="relative block size-full overflow-clip">
+              <div className="pointer-events-none absolute -left-2 top-2 z-[2] hidden sm:block lg:left-0 lg:top-4">
+                <span className="relative block size-16 overflow-visible sm:size-20">
+                  <FlightTrail
+                    className="-left-[4.5rem] top-1/2 -translate-y-1/2 rotate-[-10deg] sm:-left-20"
+                    dots={9}
+                  />
                   <Image
                     src="/cambridge/paper-plane.svg"
                     alt=""
                     width={80}
                     height={80}
-                    className="size-full rotate-12"
+                    className="relative z-[1] size-full rotate-12"
                   />
                 </span>
               </div>

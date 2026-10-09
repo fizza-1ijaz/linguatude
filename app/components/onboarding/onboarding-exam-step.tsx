@@ -15,22 +15,27 @@ import {
 } from "@/app/components/onboarding/onboarding-state";
 
 const OPTIONS: {
-  id: ExamChoice;
+  id: NonNullable<ExamChoice>;
   title: string;
   description: string;
   icon: string;
+  iconBg: string;
 }[] = [
   {
     id: "academic",
     title: "IELTS Academic",
-    description: "For university admission and professional registration",
+    description:
+      "Prepare for your IELTS test with personalized practice and guidance.",
     icon: "/onboarding/icon-academic.svg",
+    iconBg: "bg-[#DBEAFE]",
   },
   {
-    id: "ukvi",
-    title: "IELTS UKVI / Life Skills",
-    description: "For UK visa applications and immigration",
-    icon: "/onboarding/icon-ukvi.svg",
+    id: "pte",
+    title: "PTE Academic",
+    description:
+      "Prepare for the PTE Academic test with personalized practice and guidance.",
+    icon: "/onboarding/icon-globe.svg",
+    iconBg: "bg-[#E8EEFF]",
   },
 ];
 
@@ -39,34 +44,32 @@ export function OnboardingExamStep() {
   const [exam, setExam] = useState<ExamChoice>(null);
 
   useEffect(() => {
-    setExam(readOnboardingState().exam);
+    const saved = readOnboardingState().exam;
+    setExam(saved === "ukvi" ? null : saved);
   }, []);
 
   function continueNext() {
-    if (!exam) return;
+    if (!exam || exam === "ukvi") return;
     writeOnboardingState({
       exam,
       ukviLevel: null,
     });
-    router.push(
-      exam === "ukvi" ? ONBOARDING_ROUTES.level : ONBOARDING_ROUTES.goal,
-    );
+    router.push(ONBOARDING_ROUTES.routine);
   }
 
   return (
     <OnboardingShell step={1} showAiBadge>
       <div className="flex min-h-0 flex-1 flex-col">
         <header className="shrink-0 text-center">
-          <h1 className="text-balance text-[1.75rem] font-bold leading-[1.15] tracking-tight text-[#0F172A] sm:text-[2.25rem]">
-            Let&apos;s get{" "}
-            <span className="text-[#2b5ce6]">you ready</span>
+          <h1 className="text-balance text-[1.35rem] font-bold leading-[1.15] tracking-tight text-[#0F172A] sm:text-[1.75rem]">
+            Let&apos;s get <span className="text-[#2b5ce6]">you ready</span>
           </h1>
-          <p className="mt-2.5 text-base leading-6 text-[#64748B] sm:text-lg">
+          <p className="mt-1.5 text-sm leading-5 text-[#64748B] sm:text-[0.9375rem]">
             Which exam are you preparing for?
           </p>
         </header>
 
-        <div className="mt-6 flex min-h-0 flex-1 flex-col gap-3.5 overflow-y-auto">
+        <div className="mt-4 flex min-h-0 flex-1 flex-col gap-2.5">
           {OPTIONS.map((opt) => {
             const selected = exam === opt.id;
             return (
@@ -74,10 +77,10 @@ export function OnboardingExamStep() {
                 key={opt.id}
                 type="button"
                 onClick={() => setExam(opt.id)}
-                className={`relative flex w-full items-center gap-4 overflow-hidden rounded-[1.15rem] bg-white px-4 py-4 text-left transition sm:gap-5 sm:px-5 sm:py-[1.125rem] ${
+                className={`relative flex w-full items-center gap-3 overflow-hidden rounded-2xl bg-white px-3.5 py-3 text-left transition sm:gap-4 sm:px-4 sm:py-3.5 ${
                   selected
-                    ? "shadow-[0_10px_24px_rgba(43,92,230,0.12)] ring-1 ring-[#2b5ce6]/30"
-                    : "border border-[#E2E2E2]"
+                    ? "shadow-[0_8px_24px_rgba(43,92,230,0.14)] ring-1 ring-[#2b5ce6]/35"
+                    : "border border-[#E5E7EB] hover:border-[#C7D4F5]"
                 }`}
               >
                 {selected ? (
@@ -87,28 +90,26 @@ export function OnboardingExamStep() {
                   />
                 ) : null}
                 <span
-                  className={`flex size-14 shrink-0 items-center justify-center rounded-full sm:size-[3.75rem] ${
-                    selected ? "bg-[#DBEAFE]" : "bg-[#F0F4FF]"
-                  }`}
+                  className={`flex size-11 shrink-0 items-center justify-center rounded-full sm:size-12 ${opt.iconBg}`}
                 >
                   <Image
                     src={opt.icon}
                     alt=""
-                    width={32}
-                    height={32}
-                    className="size-7 sm:size-8"
+                    width={28}
+                    height={28}
+                    className="size-6 sm:size-7"
                   />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-lg font-semibold text-[#111827] sm:text-xl">
+                  <span className="block text-[0.9375rem] font-bold text-[#111827] sm:text-base">
                     {opt.title}
                   </span>
-                  <span className="mt-0.5 block text-sm leading-snug text-[#6B7280]">
+                  <span className="mt-0.5 block text-xs leading-snug text-[#6B7280] sm:text-[0.8125rem]">
                     {opt.description}
                   </span>
                 </span>
                 <span
-                  className={`flex size-8 shrink-0 items-center justify-center rounded-full ${
+                  className={`flex size-7 shrink-0 items-center justify-center rounded-full sm:size-8 ${
                     selected ? "bg-[#2b5ce6]" : "bg-[#F3F4F6]"
                   }`}
                 >
@@ -119,25 +120,47 @@ export function OnboardingExamStep() {
                         : "/onboarding/icon-chevron-gray.svg"
                     }
                     alt=""
-                    width={18}
-                    height={18}
-                    className="size-4"
+                    width={16}
+                    height={16}
+                    className="size-3.5"
                   />
                 </span>
               </button>
             );
           })}
+
+          <div className="flex w-full items-center gap-3 rounded-2xl border border-[#E5E7EB] bg-[#FAFBFD] px-3.5 py-3 opacity-85 sm:gap-4 sm:px-4 sm:py-3.5">
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#EEF1F6] sm:size-12">
+              <Image
+                src="/onboarding/icon-lock.svg"
+                alt=""
+                width={28}
+                height={28}
+                className="size-6 sm:size-7"
+              />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-[0.9375rem] font-bold text-[#6B7280] sm:text-base">
+                More exams coming soon
+              </span>
+              <span className="mt-0.5 block text-xs leading-snug text-[#9CA3AF] sm:text-[0.8125rem]">
+                We&apos;re working on more exam types to support your journey.
+              </span>
+            </span>
+            <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#EEF1F6] sm:size-8">
+              <Image
+                src="/onboarding/icon-chevron-gray.svg"
+                alt=""
+                width={16}
+                height={16}
+                className="size-3.5 opacity-60"
+              />
+            </span>
+          </div>
         </div>
 
-        <div className="mt-6 flex shrink-0 justify-center">
+        <div className="mt-4 flex shrink-0 justify-center">
           <OnboardingContinueButton disabled={!exam} onClick={continueNext}>
-            <Image
-              src="/onboarding/icon-star.svg"
-              alt=""
-              width={22}
-              height={22}
-              className="size-5"
-            />
             {exam ? "Continue" : "Select an exam to continue"}
           </OnboardingContinueButton>
         </div>

@@ -6,6 +6,7 @@ import { SiteHeader } from "@/app/components/site-header";
 import { buildBlogPostingJsonLd } from "@/lib/blogSchema";
 import {
   getBlogBySlugForLinguatude,
+  getBlogIndexDataForLinguatudeOrEmpty,
   getBlogSlugsForConfiguredSite,
 } from "@/lib/blogs";
 import { DEFAULT_OG_IMAGE_PATH, SITE_URL } from "@/lib/site";
@@ -94,15 +95,15 @@ export default async function BlogPostPage({ params }: PageProps) {
         <div className="flex min-h-0 min-w-0 flex-1 flex-col bg-white">
           <SiteHeader />
           <main className="flex min-h-0 w-full min-w-0 flex-1 flex-col">
-            <section className="home-hero relative isolate overflow-hidden">
-              <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
+            <section className="mkt-hero relative isolate overflow-hidden">
+              <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
                 <Link
                   href="/blog"
                   className="inline-flex items-center gap-2 text-lg font-bold text-[#2D5BFF]"
                 >
                   Back to blog
                 </Link>
-                <p className="mt-6 inline-flex rounded-lg bg-[#f0eeff] px-6 py-2.5 text-base font-semibold text-[#2D5BFF]">
+                <p className="mt-4 inline-flex rounded-lg bg-[#f0eeff] px-6 py-2.5 text-base font-semibold text-[#2D5BFF]">
                   Article
                 </p>
                 <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-[#111827] sm:text-5xl">
@@ -111,6 +112,12 @@ export default async function BlogPostPage({ params }: PageProps) {
                 <p className="mt-4 text-lg text-[#4b5563]">
                   New articles will appear here once they are published.
                 </p>
+                <Link
+                  href="/#start"
+                  className="mt-6 inline-flex rounded-xl bg-[#2D5BFF] px-8 py-3.5 text-base font-semibold text-white"
+                >
+                  Start free
+                </Link>
               </div>
             </section>
             <section className="px-4 pb-14 sm:px-6 lg:px-8">
@@ -136,6 +143,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   }
 
   const jsonLd = buildBlogPostingJsonLd(blog);
+  const indexData = await getBlogIndexDataForLinguatudeOrEmpty();
 
   return (
     <div className="flex min-h-0 min-w-0 flex-1 flex-col bg-white">
@@ -147,7 +155,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       />
       <SiteHeader />
       <main className="flex min-h-0 w-full min-w-0 flex-1 flex-col">
-        <BlogPostContent blog={blog} />
+        <BlogPostContent blog={blog} categories={indexData.categories} />
       </main>
     </div>
   );

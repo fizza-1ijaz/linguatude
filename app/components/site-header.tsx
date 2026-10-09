@@ -23,13 +23,13 @@ const SECONDARY_LINKS = [
 
 function LogoMark() {
   return (
-    <span className="relative h-6 w-[1.833rem] shrink-0 overflow-clip">
+    <span className="relative size-8 shrink-0 overflow-hidden rounded-lg sm:size-9">
       <Image
-        src="/home/logo-mark.svg"
+        src="/linguatude.webp"
         alt=""
-        width={30}
-        height={24}
-        className="size-full"
+        width={36}
+        height={36}
+        className="size-full object-cover"
         priority
       />
     </span>
@@ -80,6 +80,7 @@ export function SiteHeader() {
 
   useEffect(() => {
     let idleTimer: ReturnType<typeof setTimeout> | undefined;
+    let ticking = false;
 
     const onScroll = () => {
       if (open) {
@@ -87,12 +88,27 @@ export function SiteHeader() {
         return;
       }
 
-      // Hide while the user is actively scrolling
-      setHidden(true);
-      clearTimeout(idleTimer);
-      idleTimer = setTimeout(() => {
-        setHidden(false);
-      }, 180);
+      if (ticking) return;
+      ticking = true;
+
+      requestAnimationFrame(() => {
+        ticking = false;
+        const y = window.scrollY;
+
+        // Stay visible near the top of the page
+        if (y < 16) {
+          setHidden(false);
+          clearTimeout(idleTimer);
+          return;
+        }
+
+        // Hide while scrolling; show again once scrolling stops
+        setHidden(true);
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+          setHidden(false);
+        }, 280);
+      });
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });

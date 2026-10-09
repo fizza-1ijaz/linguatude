@@ -33,7 +33,7 @@ const FEATURES = [
   {
     title: ["DHA Target", "Tracking"] as const,
     description:
-      "Track your DHA or visa targets and see how close you are to your goal.",
+      "Track your visa English targets and see how close you are to your goal.",
     icon: "/features/icon-dha.svg",
     iconClass: "size-[1.5625rem]",
   },
@@ -84,7 +84,7 @@ export function FeaturesPageContent() {
   return (
     <>
       <section
-        className="mkt-hero relative isolate overflow-hidden"
+        className="mkt-hero-bottom relative isolate overflow-hidden"
         aria-labelledby="features-hero-heading"
       >
         <div className="mx-auto flex w-full max-w-5xl flex-col items-center px-4 pb-14 pt-12 text-center sm:px-6 sm:pb-16 sm:pt-16 lg:px-8 lg:pb-20 lg:pt-[5.375rem]">
@@ -98,7 +98,7 @@ export function FeaturesPageContent() {
           >
             Powerful features.
             <br />
-            <span className="text-[#2D5BFF]">One subscription.</span>
+            <span className="text-[#2D5BFF]">Built for your exams.</span>
           </h1>
 
           <p className="mt-5 max-w-2xl text-pretty text-lg font-medium leading-7 text-[#464557] sm:text-xl">

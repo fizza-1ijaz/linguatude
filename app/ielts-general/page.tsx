@@ -7,7 +7,7 @@ import { SiteHeader } from "@/app/components/site-header";
 export const metadata: Metadata = {
   title: "IELTS General Training | Linguatude",
   description:
-    "IELTS General Training for life in Australia. Letters, everyday reading, and migration-ready bands for work visas.",
+    "IELTS General Training for life in Australia. Letters, everyday reading, and band-focused practice for work and daily life.",
   alternates: { canonical: "/ielts-general" },
 };
 

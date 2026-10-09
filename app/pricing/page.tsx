@@ -5,7 +5,7 @@ import { SiteHeader } from "@/app/components/site-header";
 export const metadata: Metadata = {
   title: "Pricing | Linguatude",
   description:
-    "Simple Linguatude pricing with both PTE and IELTS included. Start free, or choose Monthly or Annual plans.",
+    "Choose your exam and plan. Flexible Linguatude pricing for PTE and IELTS — start free, try Premium, or go Monthly or Yearly.",
   alternates: { canonical: "/pricing" },
 };
 

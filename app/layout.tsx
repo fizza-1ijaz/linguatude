@@ -45,9 +45,12 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
-  /* Tab icon: app/favicon.ico (logo). Metadata `icon` would add a second <link> after Next’s default order. */
   icons: {
-    apple: [{ url: "/logo.jpg", type: "image/jpeg" }],
+    icon: [
+      { url: "/linguatude.webp", type: "image/webp" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: [{ url: "/linguatude.webp", type: "image/webp" }],
   },
   title:
     "Linguatude — AI English Test Preparation | IELTS, TOEFL, PTE & More | Coming Soon",

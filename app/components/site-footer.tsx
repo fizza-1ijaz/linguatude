@@ -171,13 +171,13 @@ export function SiteFooter() {
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-6 lg:gap-8">
           <div className="sm:col-span-2">
             <Link href="/" className="inline-flex items-center gap-2">
-              <span className="relative h-6 w-[1.833rem] overflow-clip">
+              <span className="relative size-8 overflow-hidden rounded-lg">
                 <Image
-                  src="/home/logo-mark.svg"
+                  src="/linguatude.webp"
                   alt=""
-                  width={30}
-                  height={24}
-                  className="size-full"
+                  width={32}
+                  height={32}
+                  className="size-full object-cover"
                 />
               </span>
               <span className="text-2xl font-bold text-[#2b5ce6]">Linguatude</span>

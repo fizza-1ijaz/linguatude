@@ -1,5 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
+import {
+  getPathwaySkillScores,
+  getProficientPathway,
+  hasDhaPathways,
+} from "@/lib/content";
 
 const GOALS = [
   "Your PTE Goal",
@@ -27,6 +32,11 @@ const TRUST_ITEMS = [
 ] as const;
 
 export function PteHero() {
+  const pathway = getProficientPathway();
+  const skillScores = pathway ? getPathwaySkillScores(pathway) : [];
+  const speakingTarget = skillScores.find((s) => s.label === "Speaking")?.value;
+  const showTarget = hasDhaPathways() && speakingTarget != null;
+
   return (
     <section
       className="home-hero relative isolate overflow-hidden"
@@ -52,7 +62,9 @@ export function PteHero() {
             </h1>
 
             <p className="mt-6 max-w-lg text-pretty text-lg font-medium leading-7 text-[#4b5563] sm:text-xl">
-              DHA component targets, AU-accent audio
+              {hasDhaPathways()
+                ? "Component targets, AU-accent audio"
+                : "AU-accent audio and AI scoring"}
             </p>
 
             <div className="mt-8 flex w-full flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:gap-6">
@@ -92,23 +104,25 @@ export function PteHero() {
               />
             </div>
 
-            <aside
-              className="absolute left-0 top-0 z-[2] w-[min(100%,14.5rem)] rounded-2xl bg-white px-4 py-3 shadow-[0_4px_4px_rgba(0,0,0,0.25),0_20px_40px_-15px_rgba(0,0,0,0.05)] sm:left-[-0.5rem] sm:top-[-1.25rem] animate-[fade-in-up_0.9s_ease-out_both]"
-              aria-label="Target PTE score"
-            >
-              <p className="text-sm font-semibold text-[#1f2937]">Target Score</p>
-              <p className="mt-1 flex items-baseline gap-1 text-[#2D5BFF]">
-                <span className="text-4xl font-extrabold tracking-tight sm:text-5xl">
-                  76
-                </span>
-                <span className="text-4xl font-semibold">+</span>
-              </p>
-              <div className="mt-2">
-                <span className="inline-block rounded-full bg-[#d4ddff] px-3 py-1 text-xs font-semibold text-[#2D5BFF]">
-                  Proficient English
-                </span>
-              </div>
-            </aside>
+            {showTarget ? (
+              <aside
+                className="absolute left-0 top-0 z-[2] flex w-[min(100%,14.5rem)] flex-col items-center rounded-2xl bg-white px-4 py-3 text-center shadow-[0_4px_4px_rgba(0,0,0,0.25),0_20px_40px_-15px_rgba(0,0,0,0.05)] sm:left-[-0.5rem] sm:top-[-1.25rem] animate-[fade-in-up_0.9s_ease-out_both]"
+                aria-label="Target PTE score"
+              >
+                <p className="text-sm font-semibold text-[#1f2937]">Target Score</p>
+                <p className="mt-1 flex items-baseline justify-center gap-1 text-[#2D5BFF]">
+                  <span className="text-4xl font-extrabold tracking-tight sm:text-5xl">
+                    {speakingTarget}
+                  </span>
+                  <span className="text-4xl font-semibold">+</span>
+                </p>
+                <div className="mt-2">
+                  <span className="inline-block rounded-full bg-[#d4ddff] px-3 py-1 text-xs font-semibold text-[#2D5BFF]">
+                    {pathway?.title}
+                  </span>
+                </div>
+              </aside>
+            ) : null}
 
             <aside
               className="absolute bottom-4 right-0 z-[2] w-[min(100%,11.8rem)] rounded-2xl bg-white px-2 py-5 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] sm:bottom-6 sm:right-[-0.5rem] sm:py-6 animate-[fade-in-up_0.95s_ease-out_both]"

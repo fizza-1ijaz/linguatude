@@ -5,7 +5,7 @@ import { SiteHeader } from "@/app/components/site-header";
 export const metadata: Metadata = {
   title: "Features | Linguatude",
   description:
-    "Powerful AI features for PTE and IELTS prep — speaking scores, writing feedback, mock tests, adaptive plans, and more. One subscription.",
+    "Powerful AI features for PTE and IELTS prep — speaking scores, writing feedback, mock tests, adaptive plans, and more. Built for your exams.",
   alternates: { canonical: "/features" },
 };
 

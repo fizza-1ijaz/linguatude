@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SpeakExam } from "@/app/components/dashboard/speak-exam";
+import { SpeakExamSetup } from "@/app/components/dashboard/speak-exam-setup";
 
 export const metadata: Metadata = {
   title: "Exam Simulation | Linguatude",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function SpeakExamPage() {
-  return <SpeakExam />;
+  return <SpeakExamSetup />;
 }

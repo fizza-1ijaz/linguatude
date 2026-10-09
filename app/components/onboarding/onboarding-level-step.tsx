@@ -8,59 +8,51 @@ import {
   OnboardingShell,
 } from "@/app/components/onboarding/onboarding-shell";
 import {
-  type UkviLevel,
   ONBOARDING_ROUTES,
   readOnboardingState,
   writeOnboardingState,
 } from "@/app/components/onboarding/onboarding-state";
 
-const LEVELS: {
-  id: NonNullable<UkviLevel>;
-  title: string;
-  description: string;
-  icon: string;
-}[] = [
+const STUDY_OPTIONS = [
   {
-    id: "a1",
-    title: "A1 Life Skills",
-    description: "Speaking only · For spouse / family visa applicants",
-    icon: "/onboarding/icon-a1.svg",
+    minutes: 15,
+    label: "15 minutes",
+    icon: "/onboarding/icon-stopwatch.svg",
   },
   {
-    id: "a2",
-    title: "A2 Life Skills",
-    description: "Speaking and Listening · For family route extension",
-    icon: "/onboarding/icon-a2.svg",
+    minutes: 30,
+    label: "30 minutes",
+    icon: "/onboarding/icon-clock.svg",
+    badge: "RECOMMENDED",
   },
   {
-    id: "b1",
-    title: "B1 Life Skills",
-    description:
-      "Speaking and Listening · For Indefinite Leave to Remain or citizenship",
-    icon: "/onboarding/icon-b1.svg",
+    minutes: 45,
+    label: "45 minutes",
+    icon: "/onboarding/icon-hourglass.svg",
   },
-];
+  {
+    minutes: 60,
+    label: "60 minutes",
+    icon: "/onboarding/icon-alarm.svg",
+  },
+] as const;
 
 export function OnboardingLevelStep() {
   const router = useRouter();
-  const [level, setLevel] = useState<UkviLevel>(null);
+  const [minutes, setMinutes] = useState<number | null>(null);
 
   useEffect(() => {
     const state = readOnboardingState();
-    if (!state.exam) {
+    if (!state.exam || state.exam === "ukvi") {
       router.replace(ONBOARDING_ROUTES.exam);
       return;
     }
-    if (state.exam !== "ukvi") {
-      router.replace(ONBOARDING_ROUTES.goal);
-      return;
-    }
-    setLevel(state.ukviLevel);
+    setMinutes(state.dailyMinutes);
   }, [router]);
 
   function continueNext() {
-    if (!level) return;
-    writeOnboardingState({ ukviLevel: level });
+    if (!minutes) return;
+    writeOnboardingState({ dailyMinutes: minutes });
     router.push(ONBOARDING_ROUTES.goal);
   }
 
@@ -68,78 +60,67 @@ export function OnboardingLevelStep() {
     <OnboardingShell step={2}>
       <div className="flex min-h-0 flex-1 flex-col">
         <header className="shrink-0 text-center">
-          <h1 className="text-balance text-[1.75rem] font-bold leading-[1.15] tracking-tight text-[#141B2B] sm:text-[2.25rem]">
-            Which level do you need?
+          <h1 className="text-balance text-[1.35rem] font-bold leading-[1.15] tracking-tight text-[#0F172A] sm:text-[1.75rem]">
+            Build your study routine
           </h1>
-          <p className="mt-2.5 text-pretty text-sm leading-6 text-[#434655] sm:text-base">
-            Your level is set by UK Visas and Immigration — check your visa
-            requirements if unsure.
+          <p className="mt-1.5 text-sm leading-5 text-[#64748B] sm:text-[0.9375rem]">
+            How much time can you study each day?
           </p>
         </header>
 
-        <div className="mt-5 flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto">
-          {LEVELS.map((item) => {
-            const selected = level === item.id;
+        <div
+          className="mt-4 flex min-h-0 flex-1 flex-col gap-2.5"
+          role="radiogroup"
+          aria-label="Daily study time"
+        >
+          {STUDY_OPTIONS.map((opt) => {
+            const selected = minutes === opt.minutes;
             return (
               <button
-                key={item.id}
+                key={opt.minutes}
                 type="button"
-                onClick={() => setLevel(item.id)}
-                aria-pressed={selected}
-                className={`flex w-full items-center justify-between gap-3 rounded-2xl px-4 py-3.5 text-left transition sm:px-5 sm:py-4 ${
+                role="radio"
+                aria-checked={selected}
+                onClick={() => setMinutes(opt.minutes)}
+                className={`flex w-full items-center gap-3 rounded-2xl border px-3.5 py-3 text-left transition sm:gap-3.5 sm:px-4 sm:py-3.5 ${
                   selected
-                    ? "border-2 border-[#2b5ce6] bg-[#F1F3FF]"
-                    : "border border-[#C3C5D7] bg-white hover:bg-[#F9F9FF]"
+                    ? "border-[#2b5ce6] bg-[#F7F9FF] shadow-[inset_3px_0_0_#2b5ce6]"
+                    : "border-[#E5E7EB] bg-white hover:border-[#C7D4F5]"
                 }`}
               >
-                <span className="flex min-w-0 items-center gap-3 sm:gap-4">
-                  <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#EEF2FF] sm:size-12">
-                    <Image
-                      src={item.icon}
-                      alt=""
-                      width={22}
-                      height={22}
-                      className="size-5"
-                    />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-base font-semibold text-[#141B2B] sm:text-lg">
-                      {item.title}
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#2b5ce6] sm:size-11">
+                  <Image
+                    src={opt.icon}
+                    alt=""
+                    width={22}
+                    height={22}
+                    className="size-5"
+                  />
+                </span>
+                <span className="min-w-0 flex-1 text-[0.9375rem] font-semibold text-[#111827] sm:text-base">
+                  {opt.label}
+                  {"badge" in opt && opt.badge ? (
+                    <span className="ml-2 inline-flex rounded-full bg-[#2b5ce6] px-2 py-0.5 text-[0.625rem] font-bold uppercase tracking-wide text-white">
+                      {opt.badge}
                     </span>
-                    <span className="mt-0.5 block text-sm leading-snug text-[#64748B]">
-                      {item.description}
-                    </span>
-                  </span>
+                  ) : null}
                 </span>
                 <span
-                  className={`size-6 shrink-0 rounded-full border-2 ${
-                    selected
-                      ? "border-[#2b5ce6] bg-[#2b5ce6] shadow-[inset_0_0_0_3px_white]"
-                      : "border-[#C3C5D7] bg-transparent"
+                  className={`flex size-5 shrink-0 items-center justify-center rounded-full border-2 ${
+                    selected ? "border-[#2b5ce6]" : "border-[#D1D5DB]"
                   }`}
-                  aria-hidden
-                />
+                >
+                  {selected ? (
+                    <span className="size-2.5 rounded-full bg-[#2b5ce6]" />
+                  ) : null}
+                </span>
               </button>
             );
           })}
         </div>
 
-        <button
-          type="button"
-          className="mt-3 flex shrink-0 items-center justify-center gap-1.5 text-sm font-medium text-[#64748B] transition hover:text-[#2b5ce6]"
-        >
-          Not sure which level you need?
-          <Image
-            src="/onboarding/icon-help.svg"
-            alt=""
-            width={15}
-            height={15}
-            className="size-3.5"
-          />
-        </button>
-
         <div className="mt-4 flex shrink-0 justify-center">
-          <OnboardingContinueButton disabled={!level} onClick={continueNext}>
+          <OnboardingContinueButton disabled={!minutes} onClick={continueNext}>
             Continue
           </OnboardingContinueButton>
         </div>

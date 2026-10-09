@@ -134,7 +134,6 @@ const ACHIEVEMENTS = [
   {
     title: "7 Day Streak",
     date: "Earned on May 20, 2024",
-    bg: "bg-[#FFF7ED]",
     iconBg: "bg-[#F97316]",
     locked: false,
     Icon: FlameBadgeIcon,
@@ -142,7 +141,6 @@ const ACHIEVEMENTS = [
   {
     title: "10 Lessons",
     date: "Earned on May 20, 2024",
-    bg: "bg-[#ECFDF5]",
     iconBg: "bg-[#22C55E]",
     locked: false,
     Icon: CapBadgeIcon,
@@ -150,7 +148,6 @@ const ACHIEVEMENTS = [
   {
     title: "Night Owl",
     date: "Earned on May 20, 2024",
-    bg: "bg-[#EEF2FF]",
     iconBg: "bg-[#1E3A8A]",
     locked: false,
     Icon: MoonBadgeIcon,
@@ -158,7 +155,6 @@ const ACHIEVEMENTS = [
   {
     title: "Consistent",
     date: "Earned on May 20, 2024",
-    bg: "bg-[#F5F3FF]",
     iconBg: "bg-[#7C3AED]",
     locked: false,
     Icon: ConsistentBadgeIcon,
@@ -166,7 +162,6 @@ const ACHIEVEMENTS = [
   {
     title: "First Mock",
     date: "Earned on May 20, 2024",
-    bg: "bg-[#FEFCE8]",
     iconBg: "bg-[#EAB308]",
     locked: false,
     Icon: TrophyBadgeIcon,
@@ -174,7 +169,6 @@ const ACHIEVEMENTS = [
   {
     title: "15 Day Streak",
     date: "Keep going to unlock",
-    bg: "bg-[#F1F5F9]",
     iconBg: "bg-[#94A3B8]",
     locked: true,
     Icon: FlameBadgeIcon,
@@ -237,10 +231,9 @@ export function StreakAchievements() {
       <div className="mx-auto max-w-6xl space-y-5 lg:space-y-6">
         {/* Top row: Streak + Progress */}
         <div className="grid gap-4 lg:grid-cols-2 lg:gap-5">
-          {/* Current streak */}
-          <section className="relative overflow-hidden rounded-[1.25rem] border border-[#E8EBF5] bg-[#F5F7FC] p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.2)] sm:p-6">
+          {/* Study Streak */}
+          <section className="relative overflow-hidden rounded-[1.25rem] border border-[#E8EBF5] bg-[#F8FAFF] p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.18)] sm:p-6">
             <div className="relative flex flex-wrap items-center gap-4 sm:gap-5">
-              {/* Fire + soft glow */}
               <div className="relative flex size-[5.5rem] shrink-0 items-center justify-center sm:size-[6.25rem]">
                 <div
                   className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(147,197,253,0.55)_0%,rgba(191,219,254,0.25)_45%,transparent_70%)]"
@@ -249,10 +242,9 @@ export function StreakAchievements() {
                 <FireIcon className="relative size-12 text-[#2b5ce6] sm:size-14" />
               </div>
 
-              {/* Current streak count */}
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-medium leading-snug text-[#475569]">
-                  Current
+                  Study
                   <br />
                   Streak
                 </p>
@@ -260,11 +252,10 @@ export function StreakAchievements() {
                   7
                 </p>
                 <p className="mt-1.5 text-sm font-semibold text-[#2b5ce6]">
-                  -day streak
+                  day streak
                 </p>
               </div>
 
-              {/* Personal best */}
               <div className="ml-auto flex flex-col items-center text-center sm:pr-1">
                 <span className="mb-2 flex size-9 items-center justify-center rounded-full bg-[#DBEAFE]">
                   <StarIcon />
@@ -277,13 +268,6 @@ export function StreakAchievements() {
                 </p>
               </div>
             </div>
-
-            <div className="relative mt-4 flex justify-end sm:mt-5">
-              <span className="inline-flex items-center gap-2 rounded-full border border-[#BFDBFE] bg-white px-3.5 py-1.5 text-sm font-semibold text-[#2b5ce6]">
-                <FreezeIcon />
-                Streak Freezes available: 2
-              </span>
-            </div>
           </section>
 
           {/* Your Progress */}
@@ -292,8 +276,18 @@ export function StreakAchievements() {
 
             <div className="mt-5 flex items-center justify-between gap-3">
               <div className="flex min-w-0 items-center gap-3">
-                <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#2b5ce6] text-lg font-bold text-white">
-                  12
+                <span className="relative flex size-14 shrink-0 items-center justify-center">
+                  <span
+                    className="absolute inset-0 rounded-full border border-dashed border-[#93C5FD]"
+                    aria-hidden
+                  />
+                  <span
+                    className="absolute inset-1 rounded-full border border-dashed border-[#BFDBFE]"
+                    aria-hidden
+                  />
+                  <span className="relative flex size-11 items-center justify-center rounded-full bg-[#2b5ce6] text-lg font-bold text-white">
+                    12
+                  </span>
                 </span>
                 <div className="min-w-0">
                   <p className="text-base font-bold text-[#141B2B]">
@@ -319,18 +313,19 @@ export function StreakAchievements() {
               <div className="relative h-3.5 overflow-hidden rounded-full bg-[#E8EBF5]">
                 <div
                   className="absolute inset-y-0 left-0 flex items-center justify-center rounded-full bg-[#2b5ce6]"
-                  style={{ width: "66%" }}
+                  style={{ width: "68%" }}
                 >
                   <span className="text-[0.625rem] font-bold leading-none text-white">
-                    66%
+                    68%
                   </span>
                 </div>
               </div>
               <div className="mt-2.5 flex items-center justify-between gap-3 text-sm">
                 <p className="font-semibold text-[#141B2B]">1,850 / 2,500 XP</p>
                 <p className="inline-flex items-center gap-1.5 font-medium text-[#64748B]">
-                  <FlagIcon />
-                  Next: Expert at 2,500 XP
+                  <RocketIcon />
+                  Next: <span className="font-bold text-[#141B2B]">Expert</span>{" "}
+                  at 2,500 XP
                 </p>
               </div>
             </div>
@@ -439,11 +434,9 @@ export function StreakAchievements() {
                       a.locked ? "opacity-40 sm:col-start-1" : ""
                     }`}
                   >
-                    <span
-                      className={`relative flex size-14 items-center justify-center rounded-2xl ${a.bg}`}
-                    >
+                    <span className="relative">
                       <span
-                        className={`flex size-9 items-center justify-center rounded-full text-white ${a.iconBg}`}
+                        className={`flex size-11 items-center justify-center rounded-xl text-white ${a.iconBg}`}
                       >
                         <Icon />
                       </span>
@@ -456,7 +449,7 @@ export function StreakAchievements() {
                     <p className="mt-2.5 text-[0.8125rem] font-bold leading-tight text-[#141B2B]">
                       {a.title}
                     </p>
-                    <p className="mt-0.5 text-[0.625rem] leading-snug text-[#94A3B8]">
+                    <p className="mt-0.5 text-[0.625rem] leading-snug text-[#0F172A]">
                       {a.date}
                     </p>
                   </li>
@@ -475,19 +468,21 @@ export function StreakAchievements() {
                 return (
                   <div
                     key={s.label}
-                    className={`rounded-2xl ${s.tile} p-4`}
+                    className={`flex items-center gap-3 rounded-2xl ${s.tile} p-4`}
                   >
                     <span
-                      className={`flex size-9 items-center justify-center rounded-full text-white ${s.iconBg}`}
+                      className={`flex size-9 shrink-0 items-center justify-center rounded-full text-white ${s.iconBg}`}
                     >
                       <Icon />
                     </span>
-                    <p className="mt-3 text-xl font-bold leading-none text-[#141B2B]">
-                      {s.value}
-                    </p>
-                    <p className="mt-1.5 text-xs font-medium text-[#64748B]">
-                      {s.label}
-                    </p>
+                    <div className="min-w-0">
+                      <p className="text-xl font-bold leading-none text-[#141B2B]">
+                        {s.value}
+                      </p>
+                      <p className="mt-1.5 text-xs font-medium text-[#64748B]">
+                        {s.label}
+                      </p>
+                    </div>
                   </div>
                 );
               })}
@@ -534,35 +529,6 @@ function FireIcon({ className = "size-12" }: { className?: string }) {
   );
 }
 
-function FreezeIcon() {
-  return (
-    <svg viewBox="0 0 16 16" className="size-3.5" fill="none" aria-hidden>
-      {/* 6-point snowflake: vertical + two diagonals with tip branches */}
-      <path
-        d="M8 1.5v13M8 1.5l-1.2 1.6M8 1.5l1.2 1.6M8 14.5l-1.2-1.6M8 14.5l1.2-1.6"
-        stroke="#2b5ce6"
-        strokeWidth="1.25"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M2.4 4.75 13.6 11.25M2.4 4.75l1.9-.15M2.4 4.75l.5 1.85M13.6 11.25l-1.9.15M13.6 11.25l-.5-1.85"
-        stroke="#2b5ce6"
-        strokeWidth="1.25"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M13.6 4.75 2.4 11.25M13.6 4.75l-1.9-.15M13.6 4.75l-.5 1.85M2.4 11.25l1.9.15M2.4 11.25l.5-1.85"
-        stroke="#2b5ce6"
-        strokeWidth="1.25"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 function StarIcon() {
   return (
     <svg viewBox="0 0 16 16" className="size-4" fill="#2b5ce6" aria-hidden>
@@ -593,13 +559,35 @@ function LockIcon() {
   );
 }
 
-function FlagIcon() {
+function RocketIcon() {
   return (
-    <svg viewBox="0 0 16 16" className="size-3.5" fill="none" aria-hidden>
+    <svg viewBox="0 0 18 18" className="size-4 shrink-0" fill="none" aria-hidden>
       <path
-        d="M3.5 13.5V2.5M3.5 3h7l-1.5 2.5L10.5 8h-7"
+        d="M10.2 2.2c2.1.5 3.8 2.2 4.3 4.3L9.4 11.6 6.4 8.6 10.2 2.2Z"
+        fill="#DBEAFE"
         stroke="#2b5ce6"
-        strokeWidth="1.4"
+        strokeWidth="1.35"
+        strokeLinejoin="round"
+      />
+      <circle cx="11.1" cy="6.2" r="1.1" fill="#2b5ce6" />
+      <path
+        d="M6.4 8.6 3.8 14.2l5.6-2.2"
+        stroke="#2b5ce6"
+        strokeWidth="1.35"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="m8.4 10.6 1.1 1.1"
+        stroke="#2b5ce6"
+        strokeWidth="1.35"
+        strokeLinecap="round"
+      />
+      <path
+        d="M5.2 12.2c-.7.2-1.5.8-1.9 1.7-.1.2 0 .4.2.5.9-.4 1.5-1.2 1.7-1.9"
+        fill="#93C5FD"
+        stroke="#2b5ce6"
+        strokeWidth="1"
         strokeLinejoin="round"
       />
     </svg>

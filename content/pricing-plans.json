@@ -1,0 +1,160 @@
+{
+  "exams": {
+    "pte": {
+      "id": "pte",
+      "label": "PTE Academic",
+      "shortLabel": "PTE",
+      "description": "Build your skills with AI-powered practice, real exam experience and detailed feedback.",
+      "plans": [
+        {
+          "id": "free",
+          "name": "Free",
+          "price": 0,
+          "priceSuffix": "/ month",
+          "currency": "USD",
+          "badge": null,
+          "note": null,
+          "cta": "Get Started",
+          "ctaVariant": "outline",
+          "features": [
+            "5 combined AI Speaking + Writing attempts / month",
+            "0 full mocks",
+            "Diagnostic included separately"
+          ]
+        },
+        {
+          "id": "trial",
+          "name": "Premium Trial",
+          "price": 0,
+          "priceSuffix": "/ 7 days",
+          "currency": "USD",
+          "badge": "7-day trial",
+          "note": "Payment method required. Choose Monthly or Yearly before activating.",
+          "cta": "Activate Trial",
+          "ctaVariant": "primary",
+          "featured": true,
+          "features": [
+            "25 combined AI Speaking + Writing attempts (total)",
+            "1 full mocks (total)",
+            "Cancel anytime"
+          ]
+        },
+        {
+          "id": "monthly",
+          "name": "Monthly Premium",
+          "price": null,
+          "priceDisplay": "XX.XX",
+          "priceSuffix": "/ month",
+          "currency": "USD",
+          "badge": null,
+          "note": null,
+          "cta": "Choose Monthly",
+          "ctaVariant": "outline",
+          "features": [
+            "100 combined AI Speaking + Writing attempts / month",
+            "3 full mocks / month",
+            "Full access to all features"
+          ]
+        },
+        {
+          "id": "yearly",
+          "name": "Yearly Premium",
+          "price": null,
+          "priceDisplay": "XXX.XX",
+          "priceSuffix": "/ year",
+          "currency": "USD",
+          "badge": "Save with yearly",
+          "badgeTone": "green",
+          "note": null,
+          "cta": "Choose Yearly",
+          "ctaVariant": "outline",
+          "features": [
+            "100 combined AI Speaking + Writing attempts / month",
+            "3 full mocks / month",
+            "Full access to all features"
+          ]
+        }
+      ]
+    },
+    "ielts": {
+      "id": "ielts",
+      "label": "IELTS Academic",
+      "shortLabel": "IELTS",
+      "description": "Band-scored speaking and writing practice with examiner-style feedback for IELTS Academic.",
+      "plans": [
+        {
+          "id": "free",
+          "name": "Free",
+          "price": 0,
+          "priceSuffix": "/ month",
+          "currency": "USD",
+          "badge": null,
+          "note": null,
+          "cta": "Get Started",
+          "ctaVariant": "outline",
+          "features": [
+            "5 combined AI Speaking + Writing attempts / month",
+            "0 full mocks",
+            "Diagnostic included separately"
+          ]
+        },
+        {
+          "id": "trial",
+          "name": "Premium Trial",
+          "price": 0,
+          "priceSuffix": "/ 7 days",
+          "currency": "USD",
+          "badge": "7-day trial",
+          "note": "Payment method required. Choose Monthly or Yearly before activating.",
+          "cta": "Activate Trial",
+          "ctaVariant": "primary",
+          "featured": true,
+          "features": [
+            "25 combined AI Speaking + Writing attempts (total)",
+            "1 full mocks (total)",
+            "Cancel anytime"
+          ]
+        },
+        {
+          "id": "monthly",
+          "name": "Monthly Premium",
+          "price": null,
+          "priceDisplay": "XX.XX",
+          "priceSuffix": "/ month",
+          "currency": "USD",
+          "badge": null,
+          "note": null,
+          "cta": "Choose Monthly",
+          "ctaVariant": "outline",
+          "features": [
+            "100 combined AI Speaking + Writing attempts / month",
+            "3 full mocks / month",
+            "Full access to all features"
+          ]
+        },
+        {
+          "id": "yearly",
+          "name": "Yearly Premium",
+          "price": null,
+          "priceDisplay": "XXX.XX",
+          "priceSuffix": "/ year",
+          "currency": "USD",
+          "badge": "Save with yearly",
+          "badgeTone": "green",
+          "note": null,
+          "cta": "Choose Yearly",
+          "ctaVariant": "outline",
+          "features": [
+            "100 combined AI Speaking + Writing attempts / month",
+            "3 full mocks / month",
+            "Full access to all features"
+          ]
+        }
+      ]
+    }
+  },
+  "banner": {
+    "title": "All plans include both PTE and IELTS preparation.",
+    "subtitle": "One subscription. Everything you need."
+  }
+}

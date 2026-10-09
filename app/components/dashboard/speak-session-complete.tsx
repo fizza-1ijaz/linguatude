@@ -26,10 +26,7 @@ export function SpeakSessionComplete() {
       mainClassName="flex-1 px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-7"
     >
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-5 pb-8">
-        <Link
-          href="/dashboard/speak/test-results"
-          className="block rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.18)] transition hover:border-[#BFDBFE] sm:p-6"
-        >
+        <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.18)] sm:p-6">
           <h2 className="text-base font-bold text-[#141B2B] sm:text-lg">
             Session Stats
           </h2>
@@ -38,45 +35,42 @@ export function SpeakSessionComplete() {
             <StatCell label="Session average" value="6.2" />
             <div className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-4 text-center">
               <p className="text-sm font-medium text-[#64748B]">Band change</p>
-              <p className="mt-2 text-2xl font-bold text-[#16A34A] sm:text-3xl">
-                ⬆ 0.5
-              </p>
-              <p className="mt-1 text-xs font-semibold text-[#16A34A]">
-                from last session
+              <p className="mt-2 flex items-baseline justify-center gap-1.5">
+                <span className="text-2xl font-bold text-[#16A34A] sm:text-3xl">
+                  ⬆ 0.5
+                </span>
+                <span className="text-xs font-medium text-[#94A3B8]">
+                  from last session
+                </span>
               </p>
             </div>
             <StatCell label="Speaking time" value="04:32" />
           </div>
-        </Link>
+        </section>
 
-        <Link
-          href="/dashboard/speak/test-results"
-          className="block rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.18)] transition hover:border-[#BFDBFE] sm:p-6"
-        >
+        <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.18)] sm:p-6">
           <h2 className="text-base font-bold text-[#141B2B] sm:text-lg">
             Skill breakdown
           </h2>
           <div className="mt-5 space-y-4">
             {SKILLS.map((skill) => (
-              <div key={skill.label}>
-                <div className="mb-1.5 flex items-center justify-between gap-3">
-                  <p className="text-sm font-semibold text-[#334155]">
-                    {skill.label}
-                  </p>
-                  <p className="text-sm font-bold tabular-nums text-[#141B2B]">
-                    {skill.value.toFixed(1)}
-                  </p>
-                </div>
-                <div className="h-2.5 overflow-hidden rounded-full bg-[#E8EEF7]">
+              <div key={skill.label} className="flex items-center gap-3">
+                <div className="h-2.5 w-24 shrink-0 overflow-hidden rounded-full bg-[#E8EEF7] sm:w-32">
                   <div
                     className="h-full rounded-full bg-[#2b5ce6]"
                     style={{ width: `${(skill.value / 9) * 100}%` }}
                   />
                 </div>
+                <p className="min-w-0 flex-1 text-sm font-semibold text-[#334155]">
+                  {skill.label}
+                </p>
+                <p className="shrink-0 text-sm font-bold tabular-nums text-[#141B2B]">
+                  {skill.value.toFixed(1)}
+                </p>
               </div>
             ))}
           </div>
-        </Link>
+        </section>
 
         <div className="rounded-2xl border border-[#F5D78E]/80 border-t-[3px] border-t-[#F5B942] bg-[#FFFBEB] px-4 py-4 sm:px-5">
           <div className="flex items-start gap-3">
@@ -101,7 +95,7 @@ export function SpeakSessionComplete() {
             Back to Speaking
           </Link>
           <Link
-            href="/dashboard/speak/exam"
+            href="/dashboard/speak/setup"
             className="inline-flex h-12 w-full max-w-xs items-center justify-center gap-2 rounded-xl bg-[#2b5ce6] px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-[#244FE6] sm:w-auto"
           >
             <RefreshIcon />

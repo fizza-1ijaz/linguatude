@@ -4,6 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  DiagnosticSectionHeading,
+  TipInfoIcon,
+} from "@/app/components/diagnostic/diagnostic-ui";
 import { DIAGNOSTIC_SKILL_ROUTES } from "@/app/components/diagnostic/diagnostic-test-shell";
 import {
   ONBOARDING_ROUTES,
@@ -69,9 +73,9 @@ export function DiagnosticListeningTest() {
   const router = useRouter();
   const [ready, setReady] = useState(false);
   const [sectionLeft, setSectionLeft] = useState(SECTION_SECONDS);
-  const [audioPos, setAudioPos] = useState(72); // match design ~01:12
+  const [audioPos, setAudioPos] = useState(0);
   const [playing, setPlaying] = useState(false);
-  const [audioDone, setAudioDone] = useState(true);
+  const [audioDone, setAudioDone] = useState(false);
   const [speed, setSpeed] = useState(1);
   const [volume, setVolume] = useState(0.7);
   const [answers, setAnswers] = useState<Answers>({
@@ -81,18 +85,20 @@ export function DiagnosticListeningTest() {
   });
   const endedRef = useRef(false);
 
-  const questionsLocked = false;
+  const questionsLocked = !audioDone;
   const answeredCount = QUESTIONS.filter((q) => answers[q.id] != null).length;
   const allAnswered = answeredCount === QUESTIONS.length;
-  const canSubmit = true;
+  const canSubmit = !questionsLocked && allAnswered;
 
   useEffect(() => {
     const state = readOnboardingState();
     if (
       !state.exam ||
-      (state.exam === "ukvi" && !state.ukviLevel) ||
+      !state.dailyMinutes ||
       !state.experienceDone ||
-      !state.goalsDone
+      !state.goalsDone ||
+      !state.studyDaysDone ||
+      !state.focusDone
     ) {
       router.replace(ONBOARDING_ROUTES.diagnostic);
       return;
@@ -164,26 +170,21 @@ export function DiagnosticListeningTest() {
   }
 
   return (
-    <div className="diagnostic-test min-h-dvh bg-[#f4f6fb] text-[#141b2b]">
+    <div className="diagnostic-test flex min-h-dvh flex-col bg-[#f4f6fb] text-[#141b2b]">
       {/* Top bar */}
       <header className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-3 border-b border-[#e8ebf5] bg-white px-4 py-3 sm:px-6">
         <div className="flex min-w-0 items-center gap-2.5">
           <Image
-            src="/onboarding/logo-cap.svg"
+            src="/linguatude.webp"
             alt=""
             width={32}
             height={32}
-            className="size-8"
+            className="size-8 shrink-0 overflow-hidden rounded-lg object-cover"
             priority
           />
-          <div className="min-w-0">
-            <p className="truncate text-sm font-bold text-[#2b5ce6] sm:text-base">
-              Linguatude
-            </p>
-            <p className="truncate text-xs text-[#64748b] sm:text-sm">
-              IELTS Master Diagnostics
-            </p>
-          </div>
+          <p className="truncate text-sm font-bold text-[#2b5ce6] sm:text-base">
+            Linguatude
+          </p>
         </div>
 
         <nav className="order-3 flex w-full justify-center gap-1 sm:order-none sm:w-auto sm:gap-2">
@@ -216,14 +217,15 @@ export function DiagnosticListeningTest() {
       </header>
 
       {/* Body — page scrolls; no nested scroll areas */}
-      <div className="mx-auto flex w-full max-w-7xl items-start gap-4 px-4 py-4 sm:px-6 lg:gap-6">
+      <div className="mx-auto flex w-full max-w-7xl flex-1 items-start gap-4 px-4 py-4 pb-[7.5rem] sm:px-6 sm:pb-[6.5rem] lg:gap-6">
         <main className="flex min-w-0 flex-1 flex-col gap-3 pb-4">
-          <h1 className="text-xl font-bold text-[#2b5ce6] sm:text-2xl">
-            Listening · Section 1 of 4
-          </h1>
+          <DiagnosticSectionHeading
+            skill="Listening"
+            section="Section 1 of 4"
+          />
 
           <div className="flex items-start gap-2.5 rounded-2xl bg-[#2b5ce6] px-4 py-3 text-sm font-medium text-white sm:px-5">
-            <InfoCircleIcon className="mt-0.5 size-5 shrink-0" />
+            <TipInfoIcon className="mt-0.5 size-5" />
             <p>
               Listen to the audio, then answer the questions below. You can take
               notes while listening.
@@ -324,59 +326,68 @@ export function DiagnosticListeningTest() {
                   aria-label="Volume"
                 />
               </div>
-              <button
-                type="button"
-                onClick={cycleSpeed}
-                className="rounded-lg border border-[#e2e8f0] bg-[#f8fafc] px-2.5 py-1 text-xs font-bold text-[#141b2b]"
-              >
-                {speed}x
-              </button>
-              <button
-                type="button"
-                className="ml-auto rounded-lg p-1.5 text-[#64748b] transition hover:bg-[#f1f5f9]"
-                aria-label="Settings"
-              >
-                <GearIcon className="size-4" />
-              </button>
+              <div className="ml-auto flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={cycleSpeed}
+                  className="rounded-lg border border-[#e2e8f0] bg-[#f8fafc] px-2.5 py-1 text-xs font-bold text-[#141b2b] transition hover:bg-[#f1f5f9]"
+                >
+                  {speed}x
+                </button>
+                <button
+                  type="button"
+                  className="rounded-lg p-1.5 text-[#64748b] transition hover:bg-[#f1f5f9]"
+                  aria-label="Settings"
+                >
+                  <GearIcon className="size-4" />
+                </button>
+              </div>
             </div>
           </section>
 
-          {/* Locked banner */}
+          {/* Locked banner — shown while audio has not finished */}
           {questionsLocked ? (
-            <div className="flex items-start gap-2.5 rounded-xl border border-[#e2e8f0] bg-[#f8fafc] px-4 py-3 text-sm text-[#475569]">
-              <LockIcon className="mt-0.5 size-4 shrink-0 text-[#64748b]" />
-              <p>
-                Questions are locked while the audio is playing. You will be
-                able to answer the questions after the audio finishes.
-              </p>
+            <div className="flex items-start gap-3 rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-4 py-3.5">
+              <LockIcon className="mt-0.5 size-4 shrink-0 text-[#6B7280]" />
+              <div>
+                <p className="text-sm font-semibold text-[#111827]">
+                  Questions are locked while the audio is playing.
+                </p>
+                <p className="mt-0.5 text-sm text-[#6B7280]">
+                  You will be able to answer the questions after the audio
+                  finishes.
+                </p>
+              </div>
             </div>
           ) : null}
 
           {/* Questions */}
-          <section className="rounded-2xl border border-[#e2e8f0] bg-white p-4 shadow-sm sm:p-5">
-            <h3 className="text-base font-bold text-[#141b2b]">
-              Questions ({answeredCount} / {QUESTIONS.length} answered)
+          <section className="rounded-2xl border border-[#E5E7EB] bg-white p-4 shadow-sm sm:p-5">
+            <h3 className="text-base font-bold text-[#111827]">
+              Questions{" "}
+              <span className="font-medium text-[#9CA3AF]">
+                ({answeredCount} / {QUESTIONS.length} answered)
+              </span>
             </h3>
 
-            <ul className="mt-3 divide-y divide-[#eef2f7]">
+            <ul
+              className={`mt-3 divide-y divide-[#E5E7EB] border-t border-[#E5E7EB] ${
+                questionsLocked ? "select-none blur-[2.5px]" : ""
+              }`}
+            >
               {QUESTIONS.map((q, index) => {
                 const selected = answers[q.id];
                 return (
-                  <li
-                    key={q.id}
-                    className={`py-3.5 first:pt-2 last:pb-2 ${
-                      questionsLocked ? "opacity-55" : ""
-                    }`}
-                  >
+                  <li key={q.id} className="py-3.5 first:pt-3 last:pb-2">
                     <div className="flex items-start gap-3">
-                      <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#dbeafe] text-sm font-bold text-[#2b5ce6]">
+                      <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#DBEAFE] text-sm font-bold text-[#1E40AF]">
                         {index + 1}
                       </span>
                       <div className="min-w-0 flex-1">
-                        <p className="font-semibold text-[#141b2b]">
+                        <p className="font-semibold text-[#374151]">
                           {q.prompt}
                         </p>
-                        <p className="mt-0.5 text-sm text-[#94a3b8]">{q.hint}</p>
+                        <p className="mt-0.5 text-sm text-[#9CA3AF]">{q.hint}</p>
 
                         {!questionsLocked ? (
                           <div className="mt-3 flex flex-col gap-2">
@@ -413,7 +424,7 @@ export function DiagnosticListeningTest() {
                         ) : null}
                       </div>
                       {questionsLocked ? (
-                        <LockIcon className="mt-1 size-4 shrink-0 text-[#94a3b8]" />
+                        <LockIcon className="mt-1 size-4 shrink-0 text-[#9CA3AF]" />
                       ) : null}
                     </div>
                   </li>
@@ -421,8 +432,8 @@ export function DiagnosticListeningTest() {
               })}
             </ul>
 
-            <div className="mt-3 flex items-start gap-2 rounded-xl bg-[#f1f5f9] px-3.5 py-2.5 text-sm text-[#64748b]">
-              <InfoCircleIcon className="mt-0.5 size-4 shrink-0 text-[#64748b]" />
+            <div className="mt-3 flex items-start gap-2 rounded-xl bg-[#F3F4F6] px-3.5 py-2.5 text-sm text-[#6B7280]">
+              <InfoCircleIcon className="mt-0.5 size-4 shrink-0 text-[#6B7280]" />
               <p>
                 You must answer all questions to enable the Submit section
                 button.
@@ -434,44 +445,50 @@ export function DiagnosticListeningTest() {
         {/* Sidebar — both cards stick while the page scrolls */}
         <aside className="hidden w-72 shrink-0 lg:block xl:w-80">
           <div className="sticky top-[5.25rem] flex flex-col gap-4">
-            <div className="rounded-2xl border border-[#c7d2fe] bg-[#eef2ff] p-5">
+            <div className="rounded-2xl border border-[#E0E7FF] bg-[#F5F7FF] p-5">
               <div className="flex items-center gap-2 text-sm font-semibold text-[#2b5ce6]">
-                <span className="flex size-8 items-center justify-center rounded-full bg-white">
-                  <ClockIcon className="size-4" />
-                </span>
+                <SectionInfoHeaderIcon className="size-4" />
                 Section info
               </div>
-              <h3 className="mt-3 text-lg font-bold text-[#141b2b]">Listening</h3>
-              <p className="mt-1.5 text-sm leading-6 text-[#475569]">
+              <h3 className="mt-3 text-lg font-bold text-[#111827]">Listening</h3>
+              <p className="mt-1.5 text-sm leading-6 text-[#6B7280]">
                 You will hear an audio recording. Listen carefully and then
                 answer the questions that follow.
               </p>
-              <div className="mt-4 space-y-1.5 border-t border-[#c7d2fe]/70 pt-3 text-sm text-[#334155]">
-                <p>
-                  <span className="font-semibold">Section time:</span> 3 minutes
-                </p>
-                <p>
-                  <span className="font-semibold">Questions:</span> 3 questions
-                </p>
+              <div className="mt-4 space-y-3 border-t border-[#E5E7EB] pt-4 text-sm">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="inline-flex items-center gap-2 text-[#4B5563]">
+                    <ClockIcon className="size-4 shrink-0 text-[#9CA3AF]" />
+                    Section time
+                  </span>
+                  <span className="font-bold text-[#111827]">3 minutes</span>
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="inline-flex items-center gap-2 text-[#4B5563]">
+                    <QuestionCircleIcon className="size-4 shrink-0 text-[#9CA3AF]" />
+                    Questions
+                  </span>
+                  <span className="font-bold text-[#111827]">3 questions</span>
+                </div>
               </div>
             </div>
 
             {questionsLocked ? (
-              <div className="flex flex-col items-center rounded-2xl border border-[#e2e8f0] bg-white p-6 text-center shadow-sm">
-                <span className="flex size-14 items-center justify-center rounded-full bg-[#eef2ff] text-[#2b5ce6]">
+              <div className="flex flex-col items-center rounded-2xl border border-[#E5E7EB] bg-white px-5 py-7 text-center">
+                <span className="flex size-14 items-center justify-center rounded-full bg-[#EEF2FF] text-[#2b5ce6]">
                   <LockIcon className="size-6" />
                 </span>
-                <h3 className="mt-4 text-lg font-bold text-[#141b2b]">
+                <h3 className="mt-4 text-lg font-bold text-[#111827]">
                   Questions locked
                 </h3>
-                <p className="mt-2 text-sm leading-6 text-[#64748b]">
+                <p className="mt-2 text-sm leading-6 text-[#6B7280]">
                   Please listen to the entire audio. The questions will appear
                   automatically when it finishes.
                 </p>
               </div>
             ) : (
-              <div className="rounded-2xl border border-[#bbf7d0] bg-[#ecfdf5] p-5 text-center">
-                <h3 className="text-base font-bold text-[#065f46]">
+              <div className="rounded-2xl border border-[#BBF7D0] bg-[#ECFDF5] p-5 text-center">
+                <h3 className="text-base font-bold text-[#065F46]">
                   Questions unlocked
                 </h3>
                 <p className="mt-1.5 text-sm text-[#047857]">
@@ -483,30 +500,32 @@ export function DiagnosticListeningTest() {
         </aside>
       </div>
 
-      {/* Footer */}
-      <footer className="sticky bottom-0 z-30 flex flex-col gap-3 border-t border-[#e8ebf5] bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-        <div className="flex max-w-3xl items-start gap-2.5 rounded-xl border border-[#e2e8f0] bg-[#f8fafc] px-3.5 py-2.5 text-sm text-[#475569]">
-          <ClockIcon className="mt-0.5 size-4 shrink-0 text-[#2b5ce6]" />
-          <p>
-            Switch freely between Listening, Reading, Writing, and Speaking
-            using the tabs above.
-          </p>
+      {/* Footer — fixed bottom bar */}
+      <footer className="fixed inset-x-0 bottom-0 z-40 border-t border-[#e8ebf5] bg-white shadow-[0_-4px_24px_rgba(15,23,42,0.06)]">
+        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <div className="flex max-w-3xl items-center gap-2.5 rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-3.5 py-2.5 text-sm text-[#4B5563]">
+            <ClockIcon className="size-5 shrink-0 text-[#2b5ce6]" />
+            <p>
+              If time runs out, your answers will be submitted automatically and
+              the test will move to the next section.
+            </p>
+          </div>
+          <button
+            type="button"
+            disabled={!canSubmit}
+            onClick={submitSection}
+            className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#2b5ce6] px-5 text-sm font-semibold text-white transition hover:bg-[#244fe6] disabled:cursor-not-allowed disabled:bg-[#93c5fd] sm:h-12 sm:text-base"
+          >
+            Submit section
+            <Image
+              src="/onboarding/icon-arrow-sm.svg"
+              alt=""
+              width={16}
+              height={16}
+              className="size-4"
+            />
+          </button>
         </div>
-        <button
-          type="button"
-          disabled={!canSubmit}
-          onClick={submitSection}
-          className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#2b5ce6] px-5 text-base font-semibold text-white transition hover:bg-[#244fe6] disabled:cursor-not-allowed disabled:bg-[#93c5fd]"
-        >
-          Submit section
-          <Image
-            src="/onboarding/icon-arrow-sm.svg"
-            alt=""
-            width={16}
-            height={16}
-            className="size-4"
-          />
-        </button>
       </footer>
     </div>
   );
@@ -522,6 +541,41 @@ function ClockIcon({ className = "size-4" }: { className?: string }) {
         strokeWidth="1.75"
         strokeLinecap="round"
         strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function SectionInfoHeaderIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="12" cy="12" r="8.25" stroke="currentColor" strokeWidth="1.75" />
+      <path
+        d="M12 8v4.5l2.5 1.5"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function QuestionCircleIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="12" cy="12" r="8.25" stroke="currentColor" strokeWidth="1.75" />
+      <path
+        d="M9.5 9.5a2.5 2.5 0 1 1 3.6 2.25c-.7.4-1.1.9-1.1 1.75V14"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+      />
+      <path
+        d="M12 17h.01"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
     </svg>
   );

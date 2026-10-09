@@ -8,11 +8,15 @@ import { isSupabaseConfigured, supabase } from "@/lib/supabaseClient";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PASSWORD_RE = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
 
-type Status = "idle" | "loading" | "success" | "error";
+const fieldClass =
+  "w-full rounded-xl border border-[#e5e7eb] bg-white px-3.5 py-2.5 text-[0.95rem] text-[#1e1b4b] outline-none transition placeholder:text-[#9ca3af] focus:border-[#2D5BFF] focus:ring-2 focus:ring-[#2D5BFF]/20";
+
+type Status = "idle" | "loading" | "error";
 
 export function SignupForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showPasswordHint, setShowPasswordHint] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -37,6 +41,7 @@ export function SignupForm() {
       return;
     }
     if (!PASSWORD_RE.test(password)) {
+      setShowPasswordHint(true);
       setErrorMessage(
         "Password must be at least 8 characters with one uppercase letter and one number.",
       );
@@ -79,46 +84,6 @@ export function SignupForm() {
     }
   }
 
-  if (status === "success") {
-    return (
-      <div
-        className="rounded-xl border border-[#c1ebd1] bg-[#eaf6ee] p-5"
-        role="status"
-        aria-live="polite"
-      >
-        <p className="text-lg font-bold text-[#1e1b4b]">Account created</p>
-        <p className="mt-2 text-sm leading-6 text-[#4b5563]">
-          {isSupabaseConfigured
-            ? "Check your email to confirm your account, then sign in."
-            : "Thanks for signing up. Linguatude is launching soon — join the waitlist to get early access."}
-        </p>
-        <div className="mt-4 flex flex-wrap gap-3">
-          {isSupabaseConfigured ? (
-            <Link
-              href="/login"
-              className="inline-flex rounded-xl bg-[#2D5BFF] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#244FE6]"
-            >
-              Sign in
-            </Link>
-          ) : (
-            <Link
-              href="/#start"
-              className="inline-flex rounded-xl bg-[#2D5BFF] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#244FE6]"
-            >
-              Join waitlist
-            </Link>
-          )}
-          <Link
-            href="/"
-            className="inline-flex rounded-xl border border-[#e5e7eb] bg-white px-5 py-2.5 text-sm font-semibold text-[#1e1b4b] transition hover:bg-[#f8faff]"
-          >
-            Back home
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3" noValidate>
       {errorMessage ? (
@@ -145,7 +110,7 @@ export function SignupForm() {
             autoComplete="name"
             placeholder="Jane Doe"
             required
-            className="mt-1.5 w-full rounded-xl border border-[#e5e7eb] bg-white px-3.5 py-2.5 text-[0.95rem] text-[#1e1b4b] outline-none transition placeholder:text-[#9ca3af] focus:border-[#2D5BFF] focus:ring-2 focus:ring-[#2D5BFF]/20"
+            className={`mt-1.5 ${fieldClass}`}
           />
         </div>
 
@@ -163,7 +128,7 @@ export function SignupForm() {
             autoComplete="email"
             placeholder="jane@example.com"
             required
-            className="mt-1.5 w-full rounded-xl border border-[#e5e7eb] bg-white px-3.5 py-2.5 text-[0.95rem] text-[#1e1b4b] outline-none transition placeholder:text-[#9ca3af] focus:border-[#2D5BFF] focus:ring-2 focus:ring-[#2D5BFF]/20"
+            className={`mt-1.5 ${fieldClass}`}
           />
         </div>
 
@@ -182,7 +147,8 @@ export function SignupForm() {
               autoComplete="new-password"
               placeholder="••••••••"
               required
-              className="w-full rounded-xl border border-[#e5e7eb] bg-white px-3.5 py-2.5 pr-11 text-[0.95rem] text-[#1e1b4b] outline-none transition placeholder:text-[#9ca3af] focus:border-[#2D5BFF] focus:ring-2 focus:ring-[#2D5BFF]/20"
+              onBlur={() => setShowPasswordHint(true)}
+              className={`${fieldClass} pr-11`}
             />
             <button
               type="button"
@@ -199,9 +165,6 @@ export function SignupForm() {
               />
             </button>
           </div>
-          <p className="mt-1 text-xs font-medium text-[#6b7280]">
-            Min 8 chars, 1 uppercase, 1 number
-          </p>
         </div>
 
         <div>
@@ -219,7 +182,8 @@ export function SignupForm() {
               autoComplete="new-password"
               placeholder="••••••••"
               required
-              className="w-full rounded-xl border border-[#e5e7eb] bg-white px-3.5 py-2.5 pr-11 text-[0.95rem] text-[#1e1b4b] outline-none transition placeholder:text-[#9ca3af] focus:border-[#2D5BFF] focus:ring-2 focus:ring-[#2D5BFF]/20"
+              onFocus={() => setShowPasswordHint(true)}
+              className={`${fieldClass} pr-11`}
             />
             <button
               type="button"
@@ -240,6 +204,15 @@ export function SignupForm() {
           </div>
         </div>
       </div>
+
+      {showPasswordHint ? (
+        <p
+          className="text-xs font-medium leading-4 text-[#6b7280]"
+          id="signup-password-hint"
+        >
+          Minimum 8 characters, one uppercase, one number
+        </p>
+      ) : null}
 
       <label className="flex items-start gap-2.5 text-sm leading-5 text-[#4b5563]">
         <input

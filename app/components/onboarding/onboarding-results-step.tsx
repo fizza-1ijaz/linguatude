@@ -53,9 +53,11 @@ export function OnboardingResultsStep() {
     const state = readOnboardingState();
     if (
       !state.exam ||
-      (state.exam === "ukvi" && !state.ukviLevel) ||
+      !state.dailyMinutes ||
       !state.experienceDone ||
-      !state.goalsDone
+      !state.goalsDone ||
+      !state.studyDaysDone ||
+      !state.focusDone
     ) {
       router.replace(ONBOARDING_ROUTES.diagnostic);
       return;
@@ -72,7 +74,7 @@ export function OnboardingResultsStep() {
   }
 
   return (
-    <OnboardingWideShell step={6} contentClassName="bg-[#E8EEF8]">
+    <OnboardingWideShell step={8} contentClassName="bg-[#E8EEF8]">
       <div className="mx-auto max-w-4xl">
         <header className="text-center">
           <h1 className="text-balance text-[1.75rem] font-bold leading-tight text-[#111827] sm:text-[2rem]">
@@ -118,12 +120,12 @@ export function OnboardingResultsStep() {
         </div>
 
         <div className="mt-4 grid gap-3 sm:grid-cols-2 sm:gap-4">
-          <article className="flex items-start gap-3 rounded-2xl border border-[#BBF7D0] bg-[#F0FDF4] px-4 py-4 sm:px-5">
-            <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-[#22C55E]">
+          <article className="flex items-start gap-3 rounded-2xl border border-[#15803D] bg-[#EEF2F6] px-4 py-4 sm:px-5">
+            <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-[#16A34A]">
               <CheckIcon className="size-3.5 text-white" />
             </span>
             <div>
-              <p className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-[#16A34A]">
+              <p className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-[#15803D]">
                 Your strength
               </p>
               <p className="mt-1 text-sm leading-6 text-[#334155]">
@@ -132,12 +134,12 @@ export function OnboardingResultsStep() {
             </div>
           </article>
 
-          <article className="flex items-start gap-3 rounded-2xl border border-[#FED7AA] bg-[#FFF7ED] px-4 py-4 sm:px-5">
-            <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-[#F97316]">
+          <article className="flex items-start gap-3 rounded-2xl border border-[#C2410C] bg-[#EEF2F6] px-4 py-4 sm:px-5">
+            <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-[#EA580C]">
               <FocusIcon className="size-3.5 text-white" />
             </span>
             <div>
-              <p className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-[#EA580C]">
+              <p className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-[#C2410C]">
                 Focus area
               </p>
               <p className="mt-1 text-sm leading-6 text-[#334155]">
@@ -152,7 +154,7 @@ export function OnboardingResultsStep() {
           <div className="flex items-start gap-3">
             <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#EEF2FF]">
               <Image
-                src="/ielts/sparkle.svg"
+                src="/onboarding/icon-star.svg"
                 alt=""
                 width={20}
                 height={20}
@@ -174,7 +176,7 @@ export function OnboardingResultsStep() {
             <span aria-hidden>→</span>
           </button>
 
-          <p className="mt-4 flex items-start justify-center gap-2 text-center text-xs leading-5 text-[#94A3B8]">
+          <p className="mt-4 flex items-start justify-center gap-2 text-center text-xs leading-5 text-[#111827]">
             <InfoCircleIcon className="mt-0.5 size-3.5 shrink-0 text-[#2b5ce6]" />
             <span>
               These scores are AI estimated for self-assessment purposes only.

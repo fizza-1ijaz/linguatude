@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { FlightTrail } from "@/app/components/flight-trail";
 
 const TRUST_ITEMS = [
   {
@@ -73,24 +74,30 @@ export function IeltsHero() {
             </div>
           </div>
 
-          <div className="relative mx-auto w-full max-w-[28rem] animate-[fade-in-up_0.85s_ease-out_both] lg:mx-0 lg:ml-auto lg:max-w-none">
-            <div className="pointer-events-none absolute -left-3 -top-3 z-[2] hidden size-12 sm:block lg:-left-4 lg:-top-4 lg:size-14">
-              <Image
-                src="/ielts/paper-plane.svg"
-                alt=""
-                width={56}
-                height={56}
-                className="size-full rotate-[12deg]"
-              />
+          <div className="relative mx-auto w-full max-w-[34rem] animate-[fade-in-up_0.85s_ease-out_both] lg:mx-0 lg:ml-auto lg:max-w-none">
+            <div className="pointer-events-none absolute -left-1 -top-2 z-[2] hidden sm:block lg:-left-2 lg:-top-3">
+              <span className="relative block size-16 lg:size-20">
+                <FlightTrail
+                  className="-left-[4.5rem] top-1/2 -translate-y-1/2 rotate-[-10deg] sm:-left-20 lg:-left-24"
+                  dots={9}
+                />
+                <Image
+                  src="/ielts/paper-plane.svg"
+                  alt=""
+                  width={80}
+                  height={80}
+                  className="relative z-[1] size-full rotate-[12deg]"
+                />
+              </span>
             </div>
-            <div className="relative mx-auto aspect-[690/550] w-full max-w-[26rem] lg:max-w-[28rem]">
+            <div className="relative mx-auto aspect-[690/550] w-full max-w-[32rem] lg:max-w-[36rem]">
               <Image
                 src="/ielts/writing-card.png"
                 alt="IELTS Writing Task 2 AI feedback card showing estimated band 7.5"
                 fill
                 priority
                 className="object-contain object-center"
-                sizes="(max-width: 1024px) 90vw, 448px"
+                sizes="(max-width: 1024px) 90vw, 576px"
               />
             </div>
           </div>

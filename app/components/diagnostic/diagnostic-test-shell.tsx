@@ -58,26 +58,22 @@ export function DiagnosticTestShell({
 }) {
   const message =
     footerMessage ??
-    "Switch freely between Listening, Reading, Writing, and Speaking while you review the diagnostic.";
+    "If time runs out, your answers will be submitted automatically and the test will move to the next section.";
 
   return (
-    <div className="diagnostic-test min-h-dvh bg-[#F8F9FB] text-[#141B2B]">
-      <header className="sticky top-0 z-30 border-b border-[#E5E7EB] bg-white">
+    <div className="diagnostic-test flex min-h-dvh flex-col bg-[#F8F9FB] text-[#141B2B]">
+      <header className="sticky top-0 z-40 border-b border-[#E5E7EB] bg-white">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
-          <div className="flex min-w-0 items-center gap-3">
+          <div className="flex min-w-0 items-center gap-2.5">
             <Image
-              src="/onboarding/logo-cap.svg"
+              src="/linguatude.webp"
               alt=""
               width={28}
               height={28}
-              className="size-7"
+              className="size-7 shrink-0 overflow-hidden rounded-lg object-cover"
               priority
             />
             <span className="text-base font-bold text-[#2b5ce6]">Linguatude</span>
-            <span className="hidden h-5 w-px bg-[#D1D5DB] sm:block" aria-hidden />
-            <span className="hidden truncate text-sm font-medium text-[#6B7280] sm:inline">
-              IELTS Master Diagnostics
-            </span>
           </div>
 
           <nav className="order-3 flex w-full justify-center gap-1 sm:order-none sm:w-auto sm:gap-1.5">
@@ -126,22 +122,22 @@ export function DiagnosticTestShell({
         </div>
       </header>
 
-      <div className="mx-auto w-full max-w-7xl px-4 py-5 sm:px-6 sm:py-6">
+      <div className="mx-auto w-full max-w-7xl flex-1 px-4 py-5 pb-[7.5rem] sm:px-6 sm:py-6 sm:pb-[6.5rem]">
         {children}
       </div>
 
       {footer ?? (
-        <footer className="sticky bottom-0 z-30 border-t border-[#E5E7EB] bg-white">
+        <footer className="fixed inset-x-0 bottom-0 z-40 border-t border-[#E5E7EB] bg-white shadow-[0_-4px_24px_rgba(15,23,42,0.06)]">
           <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-            <div className="flex max-w-3xl items-start gap-2.5 rounded-xl border border-[#BFDBFE] bg-[#EFF6FF] px-3.5 py-2.5 text-sm text-[#1E3A8A] sm:px-4">
-              <InfoCircleIcon className="mt-0.5 size-4 shrink-0 text-[#2b5ce6]" />
+            <div className="flex max-w-3xl items-center gap-2.5 rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-3.5 py-2.5 text-sm text-[#4B5563]">
+              <ClockIcon className="size-5 shrink-0 text-[#2b5ce6]" />
               <p>{message}</p>
             </div>
             <button
               type="button"
               disabled={!canSubmit}
               onClick={onSubmit}
-              className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#2b5ce6] px-5 text-base font-semibold text-white transition hover:bg-[#244fe6] disabled:cursor-not-allowed disabled:bg-[#CBD5E1]"
+              className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#2b5ce6] px-5 text-sm font-semibold text-white transition hover:bg-[#244fe6] disabled:cursor-not-allowed disabled:bg-[#93C5FD] sm:h-12 sm:text-base"
             >
               {!canSubmit && submitLabel.toLowerCase().includes("wait") ? (
                 <SpinnerIcon />
@@ -182,20 +178,6 @@ function ClockIcon({ className = "size-4" }: { className?: string }) {
         strokeWidth="1.75"
         strokeLinecap="round"
         strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function InfoCircleIcon({ className = "size-4" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
-      <circle cx="12" cy="12" r="8.25" stroke="currentColor" strokeWidth="1.75" />
-      <path
-        d="M12 11v5M12 8h.01"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinecap="round"
       />
     </svg>
   );

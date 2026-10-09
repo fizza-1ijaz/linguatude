@@ -92,7 +92,7 @@ export function SpeakExam() {
     const id = window.setTimeout(() => {
       if (recordingFrom === "part1") setPhase("part2-prep");
       else if (recordingFrom === "part2") setPhase("part3");
-      else router.push("/dashboard/speak/session-complete");
+      else router.push("/dashboard/speak/test-results");
     }, SAVED_ADVANCE_MS);
     return () => window.clearTimeout(id);
   }, [phase, recordingFrom, router]);

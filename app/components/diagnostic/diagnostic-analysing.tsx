@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -24,19 +23,27 @@ const STEPPER = [
 ];
 
 const ABOUT_ROWS = [
-  { label: "Total sections", value: "4", Icon: SectionsIcon },
+  { label: "Total sections", value: "4", Icon: CalendarAboutIcon },
   { label: "Total duration", value: "~10 minutes", Icon: DurationIcon },
   {
     label: "Skills assessed",
     value: "Listening, Reading, Writing, Speaking",
-    Icon: SkillsIcon,
+    Icon: PulseAboutIcon,
   },
-  { label: "Analysis", value: "AI-powered", Icon: AnalysisIcon },
+  { label: "Analysis", value: "AI-powered", Icon: InfoAboutIcon },
   {
     label: "Next step",
     value: "Your results & recommendations",
-    Icon: NextStepIcon,
+    Icon: LayersAboutIcon,
   },
+] as const;
+
+const BUBBLES = [
+  { className: "left-0 top-2 size-2", delay: "0s", duration: "2.2s" },
+  { className: "right-1 top-0 size-2.5", delay: "0.35s", duration: "2.6s" },
+  { className: "-left-2 bottom-3 size-1.5", delay: "0.7s", duration: "2.1s" },
+  { className: "-right-3 bottom-1 size-2", delay: "1.1s", duration: "2.8s" },
+  { className: "left-6 -top-3 size-1.5", delay: "1.5s", duration: "2.4s" },
 ] as const;
 
 export function DiagnosticAnalysing() {
@@ -52,9 +59,11 @@ export function DiagnosticAnalysing() {
     const state = readOnboardingState();
     if (
       !state.exam ||
-      (state.exam === "ukvi" && !state.ukviLevel) ||
+      !state.dailyMinutes ||
       !state.experienceDone ||
-      !state.goalsDone
+      !state.goalsDone ||
+      !state.studyDaysDone ||
+      !state.focusDone
     ) {
       router.replace(ONBOARDING_ROUTES.diagnostic);
       return;
@@ -121,7 +130,7 @@ export function DiagnosticAnalysing() {
       canSubmit={false}
       tabsInteractive={false}
       footer={
-        <footer className="sticky bottom-0 z-30 border-t border-[#E5E7EB] bg-white">
+        <footer className="fixed inset-x-0 bottom-0 z-40 border-t border-[#E5E7EB] bg-white shadow-[0_-4px_24px_rgba(15,23,42,0.06)]">
           <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
             <div className="flex max-w-3xl items-start gap-2.5 text-sm text-[#475569]">
               <InfoCircleIcon className="mt-0.5 size-4 shrink-0 text-[#2b5ce6]" />
@@ -146,15 +155,35 @@ export function DiagnosticAnalysing() {
     >
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-6">
         <section className="rounded-2xl border border-[#E5E7EB] bg-white px-5 py-8 shadow-[0_4px_24px_rgba(15,23,42,0.04)] sm:px-8 sm:py-10">
-          <div className="mx-auto flex max-w-xl flex-col items-center text-center">
+          <div className="mx-auto flex max-w-xl flex-col items-center text-center animate-[fade-in-up_0.55s_ease-out_both]">
             <div className="relative mb-6">
               <div
-                className="absolute left-1/2 top-1/2 size-28 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#2b5ce6]/15 blur-2xl"
+                className="diag-anim-glow absolute left-1/2 top-1/2 size-32 rounded-full bg-[#2b5ce6]/25 blur-2xl"
+                style={{ animation: "diag-glow-pulse 2.4s ease-in-out infinite" }}
                 aria-hidden
               />
-              <div className="relative flex size-[4.75rem] items-center justify-center rounded-2xl bg-white shadow-[0_8px_28px_rgba(43,92,230,0.18)] ring-1 ring-[#E8EEFF]">
-                <ClockHeroIcon className="size-9 text-[#2b5ce6]" />
-                <span className="absolute -bottom-1.5 -right-1.5 flex size-6 items-center justify-center rounded-full bg-[#2b5ce6] shadow-sm ring-2 ring-white">
+              {BUBBLES.map((bubble, i) => (
+                <span
+                  key={i}
+                  className={`diag-anim-bubble absolute rounded-full bg-[#2b5ce6] ${bubble.className}`}
+                  style={{
+                    animation: `diag-bubble-pop ${bubble.duration} ease-out infinite`,
+                    animationDelay: bubble.delay,
+                  }}
+                  aria-hidden
+                />
+              ))}
+              <div
+                className="diag-anim-icon relative flex size-[4.75rem] items-center justify-center rounded-2xl bg-white shadow-[0_8px_28px_rgba(43,92,230,0.18)] ring-1 ring-[#E8EEFF]"
+                style={{ animation: "diag-icon-float 2.8s ease-in-out infinite" }}
+              >
+                <AnimatedClockIcon className="size-9 text-[#2b5ce6]" />
+                <span
+                  className="diag-anim-check absolute -bottom-1.5 -right-1.5 flex size-6 items-center justify-center rounded-full bg-[#2b5ce6] shadow-sm ring-2 ring-white"
+                  style={{
+                    animation: "diag-check-pop 0.55s cubic-bezier(0.34, 1.4, 0.64, 1) both",
+                  }}
+                >
                   <CheckIcon className="size-3 text-white" />
                 </span>
               </div>
@@ -164,7 +193,8 @@ export function DiagnosticAnalysing() {
               Diagnostic complete.
             </h1>
             <p className="mt-1.5 text-[1.375rem] font-bold leading-tight text-[#2b5ce6] sm:text-[1.625rem]">
-              Analysing your results...
+              Analysing your results
+              <AnimatedEllipsis />
             </p>
             <p className="mt-3 max-w-md text-sm leading-6 text-[#64748B] sm:text-[0.9375rem]">
               We&apos;re using AI to evaluate your performance across all 4
@@ -175,9 +205,15 @@ export function DiagnosticAnalysing() {
               <div className="flex items-center gap-3">
                 <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-[#E5E7EB]">
                   <div
-                    className="h-full rounded-full bg-[#2b5ce6] transition-[width] duration-100 ease-linear"
+                    className="relative h-full overflow-hidden rounded-full bg-[#2b5ce6] transition-[width] duration-100 ease-linear"
                     style={{ width: `${progress}%` }}
-                  />
+                  >
+                    <span
+                      className="diag-anim-shimmer pointer-events-none absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-white/35 to-transparent"
+                      style={{ animation: "diag-shimmer 1.4s ease-in-out infinite" }}
+                      aria-hidden
+                    />
+                  </div>
                 </div>
                 <span className="w-10 shrink-0 text-right text-sm font-bold tabular-nums text-[#2b5ce6]">
                   {progress}%
@@ -239,24 +275,26 @@ export function DiagnosticAnalysing() {
         </section>
 
         <aside className="flex flex-col gap-4">
-          <div className="rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-[0_4px_16px_rgba(15,23,42,0.04)]">
-            <div className="mb-4 flex items-center gap-2">
-              <DocIcon className="size-4 text-[#2b5ce6]" />
-              <h2 className="text-sm font-semibold text-[#2b5ce6]">
+          <div className="rounded-2xl border border-[#E8ECF4] bg-white p-5 shadow-[0_8px_28px_rgba(15,23,42,0.06)] sm:p-6">
+            <div className="mb-5 flex items-center gap-2.5">
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#EEF2FF]">
+                <DocIcon className="size-4 text-[#2b5ce6]" />
+              </span>
+              <h2 className="text-sm font-bold text-[#2b5ce6]">
                 About your diagnostic
               </h2>
             </div>
-            <ul className="divide-y divide-[#E5E7EB]">
+            <ul className="space-y-4">
               {ABOUT_ROWS.map((row) => (
                 <li
                   key={row.label}
-                  className="flex items-start justify-between gap-3 py-3 first:pt-0 last:pb-0"
+                  className="flex items-start justify-between gap-3"
                 >
-                  <span className="inline-flex items-center gap-2 text-sm text-[#6B7280]">
-                    <row.Icon className="size-3.5 shrink-0 text-[#2b5ce6]" />
+                  <span className="inline-flex items-center gap-2.5 text-sm text-[#6B7280]">
+                    <row.Icon className="size-4 shrink-0 text-[#6B7280]" />
                     {row.label}
                   </span>
-                  <span className="max-w-[55%] text-right text-sm font-semibold leading-snug text-[#141B2B]">
+                  <span className="max-w-[58%] text-right text-sm font-bold leading-snug text-[#111827]">
                     {row.value}
                   </span>
                 </li>
@@ -264,30 +302,23 @@ export function DiagnosticAnalysing() {
             </ul>
           </div>
 
-          <div className="rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-[0_4px_16px_rgba(15,23,42,0.04)]">
-            <div className="mb-3 flex items-center gap-2">
-              <Image
-                src="/home/trust-shield-check.svg"
-                alt=""
-                width={18}
-                height={18}
-                className="size-[1.125rem]"
-              />
-              <h2 className="text-sm font-semibold text-[#2b5ce6]">
+          <div className="rounded-2xl border border-[#E8ECF4] bg-white p-5 shadow-[0_8px_28px_rgba(15,23,42,0.06)] sm:p-6">
+            <div className="mb-3 flex items-center gap-2.5">
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#EEF2FF]">
+                <ShieldAboutIcon className="size-4 text-[#2b5ce6]" />
+              </span>
+              <h2 className="text-sm font-bold text-[#2b5ce6]">
                 Your data is safe
               </h2>
             </div>
-            <p className="text-sm leading-6 text-[#64748B]">
+            <p className="text-sm leading-6 text-[#6B7280]">
               Your responses are secure and used only to generate your
               personalised diagnostic results.
             </p>
-            <button
-              type="button"
-              className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#2b5ce6] px-4 text-sm font-semibold text-white transition hover:bg-[#244fe6]"
-            >
-              <LockIcon className="size-3.5" />
+            <div className="mt-4 flex items-center gap-2.5 rounded-xl bg-[#2b5ce6] px-4 py-3 text-sm font-medium text-white">
+              <LockIcon className="size-3.5 shrink-0" />
               Your privacy is our priority.
-            </button>
+            </div>
           </div>
         </aside>
       </div>
@@ -309,7 +340,12 @@ function StepGlyph({
   }
   if (status === "speaking") {
     return (
-      <span className="relative z-10 flex size-8 items-center justify-center rounded-full border-[2px] border-[#2b5ce6] bg-white" />
+      <span
+        className="diag-anim-step-pulse relative z-10 flex size-8 items-center justify-center rounded-full border-[2px] border-[#2b5ce6] bg-white"
+        style={{ animation: "diag-step-pulse 1.8s ease-out infinite" }}
+      >
+        <span className="size-2.5 animate-pulse rounded-full bg-[#2b5ce6]" />
+      </span>
     );
   }
   return (
@@ -374,18 +410,53 @@ function CheckIcon({ className = "size-3.5" }: { className?: string }) {
   );
 }
 
-function ClockHeroIcon({ className = "size-9" }: { className?: string }) {
+function AnimatedClockIcon({ className = "size-9" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
       <circle cx="12" cy="12" r="8.25" stroke="currentColor" strokeWidth="1.75" />
-      <path
-        d="M12 8v4.5l3 1.5"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <g className="diag-clock-hand-hr diag-anim-hand-hr">
+        <line
+          x1="12"
+          y1="12"
+          x2="12"
+          y2="8.6"
+          stroke="currentColor"
+          strokeWidth="1.75"
+          strokeLinecap="round"
+        />
+      </g>
+      <g className="diag-clock-hand-min diag-anim-hand-min">
+        <line
+          x1="12"
+          y1="12"
+          x2="12"
+          y2="7"
+          stroke="currentColor"
+          strokeWidth="1.75"
+          strokeLinecap="round"
+        />
+      </g>
+      <circle cx="12" cy="12" r="1.1" fill="currentColor" />
     </svg>
+  );
+}
+
+function AnimatedEllipsis() {
+  return (
+    <span className="inline-flex w-[1.1em] justify-start" aria-hidden>
+      {[0, 1, 2].map((i) => (
+        <span
+          key={i}
+          className="diag-anim-dot"
+          style={{
+            animation: "diag-dots 1.2s ease-in-out infinite",
+            animationDelay: `${i * 0.2}s`,
+          }}
+        >
+          .
+        </span>
+      ))}
+    </span>
   );
 }
 
@@ -471,13 +542,78 @@ function LockIcon({ className = "size-3.5" }: { className?: string }) {
   );
 }
 
-function SectionsIcon({ className = "size-4" }: { className?: string }) {
+function CalendarAboutIcon({ className = "size-4" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 16 16" fill="none" aria-hidden>
-      <rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.4" />
-      <rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.4" />
-      <rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.4" />
-      <rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.4" />
+      <rect
+        x="2.25"
+        y="3.25"
+        width="11.5"
+        height="10.5"
+        rx="1.5"
+        stroke="currentColor"
+        strokeWidth="1.4"
+      />
+      <path
+        d="M2.25 6.5h11.5M5.25 2.25v2M10.75 2.25v2"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function PulseAboutIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" aria-hidden>
+      <path
+        d="M1.5 8h3l1.5-3.5L8.5 12l2-4.5H14.5"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function InfoAboutIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" aria-hidden>
+      <circle cx="8" cy="8" r="5.5" stroke="currentColor" strokeWidth="1.4" />
+      <path
+        d="M8 7.2v3.5M8 5.2h.01"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function LayersAboutIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" aria-hidden>
+      <path
+        d="M8 2.5 13.5 5.5 8 8.5 2.5 5.5 8 2.5ZM2.5 8.25 8 11.25l5.5-3M2.5 10.75 8 13.75l5.5-3"
+        stroke="currentColor"
+        strokeWidth="1.35"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function ShieldAboutIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" aria-hidden>
+      <path
+        d="M8 2.25 13 4.25v3.6c0 3.1-2.05 5.35-5 6.15-2.95-.8-5-3.05-5-6.15v-3.6L8 2.25Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -488,60 +624,6 @@ function DurationIcon({ className = "size-4" }: { className?: string }) {
       <circle cx="8" cy="8" r="5.5" stroke="currentColor" strokeWidth="1.4" />
       <path
         d="M8 5.25V8.25L10 9.5"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function SkillsIcon({ className = "size-4" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 16 16" fill="none" aria-hidden>
-      <path
-        d="M3 12.5V4.5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v8"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-      />
-      <path
-        d="M5.5 12.5V8M8 12.5V6.5M10.5 12.5V9.5"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function AnalysisIcon({ className = "size-4" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 16 16" fill="none" aria-hidden>
-      <path
-        d="M3 11.5L6.2 8.3L8.5 10.6L13 6"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M10.5 6H13v2.5"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function NextStepIcon({ className = "size-4" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 16 16" fill="none" aria-hidden>
-      <path
-        d="M3 8h8.5M8.5 4.5L12 8l-3.5 3.5"
         stroke="currentColor"
         strokeWidth="1.4"
         strokeLinecap="round"

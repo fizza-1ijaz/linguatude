@@ -1,0 +1,61 @@
+{
+  "source": "LIN 25/016",
+  "effectiveFrom": "2025-08-07",
+  "lastVerified": "2026-07-23",
+  "disclaimer": "Indicative only — confirm requirements for your visa subclass with official DHA sources before relying on these figures.",
+  "pathways": [
+    {
+      "id": "competent",
+      "title": "Competent English",
+      "migrationPointsLabel": "0 pts",
+      "highlight": null,
+      "pte": {
+        "listening": 47,
+        "reading": 48,
+        "writing": 51,
+        "speaking": 54
+      },
+      "ieltsAcademicMinEach": 6.0
+    },
+    {
+      "id": "proficient",
+      "title": "Proficient English",
+      "migrationPointsLabel": "+10 pts",
+      "highlight": "Most popular for Australian PR",
+      "pte": {
+        "listening": 58,
+        "reading": 59,
+        "writing": 69,
+        "speaking": 76
+      },
+      "ieltsAcademicMinEach": 7.0
+    },
+    {
+      "id": "superior",
+      "title": "Superior English",
+      "migrationPointsLabel": "+20 pts",
+      "highlight": null,
+      "pte": {
+        "listening": 69,
+        "reading": 70,
+        "writing": 85,
+        "speaking": 85
+      },
+      "ieltsAcademicMinEach": 8.0
+    }
+  ],
+  "homepageBullets": [
+    {
+      "title": "Component score tracking",
+      "subtitle": "for every skill"
+    },
+    {
+      "title": "Proficient & Superior",
+      "subtitle": "goals support"
+    },
+    {
+      "title": "Stay ahead of",
+      "subtitle": "requirement updates"
+    }
+  ]
+}

@@ -183,7 +183,7 @@ export function BlogListingClient({
                               ? `${categoryName} · ${minutes} min`
                               : `${minutes} min`}
                           </span>
-                          <span className="relative size-4 shrink-0 overflow-clip opacity-70 transition group-hover:translate-x-0.5 group-hover:opacity-100">
+                          <span className="relative size-4 shrink-0 overflow-clip opacity-80 transition group-hover:translate-x-0.5 group-hover:opacity-100">
                             <Image
                               src="/blog/card-arrow.svg"
                               alt=""

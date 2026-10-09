@@ -21,11 +21,11 @@ export function OnboardingWideShell({
         <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-4 pb-3 pt-5 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2.5">
             <Image
-              src="/onboarding/logo-cap.svg"
+              src="/linguatude.webp"
               alt=""
               width={28}
               height={28}
-              className="size-7"
+              className="size-7 shrink-0 overflow-hidden rounded-lg object-cover"
               priority
             />
             <span className="text-lg font-bold tracking-tight text-[#2b5ce6]">

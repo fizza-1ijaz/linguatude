@@ -68,14 +68,6 @@ export function SigninForm() {
           role="alert"
         >
           {errorMessage}
-          {!isSupabaseConfigured ? (
-            <>
-              {" "}
-              <Link href="/#start" className="font-semibold underline">
-                Join waitlist
-              </Link>
-            </>
-          ) : null}
         </p>
       ) : null}
 

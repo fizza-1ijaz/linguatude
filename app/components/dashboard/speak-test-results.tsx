@@ -11,9 +11,9 @@ const CRITERIA = [
 ] as const;
 
 const PARTS = [
-  { title: "Part 1: Introduction", band: "6.5" },
-  { title: "Part 2: Long Turn", band: "7.5" },
-  { title: "Part 3: Discussion", band: "6.0" },
+  { title: "Part 1: Introduction", band: "8.5", value: 8.5 },
+  { title: "Part 2: Long Turn", band: "7.0", value: 7.0 },
+  { title: "Part 3: Discussion", band: "6.0", value: 6.0 },
 ] as const;
 
 export function SpeakTestResults() {
@@ -66,7 +66,7 @@ export function SpeakTestResults() {
                   </p>
                 </div>
               </div>
-              <span className="mt-2 rounded-full bg-[#F1F5F9] px-3 py-1 text-[0.6875rem] font-bold tracking-wide text-[#64748B]">
+              <span className="mt-2 rounded-full bg-[#DBEAFE] px-3 py-1 text-[0.6875rem] font-bold tracking-wide text-[#1E40AF]">
                 ESTIMATED
               </span>
             </div>
@@ -92,12 +92,12 @@ export function SpeakTestResults() {
                   ),
                 )}
               </div>
-              <div className="mt-5 flex items-start gap-2.5 rounded-xl bg-[#EFF6FF] px-3.5 py-3">
+              <div className="mt-5 flex items-start gap-2.5 rounded-xl bg-[#F1F5F9] px-3.5 py-3">
                 <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-[#2b5ce6] text-[0.625rem] font-bold text-white">
                   i
                 </span>
-                <p className="text-sm leading-6 text-[#334155]">
-                  This is an AI-estimated score for self-assessment Only. Not an
+                <p className="text-sm leading-6 text-[#475569]">
+                  This is an AI-estimated score for self-assessment only. Not an
                   official IELTS result.
                 </p>
               </div>
@@ -160,11 +160,11 @@ export function SpeakTestResults() {
           <div className="flex flex-col gap-4">
             <section className="rounded-2xl border border-[#BFDBFE]/80 bg-[#EFF6FF] p-4 sm:p-5">
               <div className="flex items-start gap-3">
-                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#DBEAFE] text-[#2b5ce6]">
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#2b5ce6] text-white">
                   <TrendUpIcon />
                 </span>
                 <div>
-                  <p className="text-[0.6875rem] font-bold tracking-wide text-[#64748B]">
+                  <p className="text-[0.6875rem] font-bold tracking-wide text-[#2b5ce6]">
                     YOUR STRENGTH
                   </p>
                   <p className="mt-1 text-base font-bold text-[#141B2B]">
@@ -183,7 +183,7 @@ export function SpeakTestResults() {
                   <AlertIcon />
                 </span>
                 <div>
-                  <p className="text-[0.6875rem] font-bold tracking-wide text-[#64748B]">
+                  <p className="text-[0.6875rem] font-bold tracking-wide text-[#EA580C]">
                     PRIORITY FOCUS
                   </p>
                   <p className="mt-1 text-base font-bold text-[#141B2B]">
@@ -202,59 +202,73 @@ export function SpeakTestResults() {
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,0.9fr)] lg:gap-5">
           <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.18)] sm:p-6">
             <h2 className="text-base font-bold text-[#141B2B]">Part Breakdown</h2>
-            <div className="mt-4 divide-y divide-[#E2E8F0]">
+            <div className="mt-4 space-y-3">
               {PARTS.map((part) => (
                 <div
                   key={part.title}
-                  className="flex items-center justify-between gap-3 py-3.5 first:pt-0 last:pb-0"
+                  className="flex items-center gap-3 rounded-xl border border-[#E2E8F0] px-3.5 py-3.5"
                 >
-                  <div>
+                  <div className="h-2.5 w-16 shrink-0 overflow-hidden rounded-full bg-[#E8EEF7] sm:w-20">
+                    <div
+                      className="h-full rounded-full bg-[#2b5ce6]"
+                      style={{ width: `${(part.value / 9) * 100}%` }}
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
                     <p className="text-sm font-semibold text-[#141B2B]">
                       {part.title}
                     </p>
-                    <p className="mt-0.5 text-sm text-[#64748B]">
+                    <p className="mt-0.5 text-sm italic text-[#94A3B8]">
                       Average band: {part.band}
                     </p>
                   </div>
-                  <span className="shrink-0 text-sm font-semibold text-[#2b5ce6]">
+                  <Link
+                    href="/dashboard/speak/feedback"
+                    className="shrink-0 text-sm font-semibold text-[#2b5ce6] transition hover:underline"
+                  >
                     View detail →
-                  </span>
+                  </Link>
                 </div>
               ))}
             </div>
           </section>
 
-          <section className="flex flex-col rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.18)] sm:p-6">
-            <p className="text-sm font-bold text-[#141B2B]">
-              Academic Speaking Simulation
-            </p>
-            <p className="mt-1 text-sm text-[#64748B]">October 24, 2023</p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {["Part 1", "Part 2", "Part 3"].map((p) => (
-                <span
-                  key={p}
-                  className="rounded-md bg-[#F1F5F9] px-2.5 py-1 text-xs font-semibold text-[#64748B]"
-                >
-                  {p}
-                </span>
-              ))}
-            </div>
-            <div className="mt-auto flex flex-col gap-3 pt-6">
+          <div className="flex flex-col gap-4">
+            <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.18)] sm:p-6">
+              <p className="text-sm font-medium text-[#475569]">
+                Academic Speaking Simulation
+              </p>
+              <p className="mt-1 text-base font-bold text-[#141B2B]">
+                October 24, 2023
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {["Part 1", "Part 2", "Part 3"].map((p) => (
+                  <span
+                    key={p}
+                    className="inline-flex items-center gap-1 rounded-full border border-[#BFDBFE] bg-white px-2.5 py-1 text-xs font-semibold text-[#64748B]"
+                  >
+                    <CheckSmallIcon />
+                    {p}
+                  </span>
+                ))}
+              </div>
+            </section>
+            <div className="flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/dashboard/speak/exam"
-                className="inline-flex h-11 w-full items-center justify-center rounded-xl border border-[#E2E8F0] bg-white text-sm font-semibold text-[#141B2B] transition hover:bg-[#F8FAFC]"
+                className="inline-flex h-11 flex-1 items-center justify-center rounded-xl border border-[#E2E8F0] bg-white text-sm font-semibold text-[#141B2B] transition hover:bg-[#F8FAFC]"
               >
                 Try Again
               </Link>
               <Link
-                href="/dashboard/speak"
-                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#2b5ce6] text-sm font-semibold text-white transition hover:bg-[#244FE6]"
+                href="/dashboard/speak/setup"
+                className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#2b5ce6] text-sm font-semibold text-white transition hover:bg-[#244FE6]"
               >
+                <PlaySmallIcon />
                 Practice This Skill
-                <span aria-hidden>→</span>
               </Link>
             </div>
-          </section>
+          </div>
         </div>
       </div>
     </DashboardShell>
@@ -272,13 +286,11 @@ function SpokeRow({
 }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#EFF6FF] text-[#2b5ce6]">
+      <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#EFF6FF] text-[#2b5ce6]">
         {icon}
       </span>
-      <div className="min-w-0 flex-1">
-        <p className="text-sm text-[#64748B]">{label}</p>
-        <p className="text-base font-bold text-[#141B2B]">{value}</p>
-      </div>
+      <p className="min-w-0 flex-1 text-sm text-[#64748B]">{label}</p>
+      <p className="shrink-0 text-base font-bold text-[#141B2B]">{value}</p>
     </div>
   );
 }
@@ -400,6 +412,14 @@ function AlertIcon() {
         strokeWidth="1.6"
         strokeLinecap="round"
       />
+    </svg>
+  );
+}
+
+function PlaySmallIcon() {
+  return (
+    <svg viewBox="0 0 12 12" className="size-3" fill="currentColor" aria-hidden>
+      <path d="M3.5 2v8l7-4-7-4Z" />
     </svg>
   );
 }

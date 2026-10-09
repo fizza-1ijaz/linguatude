@@ -1,5 +1,13 @@
-export type ExamChoice = "academic" | "ukvi" | null;
+export type ExamChoice = "academic" | "pte" | "ukvi" | null;
 export type UkviLevel = "a1" | "a2" | "b1" | null;
+
+export type FocusChoice =
+  | "auto"
+  | "speaking"
+  | "writing"
+  | "reading"
+  | "listening"
+  | null;
 
 /** IELTS band 0–9 in 0.5 steps */
 export type BandScore = number | null;
@@ -11,22 +19,33 @@ export type SkillBands = {
   speaking: BandScore;
 };
 
+export type StudyDayId = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
+
 export type OnboardingState = {
   exam: ExamChoice;
   ukviLevel: UkviLevel;
-  /** True when the learner has never taken IELTS before */
+  /** Daily study commitment in minutes (step 2) */
+  dailyMinutes: number | null;
+  /** True when the learner has never taken the exam before */
   isFirstIelts: boolean;
   previousScores: SkillBands;
-  /** Whether step 3 (prior IELTS experience) was completed */
+  /** Whether step 3 (prior experience) was completed */
   experienceDone: boolean;
   /** Per-skill target bands (step 4) */
   targetScores: SkillBands;
   sameTargetAll: boolean;
+  notSureTarget: boolean;
   /** ISO date string yyyy-mm-dd, or null */
   testDate: string | null;
   noTestDate: boolean;
   /** Whether step 4 (goals + date) was completed */
   goalsDone: boolean;
+  /** Selected study weekdays (step 5) */
+  studyDays: StudyDayId[];
+  studyDaysDone: boolean;
+  /** Learning focus preference (step 6) */
+  focus: FocusChoice;
+  focusDone: boolean;
   completed: boolean;
 };
 
@@ -45,14 +64,20 @@ export const DEFAULT_TARGET_BAND = 7.0;
 export const defaultOnboardingState: OnboardingState = {
   exam: null,
   ukviLevel: null,
+  dailyMinutes: null,
   isFirstIelts: true,
   previousScores: emptySkillBands,
   experienceDone: false,
   targetScores: emptySkillBands,
   sameTargetAll: false,
+  notSureTarget: false,
   testDate: null,
   noTestDate: false,
   goalsDone: false,
+  studyDays: ["mon", "tue", "wed", "thu"],
+  studyDaysDone: false,
+  focus: "auto",
+  focusDone: false,
   completed: false,
 };
 
@@ -73,6 +98,9 @@ export function readOnboardingState(): OnboardingState {
         ...emptySkillBands,
         ...(parsed.targetScores ?? {}),
       },
+      studyDays: Array.isArray(parsed.studyDays)
+        ? (parsed.studyDays as StudyDayId[])
+        : defaultOnboardingState.studyDays,
     };
   } catch {
     return defaultOnboardingState;
@@ -86,15 +114,32 @@ export function writeOnboardingState(partial: Partial<OnboardingState>) {
   return next;
 }
 
-/** Total progress segments shown in Figma (7). */
-export const ONBOARDING_TOTAL_STEPS = 7;
+/**
+ * Progress bar / step labels (8 total).
+ * Listening + Reading + Writing + Speaking diagnostic screens count as ONE step (8).
+ *
+ * 1 Exam · 2 Study time · 3 Prior scores · 4 Goals · 5 Study days ·
+ * 6 Focus · 7 Diagnostic intro · 8 Diagnostic test
+ */
+export const ONBOARDING_TOTAL_STEPS = 8;
+
+/** Progress index for the multi-skill diagnostic test screens. */
+export const ONBOARDING_DIAGNOSTIC_TEST_STEP = 8;
 
 export const ONBOARDING_ROUTES = {
   exam: "/onboarding",
+  /** Step 2 — daily study routine */
   level: "/onboarding/level",
+  routine: "/onboarding/level",
   goal: "/onboarding/goal",
   schedule: "/onboarding/schedule",
+  /** Step 5 — choose study days */
+  days: "/onboarding/days",
+  /** Step 6 — learning focus */
+  focus: "/onboarding/focus",
+  /** Step 7 — diagnostic intro */
   diagnostic: "/onboarding/diagnostic",
+  /** Step 8 — diagnostic test (all skills) */
   diagnosticTest: "/onboarding/diagnostic/test",
   diagnosticReading: "/onboarding/diagnostic/test/reading",
   diagnosticWriting: "/onboarding/diagnostic/test/writing",

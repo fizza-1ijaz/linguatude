@@ -29,7 +29,7 @@ function StartFreeButton({ className }: { className?: string }) {
           alt=""
           width={16}
           height={16}
-          className="size-full"
+          className="size-full brightness-0 invert"
         />
       </span>
     </Link>
@@ -40,46 +40,47 @@ export function AboutPageContent() {
   return (
     <>
       <section
-        className="home-hero relative isolate overflow-hidden"
+        className="mkt-hero relative isolate overflow-hidden"
         aria-labelledby="about-hero-heading"
       >
-        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[48%] lg:block" aria-hidden>
-          <div className="relative h-full w-full opacity-20">
-            <Image
-              src="/about/hero-collage.png"
-              alt=""
-              fill
-              priority
-              className="object-contain object-bottom blur-[1px]"
-              sizes="48vw"
-            />
-          </div>
-        </div>
-
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-14 lg:px-8 lg:pb-24 lg:pt-16">
-          <div className="max-w-lg animate-[fade-in-up_0.75s_ease-out_both]">
-            <p className="inline-flex items-center gap-2 rounded-full border border-[rgba(199,196,219,0.3)] bg-white px-3.5 py-1.5 text-xs font-bold uppercase tracking-[1.2px] text-[#464557]">
-              <span className="size-2 rounded-full bg-[#2D5BFF]" aria-hidden />
-              Our mission
-            </p>
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-8">
+            <div className="relative z-10 max-w-lg animate-[fade-in-up_0.75s_ease-out_both]">
+              <p className="inline-flex items-center gap-2 rounded-full border border-[rgba(199,196,219,0.3)] bg-white px-3.5 py-1.5 text-xs font-bold uppercase tracking-[1.2px] text-[#464557]">
+                <span className="size-2 rounded-full bg-[#2D5BFF]" aria-hidden />
+                Our mission
+              </p>
 
-            <h1
-              id="about-hero-heading"
-              className="mt-5 text-balance text-4xl font-extrabold leading-[1.1] tracking-[-0.02em] text-[#191c1f] sm:text-5xl lg:text-[3.5rem] lg:leading-[1.1]"
+              <h1
+                id="about-hero-heading"
+                className="mt-5 text-balance text-4xl font-extrabold leading-[1.1] tracking-[-0.02em] text-[#191c1f] sm:text-5xl lg:text-[3.5rem] lg:leading-[1.1]"
+              >
+                Why we built
+                <br />
+                <span className="text-[#2D5BFF]">Linguatude.</span>
+              </h1>
+
+              <p className="mt-6 max-w-md text-pretty text-lg font-medium leading-7 text-[#464557] sm:text-xl">
+                English tests decide careers, visas and reunions. We believe
+                everyone deserves high-fidelity, accurate preparation to achieve
+                their required scores without unnecessary stress.
+              </p>
+
+              <div className="mt-8">
+                <StartFreeButton />
+              </div>
+            </div>
+
+            <div
+              className="pointer-events-none relative mx-auto w-full max-w-[28rem] lg:max-w-none"
+              aria-hidden
             >
-              Why we built
-              <br />
-              <span className="text-[#2D5BFF]">Linguatude.</span>
-            </h1>
-
-            <p className="mt-6 max-w-md text-pretty text-lg font-medium leading-7 text-[#464557] sm:text-xl">
-              English tests decide careers, visas and reunions. We believe
-              everyone deserves high-fidelity, accurate preparation to achieve
-              their required scores without unnecessary stress.
-            </p>
-
-            <div className="mt-8">
-              <StartFreeButton />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/about/aboutus-herosvg.svg"
+                alt=""
+                className="h-auto w-full object-contain object-center"
+              />
             </div>
           </div>
         </div>
