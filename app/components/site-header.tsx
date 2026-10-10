@@ -9,7 +9,7 @@ const PRIMARY_LINKS = [
   { href: "/", label: "Home" },
   { href: "/pte", label: "PTE" },
   { href: "/ielts", label: "IELTS" },
-  { href: "/#start", label: "Dashboard" },
+  { href: "/dashboard", label: "Dashboard" },
   { href: "/features", label: "Features" },
   { href: "/about", label: "About" },
 ] as const;
