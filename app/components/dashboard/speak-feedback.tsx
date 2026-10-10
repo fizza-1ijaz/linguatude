@@ -1,6 +1,9 @@
 "use client";
 
+import { NotificationBellButton } from "@/app/components/dashboard/notification-bell-button";
+
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
 
@@ -11,19 +14,280 @@ const BAND_METRICS = [
   { label: "Pron", value: "6.5", color: "text-[#F97316]" },
 ] as const;
 
-export function SpeakFeedback() {
-  const [showFull, setShowFull] = useState(false);
+const PART2_BAND_METRICS = [
+  { label: "F&C", value: "6.0", color: "text-[#3B82F6]" },
+  { label: "Lex", value: "6.5", color: "text-[#16A34A]" },
+  { label: "Gram", value: "6.0", color: "text-[#F97316]" },
+  { label: "Pron", value: "7.0", color: "text-[#8B5CF6]" },
+] as const;
 
+const PART2_IMPROVEMENTS = [
+  {
+    level: "High" as const,
+    title: "Sentence variety is limited",
+    description:
+      "Try using more complex and compound sentences to express ideas more naturally.",
+  },
+  {
+    level: "Medium" as const,
+    title: "Vocabulary choices are basic",
+    description:
+      "Use a wider range of specific vocabulary to make your answers more precise and engaging.",
+  },
+  {
+    level: "Medium" as const,
+    title: "Grammar accuracy",
+    description:
+      "Watch subject-verb agreement and article usage in longer sentences.",
+  },
+  {
+    level: "Low" as const,
+    title: "Pronunciation",
+    description: "A few word stress and linking issues were noticed.",
+  },
+] as const;
+
+const PART_TITLES: Record<string, string> = {
+  "1": "Part 1 Feedback",
+  "2": "Part 2 Detail",
+  "3": "Part 3 Feedback",
+};
+
+export function SpeakFeedback() {
+  const searchParams = useSearchParams();
+  const part = searchParams.get("part");
+  const fromExam = part === "1" || part === "2" || part === "3";
+
+  if (part === "2") {
+    return <Part2Detail />;
+  }
+
+  return <SpeakFeedbackDefault fromExam={fromExam} part={part} />;
+}
+
+function Part2Detail() {
   return (
     <DashboardShell
-      title="Your Feedback"
+      title="Part 2 Detail"
       contentBgClassName="bg-[#F8F9FC]"
       mainClassName="flex-1 px-4 py-5 sm:px-5 lg:px-6"
       headerLeft={
         <Link
-          href="/dashboard/speak"
+          href="/dashboard/speak/test-results"
           className="inline-flex size-10 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-[#E2E8F0] transition hover:bg-[#F8FAFC]"
-          aria-label="Back to Speaking"
+          aria-label="Back"
+        >
+          <BackIcon />
+        </Link>
+      }
+      headerRight={
+        <NotificationBellButton />
+      }
+    >
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 pb-8 lg:gap-5">
+        {/* Your response + estimated band */}
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1.75fr)_minmax(0,1fr)] lg:gap-5">
+          <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.16)] sm:p-6">
+            <h2 className="text-base font-bold text-[#141B2B]">Your response</h2>
+            <p className="mt-4 text-sm leading-7 text-[#334155] sm:text-[0.9375rem] sm:leading-8">
+              I think the neighborhood I grew up in was, <Filler>you know</Filler>,
+              pretty quiet and peaceful. There were lots of parks nearby,{" "}
+              <Filler>like</Filler>, where kids could play. <Filler>Um</Filler>, the
+              people were very friendly and we had, <Pause /> <Filler>basically</Filler>,
+              a strong sense of community. <Filler>Uh</Filler>, there are many local
+              events where neighbors come together and enjoy their time.
+            </p>
+          </section>
+
+          <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.16)] sm:p-6">
+            <h2 className="text-center text-base font-bold text-[#141B2B]">
+              Part 2 estimated band
+            </h2>
+            <div className="mt-5 flex flex-col items-center">
+              <div className="relative flex size-[8.75rem] items-center justify-center">
+                <svg viewBox="0 0 120 120" className="absolute inset-0 size-full" aria-hidden>
+                  <circle
+                    cx="60"
+                    cy="60"
+                    r="52"
+                    fill="none"
+                    stroke="#FED7AA"
+                    strokeWidth="10"
+                  />
+                  <circle
+                    cx="60"
+                    cy="60"
+                    r="52"
+                    fill="none"
+                    stroke="#F97316"
+                    strokeWidth="10"
+                    strokeLinecap="round"
+                    strokeDasharray={`${(6.5 / 9) * 2 * Math.PI * 52} ${2 * Math.PI * 52}`}
+                    transform="rotate(-90 60 60)"
+                  />
+                </svg>
+                <p className="relative text-[2.25rem] font-bold tabular-nums leading-none text-[#F97316]">
+                  6.5
+                </p>
+              </div>
+              <p className="mt-3 text-center text-xs text-[#94A3B8]">
+                AI-estimated. Not an official result.
+              </p>
+              <div className="mt-5 grid w-full grid-cols-4 gap-2">
+                {PART2_BAND_METRICS.map((m) => (
+                  <div
+                    key={m.label}
+                    className="rounded-lg border border-[#E2E8F0] bg-white px-1 py-2.5 text-center"
+                  >
+                    <p className="text-[0.625rem] font-medium text-[#94A3B8] sm:text-[0.6875rem]">
+                      {m.label}
+                    </p>
+                    <p className={`mt-1 text-sm font-bold tabular-nums sm:text-base ${m.color}`}>
+                      {m.value}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </div>
+
+        {/* Areas to improve + Better phrasing */}
+        <div className="grid gap-4 lg:grid-cols-2 lg:gap-5">
+          <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.16)] sm:p-6">
+            <h2 className="text-base font-bold text-[#141B2B]">Areas to improve</h2>
+            <ul className="mt-4 divide-y divide-[#E2E8F0]">
+              {PART2_IMPROVEMENTS.map((row) => (
+                <li key={row.title} className="flex items-start gap-3 py-3.5 first:pt-0 last:pb-0">
+                  <PriorityBadge level={row.level} />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-bold text-[#141B2B]">{row.title}</p>
+                    <p className="mt-0.5 text-xs leading-5 text-[#64748B] sm:text-[0.8125rem] sm:leading-5">
+                      {row.description}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.16)] sm:p-6">
+            <h2 className="text-base font-bold text-[#141B2B]">
+              Better phrasing example
+            </h2>
+            <div className="mt-4 rounded-xl bg-[#F3F6FF] p-4 sm:p-5">
+              <div className="grid gap-4 sm:grid-cols-2 sm:gap-0">
+                <div className="sm:pr-5">
+                  <p className="text-sm font-bold text-[#334155]">You said</p>
+                  <p className="mt-2 text-sm italic leading-6 text-[#64748B]">
+                    &ldquo;there are many local events where neighbors come together
+                    and <span className="font-bold text-[#334155]">basically</span>{" "}
+                    enjoy their time.&rdquo;
+                  </p>
+                </div>
+                <div className="border-t border-[#E2E8F0] pt-4 sm:border-l sm:border-t-0 sm:pl-5 sm:pt-0">
+                  <p className="text-sm font-bold text-[#2b5ce6]">Try instead</p>
+                  <p className="mt-2 text-sm italic leading-6 text-[#2b5ce6]">
+                    &ldquo;there are numerous community events that bring neighbors
+                    together, allowing everyone to enjoy meaningful time and build
+                    stronger connections.&rdquo;
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        {/* Pace / Fillers / Duration */}
+        <section className="rounded-2xl border border-[#E2E8F0] bg-white px-4 py-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.16)] sm:px-6 sm:py-6">
+          <div className="grid gap-5 sm:grid-cols-3 sm:gap-0">
+            <div className="flex items-center gap-3 sm:pr-5">
+              <span className="flex size-11 shrink-0 items-center justify-center rounded-full border border-[#BFDBFE] bg-[#EFF6FF] text-[#3B82F6]">
+                <TrendUpIcon />
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-[#141B2B]">Pace</p>
+                <p className="mt-0.5 text-xl font-bold tabular-nums leading-none text-[#141B2B]">
+                  132{" "}
+                  <span className="text-sm font-semibold text-[#64748B]">WPM</span>
+                </p>
+                <p className="mt-1.5 text-sm font-medium text-[#3B82F6]">Good</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 border-t border-[#E2E8F0] pt-5 sm:border-l sm:border-t-0 sm:px-5 sm:pt-0">
+              <span className="flex size-11 shrink-0 items-center justify-center rounded-full border border-[#FDE68A] bg-[#FFFBEB] text-[#F59E0B]">
+                <SpeechBubbleIcon />
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-[#141B2B]">Filler words</p>
+                <p className="mt-0.5 text-xl font-bold tabular-nums leading-none text-[#141B2B]">
+                  7
+                </p>
+                <p className="mt-1.5 text-xs font-medium text-[#F59E0B] sm:text-[0.8125rem]">
+                  um (3) uh (2) like (1) you know (1)
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 border-t border-[#E2E8F0] pt-5 sm:border-l sm:border-t-0 sm:pl-5 sm:pt-0">
+              <span className="flex size-11 shrink-0 items-center justify-center rounded-full border border-[#A7F3D0] bg-[#ECFDF5] text-[#10B981]">
+                <DurationClockIcon />
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-[#141B2B]">Duration</p>
+                <p className="mt-0.5 text-xl font-bold tabular-nums leading-none text-[#141B2B]">
+                  01:28
+                </p>
+                <p className="mt-1.5 text-xs font-medium text-[#10B981] sm:text-[0.8125rem]">
+                  128-180 sec recommended
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </DashboardShell>
+  );
+}
+
+function PriorityBadge({ level }: { level: "High" | "Medium" | "Low" }) {
+  const styles = {
+    High: "bg-[#FEE2E2] text-[#DC2626]",
+    Medium: "bg-[#FEF3C7] text-[#B45309]",
+    Low: "bg-[#DCFCE7] text-[#15803D]",
+  } as const;
+  const arrow = level === "Low" ? "↓" : "↑";
+
+  return (
+    <span
+      className={`inline-flex w-[4.75rem] shrink-0 items-center justify-center gap-1 rounded-md px-2 py-1 text-xs font-bold ${styles[level]}`}
+    >
+      <span aria-hidden>{arrow}</span>
+      {level}
+    </span>
+  );
+}
+
+function SpeakFeedbackDefault({
+  fromExam,
+  part,
+}: {
+  fromExam: boolean;
+  part: string | null;
+}) {
+  const [showFull, setShowFull] = useState(false);
+
+  return (
+    <DashboardShell
+      title={fromExam && part ? PART_TITLES[part] : "Your Feedback"}
+      contentBgClassName="bg-[#F8F9FC]"
+      mainClassName="flex-1 px-4 py-5 sm:px-5 lg:px-6"
+      headerLeft={
+        <Link
+          href={fromExam ? "/dashboard/speak/test-results" : "/dashboard/speak"}
+          className="inline-flex size-10 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-[#E2E8F0] transition hover:bg-[#F8FAFC]"
+          aria-label="Back"
         >
           <BackIcon />
         </Link>
@@ -37,19 +301,11 @@ export function SpeakFeedback() {
             <FlameIcon className="size-4 text-[#F97316]" />
             7 Day Streak
           </Link>
-          <button
-            type="button"
-            className="relative inline-flex size-10 items-center justify-center rounded-full bg-white text-[#64748B] shadow-sm ring-1 ring-[#E2E8F0]"
-            aria-label="Notifications"
-          >
-            <BellIcon />
-            <span className="absolute right-2 top-2 size-2 rounded-full bg-[#EF4444] ring-2 ring-white" />
-          </button>
+          <NotificationBellButton />
         </div>
       }
     >
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 pb-6 lg:gap-5">
-        {/* Top row */}
         <div className="grid gap-4 lg:grid-cols-2 lg:gap-5">
           <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.22)] sm:p-6">
             <div className="flex flex-wrap items-center justify-between gap-2">
@@ -141,7 +397,6 @@ export function SpeakFeedback() {
           </section>
         </div>
 
-        {/* Middle row */}
         <div className="grid gap-4 sm:grid-cols-3 lg:gap-5">
           <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.22)]">
             <div className="flex items-start gap-3">
@@ -201,7 +456,6 @@ export function SpeakFeedback() {
           </section>
         </div>
 
-        {/* Bottom split — coach wider, next question tighter */}
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1.65fr)_minmax(0,0.75fr)] lg:gap-5">
           <section className="rounded-2xl border border-[#FED7AA]/60 bg-[#FFFBF5] p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.18)] sm:p-6">
             <h2 className="text-base font-bold text-[#141B2B]">Coach Feedback</h2>
@@ -300,7 +554,7 @@ export function SpeakFeedback() {
 
 function Filler({ children }: { children: React.ReactNode }) {
   return (
-    <mark className="rounded px-1 py-0.5 bg-[#FED7AA] font-medium text-[#9A3412]">
+    <mark className="rounded px-1 py-0.5 bg-[#FEF3C7] font-medium text-[#D97706]">
       {children}
     </mark>
   );
@@ -328,25 +582,6 @@ function FlameIcon({ className = "size-4" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 20 20" fill="currentColor" aria-hidden>
       <path d="M10.2 2.4c.4 2.1-.2 3.5-1.3 4.7-.9 1-1.4 1.8-1.4 3 0 1.4.9 2.5 2.2 2.5 1.4 0 2.4-1.1 2.4-2.6 0-.7-.2-1.3-.5-1.9 1.6 1 2.6 2.5 2.6 4.3 0 3-2.3 5.2-5.2 5.2S4 15.4 4 12.4c0-2.6 1.4-4.4 2.8-5.8C8.2 5.1 9.4 4 10.2 2.4Z" />
-    </svg>
-  );
-}
-
-function BellIcon() {
-  return (
-    <svg viewBox="0 0 20 20" className="size-5" fill="none" aria-hidden>
-      <path
-        d="M10 2.5a4.5 4.5 0 0 0-4.5 4.5v2.2c0 .6-.2 1.2-.6 1.7L3.8 12.5c-.5.6-.1 1.5.7 1.5h11c.8 0 1.2-.9.7-1.5l-1.1-1.6c-.4-.5-.6-1.1-.6-1.7V7A4.5 4.5 0 0 0 10 2.5Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M8.2 14.5a1.8 1.8 0 0 0 3.6 0"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
     </svg>
   );
 }
@@ -388,6 +623,70 @@ function ClockIcon() {
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function TrendUpIcon() {
+  return (
+    <svg viewBox="0 0 20 20" className="size-5" fill="none" aria-hidden>
+      <path
+        d="M3.5 13.5 8 9l3 3 5.5-5.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M12.5 6.5H16.5V10.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function SpeechBubbleIcon() {
+  return (
+    <svg viewBox="0 0 20 20" className="size-5" fill="none" aria-hidden>
+      <rect
+        x="3.5"
+        y="4"
+        width="13"
+        height="10"
+        rx="2.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M7 9h6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function DurationClockIcon() {
+  return (
+    <svg viewBox="0 0 20 20" className="size-5" fill="none" aria-hidden>
+      <circle cx="10" cy="10.5" r="6" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M10 7.5V10.5l2 1.2"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M13.5 4.5c1 .5 1.8 1.3 2.3 2.3"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
       />
     </svg>
   );

@@ -76,10 +76,11 @@ export function LessonExitAssessment() {
         </div>
       }
     >
-      <div className="mx-auto grid w-full max-w-6xl flex-1 gap-4 pb-28 lg:grid-cols-2">
+      <div className="mx-auto grid w-full max-w-6xl flex-1 items-start gap-4 pb-8 lg:grid-cols-2">
         <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.12)] sm:p-6 ui-fade-up">
           <h2 className="text-base font-bold text-[#141B2B]">Passage</h2>
-          <h3 className="mt-3 text-xl font-bold text-[#141B2B]">
+          <div className="my-3 border-t border-[#E2E8F0]" />
+          <h3 className="text-xl font-bold text-[#141B2B]">
             The Impact of Urban Green Spaces
           </h3>
           <div className="mt-5 space-y-5">
@@ -104,64 +105,65 @@ export function LessonExitAssessment() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.12)] sm:p-6 ui-fade-up-delay-1">
-          <h2 className="text-base font-bold text-[#141B2B]">Question</h2>
-          <span className="mt-3 inline-flex rounded-full bg-[#DBEAFE] px-3 py-1 text-xs font-semibold text-[#1D4ED8]">
-            Multiple Choice — Single Answer
-          </span>
-          <p className="mt-4 text-sm font-bold leading-6 text-[#141B2B]">
-            1. What is one of the environmental benefits of urban green spaces
-            mentioned in paragraph B?
-          </p>
-          <ul className="mt-4 space-y-2.5">
-            {OPTIONS.map((opt, i) => {
-              const active = selected === i;
-              return (
-                <li key={opt}>
-                  <button
-                    type="button"
-                    onClick={() => setSelected(i)}
-                    className={`flex w-full items-center gap-3 rounded-xl border px-3.5 py-3 text-left text-sm transition ${
-                      active
-                        ? "border-[#2b5ce6] bg-[#F8FAFF] font-semibold text-[#1D4ED8]"
-                        : "border-[#E2E8F0] bg-white text-[#475569] hover:border-[#BFDBFE]"
-                    }`}
-                  >
-                    <span
-                      className={`flex size-5 shrink-0 items-center justify-center rounded-full border-2 ${
-                        active ? "border-[#2b5ce6] bg-[#2b5ce6]" : "border-[#CBD5E1]"
+        <div className="flex flex-col gap-3 ui-fade-up-delay-1">
+          <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.12)] sm:p-6">
+            <h2 className="text-base font-bold text-[#141B2B]">Question</h2>
+            <div className="my-3 border-t border-[#E2E8F0]" />
+            <span className="inline-flex rounded-full bg-[#DBEAFE] px-3 py-1 text-xs font-semibold text-[#1D4ED8]">
+              Multiple Choice — Single Answer
+            </span>
+            <p className="mt-4 text-sm font-bold leading-6 text-[#141B2B]">
+              1. What is one of the environmental benefits of urban green spaces
+              mentioned in paragraph B?
+            </p>
+            <ul className="mt-4 space-y-2.5">
+              {OPTIONS.map((opt, i) => {
+                const active = selected === i;
+                return (
+                  <li key={opt}>
+                    <button
+                      type="button"
+                      onClick={() => setSelected(i)}
+                      className={`flex w-full items-center gap-3 rounded-xl border px-3.5 py-3 text-left text-sm transition ${
+                        active
+                          ? "border-[#2b5ce6] bg-[#F8FAFF] font-semibold text-[#1D4ED8]"
+                          : "border-[#E2E8F0] bg-white text-[#475569] hover:border-[#BFDBFE]"
                       }`}
                     >
-                      {active ? (
-                        <span className="size-1.5 rounded-full bg-white" />
-                      ) : null}
-                    </span>
-                    <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-[#DBEAFE] text-xs font-bold text-[#1D4ED8]">
-                      {String.fromCharCode(65 + i)}
-                    </span>
-                    {opt}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      </div>
+                      <span
+                        className={`flex size-5 shrink-0 items-center justify-center rounded-full border-2 ${
+                          active ? "border-[#2b5ce6] bg-[#2b5ce6]" : "border-[#CBD5E1]"
+                        }`}
+                      >
+                        {active ? (
+                          <span className="size-1.5 rounded-full bg-white" />
+                        ) : null}
+                      </span>
+                      <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-[#DBEAFE] text-xs font-bold text-[#1D4ED8]">
+                        {String.fromCharCode(65 + i)}
+                      </span>
+                      {opt}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
 
-      <div className="dashboard-panel-bottom px-4 pb-4 sm:px-6">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 rounded-2xl bg-[#FEF3C7] px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5">
-          <p className="inline-flex items-center gap-2 text-sm font-semibold text-[#B45309]">
-            <WarnIcon />
-            Answer all questions to continue
-          </p>
-          <Link
-            href="/dashboard/skills/essay-development/exit-assessment/complete"
-            className={`inline-flex h-11 items-center justify-center rounded-xl bg-[#2b5ce6] px-5 text-sm font-semibold text-white transition hover:bg-[#244FE6] ${
-              canContinue ? "" : "pointer-events-none opacity-90"
-            }`}
-          >
-            Answer all questions to continue
-          </Link>
+          <div className="flex flex-col gap-3 rounded-2xl bg-[#FEF3C7] px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+            <p className="inline-flex items-center gap-2 text-sm font-semibold text-[#B45309]">
+              <WarnIcon />
+              Answer all questions to continue
+            </p>
+            <Link
+              href="/dashboard/skills/essay-development/exit-assessment/complete"
+              className={`inline-flex h-11 shrink-0 items-center justify-center rounded-xl bg-[#2b5ce6] px-5 text-sm font-semibold text-white transition hover:bg-[#244FE6] ${
+                canContinue ? "" : "pointer-events-none opacity-90"
+              }`}
+            >
+              Answer all questions to continue
+            </Link>
+          </div>
         </div>
       </div>
     </DashboardShell>

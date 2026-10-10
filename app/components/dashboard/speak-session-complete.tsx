@@ -54,17 +54,17 @@ export function SpeakSessionComplete() {
           </h2>
           <div className="mt-5 space-y-4">
             {SKILLS.map((skill) => (
-              <div key={skill.label} className="flex items-center gap-3">
-                <div className="h-2.5 w-24 shrink-0 overflow-hidden rounded-full bg-[#E8EEF7] sm:w-32">
+              <div key={skill.label} className="flex items-center gap-3 sm:gap-4">
+                <p className="w-[6.5rem] shrink-0 text-sm font-semibold text-[#334155] sm:w-28">
+                  {skill.label}
+                </p>
+                <div className="h-2.5 min-w-0 flex-1 overflow-hidden rounded-full bg-[#E8EEF7]">
                   <div
                     className="h-full rounded-full bg-[#2b5ce6]"
                     style={{ width: `${(skill.value / 9) * 100}%` }}
                   />
                 </div>
-                <p className="min-w-0 flex-1 text-sm font-semibold text-[#334155]">
-                  {skill.label}
-                </p>
-                <p className="shrink-0 text-sm font-bold tabular-nums text-[#141B2B]">
+                <p className="w-8 shrink-0 text-right text-sm font-bold tabular-nums text-[#141B2B]">
                   {skill.value.toFixed(1)}
                 </p>
               </div>

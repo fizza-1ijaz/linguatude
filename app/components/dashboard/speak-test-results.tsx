@@ -11,9 +11,9 @@ const CRITERIA = [
 ] as const;
 
 const PARTS = [
-  { title: "Part 1: Introduction", band: "8.5", value: 8.5 },
-  { title: "Part 2: Long Turn", band: "7.0", value: 7.0 },
-  { title: "Part 3: Discussion", band: "6.0", value: 6.0 },
+  { title: "Part 1: Introduction", band: "8.5", href: "/dashboard/speak/feedback?part=1" },
+  { title: "Part 2: Long Turn", band: "7.0", href: "/dashboard/speak/feedback?part=2" },
+  { title: "Part 3: Discussion", band: "6.0", href: "/dashboard/speak/feedback?part=3" },
 ] as const;
 
 export function SpeakTestResults() {
@@ -86,7 +86,7 @@ export function SpeakTestResults() {
                       key={label}
                       className="inline-flex items-center gap-1.5 rounded-full border border-[#86EFAC] bg-[#F0FDF4] px-3 py-1 text-xs font-semibold text-[#15803D]"
                     >
-                      <CheckSmallIcon />
+                      <CheckCircleIcon />
                       {label}
                     </span>
                   ),
@@ -208,12 +208,6 @@ export function SpeakTestResults() {
                   key={part.title}
                   className="flex items-center gap-3 rounded-xl border border-[#E2E8F0] px-3.5 py-3.5"
                 >
-                  <div className="h-2.5 w-16 shrink-0 overflow-hidden rounded-full bg-[#E8EEF7] sm:w-20">
-                    <div
-                      className="h-full rounded-full bg-[#2b5ce6]"
-                      style={{ width: `${(part.value / 9) * 100}%` }}
-                    />
-                  </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-semibold text-[#141B2B]">
                       {part.title}
@@ -223,7 +217,7 @@ export function SpeakTestResults() {
                     </p>
                   </div>
                   <Link
-                    href="/dashboard/speak/feedback"
+                    href={part.href}
                     className="shrink-0 text-sm font-semibold text-[#2b5ce6] transition hover:underline"
                   >
                     View detail →
@@ -245,9 +239,9 @@ export function SpeakTestResults() {
                 {["Part 1", "Part 2", "Part 3"].map((p) => (
                   <span
                     key={p}
-                    className="inline-flex items-center gap-1 rounded-full border border-[#BFDBFE] bg-white px-2.5 py-1 text-xs font-semibold text-[#64748B]"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-[#BFDBFE] bg-white px-2.5 py-1 text-xs font-semibold text-[#64748B]"
                   >
-                    <CheckSmallIcon />
+                    <CheckCircleIcon className="text-[#2b5ce6]" />
                     {p}
                   </span>
                 ))}
@@ -317,13 +311,19 @@ function CalendarIcon() {
   );
 }
 
-function CheckSmallIcon() {
+function CheckCircleIcon({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 16 16" className="size-3.5" fill="none" aria-hidden>
+    <svg
+      viewBox="0 0 16 16"
+      className={`size-3.5 ${className}`}
+      fill="none"
+      aria-hidden
+    >
+      <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.4" />
       <path
-        d="M3.5 8.2 6.4 11l6-6.5"
+        d="M5 8.1 7 10l4-4.2"
         stroke="currentColor"
-        strokeWidth="1.8"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

@@ -161,79 +161,77 @@ export function DashboardShell({
           ) : null}
         </div>
 
-        <div className="hide-scrollbar flex min-h-0 flex-1 flex-col overflow-y-auto">
-          <nav className="flex flex-col gap-0.5">
-            {NAV.map((item) => {
-              const active =
-                item.match === "exact"
-                  ? pathname === item.href
-                  : pathname === item.href ||
-                    Boolean(pathname?.startsWith(`${item.href}/`));
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className={`relative flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] font-semibold transition ${
-                    active
-                      ? "bg-[#EEF2FF] text-[#2b5ce6]"
-                      : "text-[#64748B] hover:bg-[#F8FAFC] hover:text-[#1E293B]"
-                  }`}
-                >
-                  {active ? (
-                    <span
-                      className="absolute inset-y-1.5 right-0 w-[3px] rounded-full bg-[#2b5ce6]"
-                      aria-hidden
-                    />
-                  ) : null}
-                  <Icon active={active} />
-                  {item.label}
-                </Link>
-              );
-            })}
-          </nav>
+        <nav className="hide-scrollbar mb-3 flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto overscroll-contain">
+          {NAV.map((item) => {
+            const active =
+              item.match === "exact"
+                ? pathname === item.href
+                : pathname === item.href ||
+                  Boolean(pathname?.startsWith(`${item.href}/`));
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                className={`relative flex shrink-0 items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] font-semibold transition ${
+                  active
+                    ? "bg-[#EEF2FF] text-[#2b5ce6]"
+                    : "text-[#64748B] hover:bg-[#F8FAFC] hover:text-[#1E293B]"
+                }`}
+              >
+                {active ? (
+                  <span
+                    className="absolute inset-y-1.5 right-0 w-[3px] rounded-full bg-[#2b5ce6]"
+                    aria-hidden
+                  />
+                ) : null}
+                <Icon active={active} />
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
 
-          <div className="mt-3 space-y-0.5 border-t border-[#E2E8F0] pt-3">
-            <Link
-              href="/contact"
-              className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] font-semibold text-[#64748B] transition hover:bg-[#F8FAFC] hover:text-[#1E293B]"
-            >
-              <HelpIcon />
-              Help Center
-            </Link>
-            <Link
-              href="/signin"
-              className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] font-semibold text-[#64748B] transition hover:bg-[#F8FAFC] hover:text-[#1E293B]"
-            >
-              <LogoutIcon />
-              Logout
-            </Link>
+        <div className="mt-auto shrink-0 space-y-0.5 border-t border-[#E2E8F0] pt-3">
+          <Link
+            href="/contact"
+            className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] font-semibold text-[#64748B] transition hover:bg-[#F8FAFC] hover:text-[#1E293B]"
+          >
+            <HelpIcon />
+            Help Center
+          </Link>
+          <Link
+            href="/signin"
+            className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] font-semibold text-[#64748B] transition hover:bg-[#F8FAFC] hover:text-[#1E293B]"
+          >
+            <LogoutIcon />
+            Logout
+          </Link>
 
-            <Link
-              href="/pricing"
-              className="mt-2 flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-[#2b5ce6] text-[13px] font-semibold text-white shadow-sm transition hover:bg-[#244FE6]"
-            >
-              <CrownIcon />
-              Upgrade to Pro
-            </Link>
-          </div>
-        </div>
+          <Link
+            href="/dashboard/premium"
+            className="mt-2 flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-[#2b5ce6] text-[13px] font-semibold text-white shadow-sm transition hover:bg-[#244FE6]"
+          >
+            <CrownIcon />
+            Upgrade to Pro
+          </Link>
 
-        <button
-          type="button"
-          className="mt-3 flex w-full shrink-0 items-center gap-2.5 rounded-xl px-2 py-2 text-left transition hover:bg-[#F8FAFC]"
-        >
-          <span className="relative flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#93C5FD] to-[#2b5ce6] text-[13px] font-bold text-white">
-            A
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="block text-[13px] font-bold text-[#1E293B]">Alex</span>
-            <span className="block text-[11px] font-medium text-[#94A3B8]">
-              Free Plan
+          <button
+            type="button"
+            className="mt-3 flex w-full items-center gap-2.5 rounded-xl px-2 py-2 text-left transition hover:bg-[#F8FAFC]"
+          >
+            <span className="relative flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#93C5FD] to-[#2b5ce6] text-[13px] font-bold text-white">
+              A
             </span>
-          </span>
-          <ChevronDownIcon />
-        </button>
+            <span className="min-w-0 flex-1">
+              <span className="block text-[13px] font-bold text-[#1E293B]">Alex</span>
+              <span className="block text-[11px] font-medium text-[#94A3B8]">
+                Free Plan
+              </span>
+            </span>
+            <ChevronDownIcon />
+          </button>
+        </div>
       </aside>
 
       <div
@@ -285,11 +283,21 @@ export function DashboardShell({
 export { EXAM_STORAGE_KEY };
 
 function HomeIcon({ active }: { active?: boolean }) {
+  if (active) {
+    return (
+      <svg viewBox="0 0 20 20" className="size-[1.125rem]" aria-hidden>
+        <path
+          d="M3.5 8.2 10 3l6.5 5.2V17a1 1 0 0 1-1 1h-3.5v-5.5H8V18H4.5a1 1 0 0 1-1-1V8.2Z"
+          fill="#2b5ce6"
+        />
+      </svg>
+    );
+  }
   return (
     <svg viewBox="0 0 20 20" className="size-[1.125rem]" fill="none" aria-hidden>
       <path
         d="M3.5 8.2 10 3l6.5 5.2V17a1 1 0 0 1-1 1h-3.5v-5.5H8V18H4.5a1 1 0 0 1-1-1V8.2Z"
-        stroke={active ? "#2b5ce6" : "#64748B"}
+        stroke="#64748B"
         strokeWidth="1.6"
         strokeLinejoin="round"
       />
@@ -298,51 +306,53 @@ function HomeIcon({ active }: { active?: boolean }) {
 }
 
 function PracticeIcon({ active }: { active?: boolean }) {
+  if (active) {
+    return (
+      <svg viewBox="0 0 20 20" className="size-[1.125rem]" aria-hidden>
+        <rect x="2.5" y="6" width="3" height="8" rx="1" fill="#2b5ce6" />
+        <rect x="14.5" y="6" width="3" height="8" rx="1" fill="#2b5ce6" />
+        <rect x="6" y="8.5" width="1.8" height="3" rx="0.5" fill="#2b5ce6" />
+        <rect x="12.2" y="8.5" width="1.8" height="3" rx="0.5" fill="#2b5ce6" />
+        <rect x="6.5" y="9.2" width="7" height="1.6" rx="0.5" fill="#2b5ce6" />
+      </svg>
+    );
+  }
   return (
     <svg viewBox="0 0 20 20" className="size-[1.125rem]" fill="none" aria-hidden>
       <path
         d="M4 7v6M6.5 8.5v3M13.5 8.5v3M16 7v6M6.5 10h7"
-        stroke={active ? "#2b5ce6" : "#64748B"}
+        stroke="#64748B"
         strokeWidth="1.6"
         strokeLinecap="round"
       />
-      <rect
-        x="2.5"
-        y="6"
-        width="2.5"
-        height="8"
-        rx="1"
-        stroke={active ? "#2b5ce6" : "#64748B"}
-        strokeWidth="1.4"
-      />
-      <rect
-        x="15"
-        y="6"
-        width="2.5"
-        height="8"
-        rx="1"
-        stroke={active ? "#2b5ce6" : "#64748B"}
-        strokeWidth="1.4"
-      />
+      <rect x="2.5" y="6" width="2.5" height="8" rx="1" stroke="#64748B" strokeWidth="1.4" />
+      <rect x="15" y="6" width="2.5" height="8" rx="1" stroke="#64748B" strokeWidth="1.4" />
     </svg>
   );
 }
 
 function MicIcon({ active }: { active?: boolean }) {
+  if (active) {
+    return (
+      <svg viewBox="0 0 20 20" className="size-[1.125rem]" aria-hidden>
+        <rect x="7.5" y="2.5" width="5" height="9" rx="2.5" fill="#2b5ce6" />
+        <path
+          d="M4.5 9.5a5.5 5.5 0 0 0 11 0M10 15v2.5"
+          stroke="#2b5ce6"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          fill="none"
+        />
+        <path d="M8 17.5h4" stroke="#2b5ce6" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    );
+  }
   return (
     <svg viewBox="0 0 20 20" className="size-[1.125rem]" fill="none" aria-hidden>
-      <rect
-        x="7.5"
-        y="2.5"
-        width="5"
-        height="9"
-        rx="2.5"
-        stroke={active ? "#2b5ce6" : "#64748B"}
-        strokeWidth="1.6"
-      />
+      <rect x="7.5" y="2.5" width="5" height="9" rx="2.5" stroke="#64748B" strokeWidth="1.6" />
       <path
         d="M4.5 9.5a5.5 5.5 0 0 0 11 0M10 15v2.5"
-        stroke={active ? "#2b5ce6" : "#64748B"}
+        stroke="#64748B"
         strokeWidth="1.6"
         strokeLinecap="round"
       />
@@ -351,11 +361,18 @@ function MicIcon({ active }: { active?: boolean }) {
 }
 
 function PenIcon({ active }: { active?: boolean }) {
+  if (active) {
+    return (
+      <svg viewBox="0 0 20 20" className="size-[1.125rem]" aria-hidden>
+        <path d="m4 16 1.2-4.2L13.5 3.5l3 3L8.2 14.8 4 16Z" fill="#2b5ce6" />
+      </svg>
+    );
+  }
   return (
     <svg viewBox="0 0 20 20" className="size-[1.125rem]" fill="none" aria-hidden>
       <path
         d="m4 16 1.2-4.2L13.5 3.5l3 3L8.2 14.8 4 16Z"
-        stroke={active ? "#2b5ce6" : "#64748B"}
+        stroke="#64748B"
         strokeWidth="1.6"
         strokeLinejoin="round"
       />
@@ -364,14 +381,28 @@ function PenIcon({ active }: { active?: boolean }) {
 }
 
 function MockTestIcon({ active }: { active?: boolean }) {
-  const stroke = active ? "#2b5ce6" : "#64748B";
+  if (active) {
+    return (
+      <svg viewBox="0 0 20 20" className="size-[1.125rem]" aria-hidden>
+        <rect x="4" y="3" width="12" height="14" rx="2" fill="#2b5ce6" />
+        <path d="M7 7h6M7 10h6M7 13h3.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+        <path
+          d="m12.2 12.2 1.1 1.1 2.1-2.2"
+          stroke="white"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    );
+  }
   return (
     <svg viewBox="0 0 20 20" className="size-[1.125rem]" fill="none" aria-hidden>
-      <rect x="4" y="3" width="12" height="14" rx="2" stroke={stroke} strokeWidth="1.6" />
-      <path d="M7 7h6M7 10h6M7 13h3.5" stroke={stroke} strokeWidth="1.6" strokeLinecap="round" />
+      <rect x="4" y="3" width="12" height="14" rx="2" stroke="#64748B" strokeWidth="1.6" />
+      <path d="M7 7h6M7 10h6M7 13h3.5" stroke="#64748B" strokeWidth="1.6" strokeLinecap="round" />
       <path
         d="m12.5 12.5 1.2 1.2 2.3-2.4"
-        stroke={stroke}
+        stroke="#64748B"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -381,11 +412,20 @@ function MockTestIcon({ active }: { active?: boolean }) {
 }
 
 function ChartIcon({ active }: { active?: boolean }) {
+  if (active) {
+    return (
+      <svg viewBox="0 0 20 20" className="size-[1.125rem]" aria-hidden>
+        <rect x="3" y="9.5" width="2.2" height="6.5" rx="1" fill="#2b5ce6" />
+        <rect x="8.9" y="4.5" width="2.2" height="11.5" rx="1" fill="#2b5ce6" />
+        <rect x="14.8" y="12" width="2.2" height="4" rx="1" fill="#2b5ce6" />
+      </svg>
+    );
+  }
   return (
     <svg viewBox="0 0 20 20" className="size-[1.125rem]" fill="none" aria-hidden>
       <path
         d="M4 16V9.5M10 16V4.5M16 16v-4"
-        stroke={active ? "#2b5ce6" : "#64748B"}
+        stroke="#64748B"
         strokeWidth="1.8"
         strokeLinecap="round"
       />
@@ -394,18 +434,20 @@ function ChartIcon({ active }: { active?: boolean }) {
 }
 
 function UserIcon({ active }: { active?: boolean }) {
+  if (active) {
+    return (
+      <svg viewBox="0 0 20 20" className="size-[1.125rem]" aria-hidden>
+        <circle cx="10" cy="7" r="3.2" fill="#2b5ce6" />
+        <path d="M3.5 16.8c1.5-2.8 3.6-4 6.5-4s5 1.2 6.5 4" fill="#2b5ce6" />
+      </svg>
+    );
+  }
   return (
     <svg viewBox="0 0 20 20" className="size-[1.125rem]" fill="none" aria-hidden>
-      <circle
-        cx="10"
-        cy="7"
-        r="3"
-        stroke={active ? "#2b5ce6" : "#64748B"}
-        strokeWidth="1.6"
-      />
+      <circle cx="10" cy="7" r="3" stroke="#64748B" strokeWidth="1.6" />
       <path
         d="M4 16.5c1.4-2.5 3.4-3.5 6-3.5s4.6 1 6 3.5"
-        stroke={active ? "#2b5ce6" : "#64748B"}
+        stroke="#64748B"
         strokeWidth="1.6"
         strokeLinecap="round"
       />

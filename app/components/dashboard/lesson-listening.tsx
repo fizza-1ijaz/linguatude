@@ -82,10 +82,10 @@ export function LessonListening() {
             <ShieldIcon />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-bold text-[#C2410C]">
+            <p className="text-sm font-bold text-[#EA580C]">
               Read questions. Audio starts in 0:{String(countdown).padStart(2, "0")}.
             </p>
-            <p className="mt-0.5 text-sm text-[#EA580C]">
+            <p className="mt-0.5 text-sm text-[#64748B]">
               Questions are shown before the audio. Read them now.
             </p>
           </div>
@@ -95,17 +95,16 @@ export function LessonListening() {
         </div>
 
         <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.12)] sm:p-6 ui-fade-up-delay-1">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <h2 className="text-base font-bold text-[#141B2B]">
-              Section 1 — A conversation about campus facilities
-            </h2>
-            <div className="max-w-xs rounded-lg border border-[#BFDBFE] bg-[#F8FAFF] px-3 py-2 text-xs leading-5 text-[#1D4ED8]">
-              <span className="mr-1 inline-flex size-4 items-center justify-center rounded-full bg-[#2b5ce6] text-[0.5625rem] font-bold text-white">
-                i
-              </span>
-              The IELTS exam uses British, Australian, American, and other English
-              accents. This recording uses British English.
-            </div>
+          <h2 className="text-base font-bold text-[#141B2B]">
+            Section 1 — A conversation about campus facilities
+          </h2>
+          <div className="my-3 border-t border-[#E2E8F0]" />
+          <div className="rounded-lg border border-[#BFDBFE] bg-[#F8FAFF] px-3 py-2 text-xs leading-5 text-[#1D4ED8]">
+            <span className="mr-1 inline-flex size-4 items-center justify-center rounded-full bg-[#2b5ce6] text-[0.5625rem] font-bold text-white">
+              i
+            </span>
+            The IELTS exam uses British, Australian, American, and other English
+            accents. This recording uses British English.
           </div>
 
           <div className="mt-5 rounded-xl bg-[#F1F5F9] p-4">

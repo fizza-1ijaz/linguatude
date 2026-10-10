@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useId, useState } from "react";
 
 const PRIMARY_LINKS = [
@@ -63,6 +64,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
   const menuId = useId();
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     if (!open) return;
@@ -145,28 +147,43 @@ export function SiteHeader() {
           aria-label="Main"
         >
           {PRIMARY_LINKS.map((link) => (
-            <Link key={link.label} href={link.href} className={navLinkClass}>
+            <Link
+              key={link.label}
+              href={link.href}
+              className={`${navLinkClass} relative after:absolute after:inset-x-0 after:-bottom-1 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-[#2D5BFF] after:transition-transform after:duration-200 hover:after:scale-x-100`}
+            >
               {link.label}
             </Link>
           ))}
 
           {SECONDARY_LINKS.map((link) => (
-            <Link key={link.label} href={link.href} className={navLinkClass}>
+            <Link
+              key={link.label}
+              href={link.href}
+              className={`${navLinkClass} relative after:absolute after:inset-x-0 after:-bottom-1 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-[#2D5BFF] after:transition-transform after:duration-200 hover:after:scale-x-100`}
+            >
               {link.label}
             </Link>
           ))}
         </nav>
 
         <div className="ml-auto flex items-center gap-2 lg:ml-0">
-          <StartFreeButton className="hidden sm:inline-flex" />
+          <motion.div
+            className="hidden sm:inline-flex"
+            whileHover={reduce ? undefined : { scale: 1.03, y: -1 }}
+            whileTap={reduce ? undefined : { scale: 0.98 }}
+          >
+            <StartFreeButton />
+          </motion.div>
 
-          <button
+          <motion.button
             type="button"
             className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-[#2D5BFF] transition hover:bg-[#eff6ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/40 dark:hover:bg-[#1e3a8a]/40 xl:hidden"
             aria-expanded={open}
             aria-controls={menuId}
             aria-label={open ? "Close menu" : "Open menu"}
             onClick={() => setOpen((v) => !v)}
+            whileTap={reduce ? undefined : { scale: 0.92 }}
           >
             {open ? (
               <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" aria-hidden>
@@ -187,33 +204,44 @@ export function SiteHeader() {
                 />
               </svg>
             )}
-          </button>
+          </motion.button>
         </div>
       </div>
 
-      {open ? (
-        <div
-          id={menuId}
-          className="border-t border-[#dbeafe] bg-white px-4 py-4 shadow-lg dark:border-[#1e3a8a]/50 dark:bg-[#0f172a] xl:hidden"
-        >
-          <nav className="flex flex-col gap-1" aria-label="Mobile">
-            {[...PRIMARY_LINKS, ...SECONDARY_LINKS].map((link) => (
-              <div key={link.label}>
-                <Link
-                  href={link.href}
-                  className="block rounded-lg px-3 py-2.5 text-sm font-medium text-[#475569] transition hover:bg-[#eff6ff] hover:text-[#2D5BFF] dark:text-[#cbd5e1] dark:hover:bg-[#1e3a8a]/35 dark:hover:text-[#93c5fd]"
-                  onClick={() => setOpen(false)}
+      <AnimatePresence>
+        {open ? (
+          <motion.div
+            id={menuId}
+            className="overflow-hidden border-t border-[#dbeafe] bg-white px-4 shadow-lg dark:border-[#1e3a8a]/50 dark:bg-[#0f172a] xl:hidden"
+            initial={reduce ? false : { height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={reduce ? undefined : { height: 0, opacity: 0 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <nav className="flex flex-col gap-1 py-4" aria-label="Mobile">
+              {[...PRIMARY_LINKS, ...SECONDARY_LINKS].map((link, i) => (
+                <motion.div
+                  key={link.label}
+                  initial={reduce ? false : { opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.03 * i, duration: 0.25 }}
                 >
-                  {link.label}
-                </Link>
+                  <Link
+                    href={link.href}
+                    className="block rounded-lg px-3 py-2.5 text-sm font-medium text-[#475569] transition hover:bg-[#eff6ff] hover:text-[#2D5BFF] dark:text-[#cbd5e1] dark:hover:bg-[#1e3a8a]/35 dark:hover:text-[#93c5fd]"
+                    onClick={() => setOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
+              ))}
+              <div className="mt-3 sm:hidden">
+                <StartFreeButton className="w-full" />
               </div>
-            ))}
-            <div className="mt-3 sm:hidden">
-              <StartFreeButton className="w-full" />
-            </div>
-          </nav>
-        </div>
-      ) : null}
+            </nav>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </header>
   );
 }

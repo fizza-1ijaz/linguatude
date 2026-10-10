@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
 
 const QUESTIONS = [
   {
@@ -59,22 +60,28 @@ export function MockListening() {
   const audioPct = (audioPos / 600) * 100;
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#F9FAFB]">
-      <header className="flex items-center justify-between gap-3 border-b border-[#E2E8F0] bg-white px-4 py-3 sm:px-6">
-        <div className="inline-flex items-center gap-2 text-base font-bold text-[#141B2B]">
+    <DashboardShell
+      title={
+        <span className="inline-flex items-center gap-2">
           <HeadphoneIcon />
           Listening
-        </div>
-        <span className="rounded-xl bg-[#2b5ce6] px-4 py-1.5 text-sm font-bold tabular-nums text-white ui-soft-pulse">
-          {mm}:{ss}
         </span>
-        <p className="text-sm font-medium tabular-nums text-[#64748B]">
-          Total: {totalH}:{totalM}:{totalS}
-        </p>
-      </header>
-
-      <div className="mx-auto w-full max-w-3xl flex-1 space-y-4 px-4 py-4 pb-28 sm:px-6">
-        <div className="flex items-center gap-2 rounded-xl border border-[#FDBA74] bg-[#FFF7ED] px-4 py-3 ui-fade-up">
+      }
+      contentBgClassName="bg-[#F8F9FC]"
+      mainClassName="flex flex-1 flex-col px-4 py-4 sm:px-5 lg:px-6"
+      headerRight={
+        <div className="flex items-center gap-4 sm:gap-6">
+          <span className="rounded-xl bg-[#2b5ce6] px-4 py-1.5 text-sm font-bold tabular-nums text-white">
+            {mm}:{ss}
+          </span>
+          <p className="hidden text-sm font-medium tabular-nums text-[#64748B] sm:block">
+            Total: {totalH}:{totalM}:{totalS}
+          </p>
+        </div>
+      }
+    >
+      <div className="mx-auto w-full max-w-3xl flex-1 space-y-4 pb-28">
+        <div className="flex items-center gap-2 rounded-xl border border-[#FDBA74] bg-[#FFF7ED] px-4 py-3">
           <ClockIcon />
           <p className="text-sm text-[#9A3412]">
             Read questions. Audio starts in{" "}
@@ -82,7 +89,7 @@ export function MockListening() {
           </p>
         </div>
 
-        <section className="rounded-2xl border border-[#E2E8F0] bg-white p-4 shadow-[0_8px_24px_-18px_rgba(15,23,42,0.12)] ui-fade-up-delay-1">
+        <section className="rounded-2xl border border-[#E2E8F0] bg-white p-4 shadow-[0_8px_24px_-18px_rgba(15,23,42,0.12)]">
           <div className="flex items-center gap-3">
             <button
               type="button"
@@ -118,7 +125,7 @@ export function MockListening() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-18px_rgba(15,23,42,0.12)] ui-fade-up-delay-2">
+        <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-18px_rgba(15,23,42,0.12)]">
           <h2 className="text-base font-bold text-[#141B2B]">Questions 1–10</h2>
           <p className="mt-1 text-sm text-[#64748B]">Choose the correct answer.</p>
 
@@ -126,10 +133,10 @@ export function MockListening() {
             {QUESTIONS.map((q, qi) => (
               <div
                 key={q.n}
-                className={qi > 0 ? "border-t border-[#E2E8F0] pt-5 mt-5" : ""}
+                className={qi > 0 ? "mt-5 border-t border-[#E2E8F0] pt-5" : ""}
               >
                 <div className="flex items-start gap-2.5">
-                  <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#93C5FD] text-xs font-bold text-white">
+                  <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-[#DBEAFE] text-xs font-bold text-[#1D4ED8]">
                     {q.n}
                   </span>
                   <p className="text-sm font-bold text-[#141B2B]">{q.text}</p>
@@ -171,36 +178,38 @@ export function MockListening() {
         </section>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-[#E2E8F0] bg-white px-4 py-3 sm:px-6">
+      <div className="dashboard-panel-bottom border-t border-[#E2E8F0] bg-white px-4 py-3 sm:px-6">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
           <div>
             <p className="text-[0.6875rem] font-medium uppercase tracking-wide text-[#94A3B8]">
               Questions answered
             </p>
-            <p className="text-base font-bold text-[#141B2B]">
-              {answered} of 10
-            </p>
+            <p className="text-base font-bold text-[#141B2B]">{answered} of 10</p>
           </div>
           <Link
-            href="/dashboard/mock"
+            href="/dashboard/mock/reading"
             className="inline-flex h-11 items-center justify-center rounded-xl bg-[#2b5ce6] px-5 text-sm font-semibold text-white transition hover:bg-[#244FE6]"
           >
             Submit Listening
           </Link>
         </div>
       </div>
-    </div>
+    </DashboardShell>
   );
 }
 
 function HeadphoneIcon() {
   return (
     <svg viewBox="0 0 18 18" className="size-5" fill="none" aria-hidden>
-      <path d="M3 10v2.5A1.8 1.8 0 0 0 4.8 14.3H6V10H4.8A1.8 1.8 0 0 0 3 11.8V10a6 6 0 1 1 12 0v1.8a1.8 1.8 0 0 1-1.8-1.8H12v4.3h1.2A1.8 1.8 0 0 0 15 12.5V10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <path
+        d="M3 10v2.5A1.8 1.8 0 0 0 4.8 14.3H6V10H4.8A1.8 1.8 0 0 0 3 11.8V10a6 6 0 1 1 12 0v1.8a1.8 1.8 0 0 1-1.8-1.8H12v4.3h1.2A1.8 1.8 0 0 0 15 12.5V10"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
-
 
 function ClockIcon() {
   return (

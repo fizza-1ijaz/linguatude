@@ -170,16 +170,16 @@ export function WritingTask1Feedback() {
                   <CalendarTiny />
                   Submitted: May 23, 2026 • 10:32 AM
                 </p>
+                <div className="mt-2.5 flex items-start gap-1.5 rounded-lg bg-[#EFF6FF] px-2.5 py-2">
+                  <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full bg-[#2b5ce6] text-[0.5625rem] font-bold text-white">
+                    i
+                  </span>
+                  <p className="text-[0.6875rem] leading-4 text-[#475569]">
+                    Estimated by Linguatude from your practice performance. Not an
+                    official IELTS result.
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="mt-5 flex items-start gap-2.5 rounded-xl bg-[#EFF6FF] px-3.5 py-3">
-              <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-[#2b5ce6] text-[0.625rem] font-bold text-white">
-                i
-              </span>
-              <p className="text-sm leading-5 text-[#334155]">
-                Estimated by Linguatude from your practice performance. Not an
-                official IELTS result.
-              </p>
             </div>
           </section>
 
@@ -193,25 +193,23 @@ export function WritingTask1Feedback() {
                 How scoring works
               </button>
             </div>
-            <ul className="mt-4 space-y-4">
+            <ul className="mt-4 space-y-3.5">
               {CRITERIA.map((c) => (
-                <li key={c.label} className="flex items-center gap-3">
-                  <div className="min-w-0 flex-1">
-                    <div className="mb-1.5 flex items-center justify-between gap-2">
-                      <p className="text-sm font-semibold text-[#334155]">{c.label}</p>
-                      <p className="text-sm font-bold tabular-nums text-[#141B2B]">
-                        {c.value.toFixed(1)}{" "}
-                        <span className="font-medium text-[#94A3B8]">/ 9</span>
-                      </p>
-                    </div>
-                    <div className={`h-2 overflow-hidden rounded-full ${c.track}`}>
-                      <div
-                        className={`h-full rounded-full ${c.color}`}
-                        style={{ width: `${(c.value / 9) * 100}%` }}
-                      />
-                    </div>
+                <li key={c.label} className="flex items-center gap-2.5 sm:gap-3">
+                  <p className="w-[7.25rem] shrink-0 text-xs font-semibold leading-4 text-[#334155] sm:w-[9.5rem] sm:text-sm sm:leading-5">
+                    {c.label}
+                  </p>
+                  <div className={`h-2 min-w-0 flex-1 overflow-hidden rounded-full ${c.track}`}>
+                    <div
+                      className={`h-full rounded-full ${c.color}`}
+                      style={{ width: `${(c.value / 9) * 100}%` }}
+                    />
                   </div>
-                  <span className="text-[#CBD5E1]" aria-hidden>
+                  <p className="w-[3.25rem] shrink-0 text-right text-sm font-bold tabular-nums text-[#141B2B]">
+                    {c.value.toFixed(1)}
+                    <span className="font-medium text-[#94A3B8]"> / 9</span>
+                  </p>
+                  <span className="shrink-0 text-[#CBD5E1]" aria-hidden>
                     ›
                   </span>
                 </li>
@@ -229,7 +227,7 @@ export function WritingTask1Feedback() {
               </span>
               <h2 className="text-base font-bold text-[#141B2B]">Overall</h2>
             </div>
-            <p className="mt-3 text-sm leading-6 text-[#334155]">
+            <p className="mt-3 text-xs leading-5 text-[#334155] sm:text-[0.8125rem] sm:leading-6">
               You have provided a clear overview of the trends in the graph and
               included relevant comparisons{" "}
               <strong>
@@ -250,7 +248,7 @@ export function WritingTask1Feedback() {
                 No score adjustments applied
               </h2>
             </div>
-            <div className="mt-4 flex items-center gap-2 rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-3 text-sm font-medium text-[#15803D]">
+            <div className="mt-4 flex items-center gap-2 rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-3 text-xs font-medium text-[#15803D] sm:text-sm">
               <span className="text-[#16A34A]">✓</span>
               Your score was evaluated without adjustments.
             </div>
@@ -258,7 +256,7 @@ export function WritingTask1Feedback() {
         </div>
 
         {/* Strengths + improve */}
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-5">
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-5">
           <section className="rounded-2xl border border-[#BBF7D0] bg-[#F0FDF4] p-5 sm:p-6">
             <div className="flex items-center gap-2.5">
               <span className="flex size-8 items-center justify-center rounded-full bg-[#DCFCE7] text-[#15803D]">
@@ -278,7 +276,7 @@ export function WritingTask1Feedback() {
                     </span>
                     <div>
                       <p className="text-sm font-bold text-[#141B2B]">{s.title}</p>
-                      <p className="mt-1 text-sm italic text-[#64748B]">
+                      <p className="mt-1 text-xs italic leading-5 text-[#64748B]">
                         &ldquo;{s.quote}&rdquo;
                       </p>
                     </div>
@@ -299,18 +297,18 @@ export function WritingTask1Feedback() {
               {IMPROVEMENTS.map((row) => (
                 <li
                   key={row.title}
-                  className="grid items-start gap-x-3 gap-y-1.5 py-3.5 first:pt-0 last:pb-0 sm:grid-cols-[8.75rem_minmax(0,1fr)_minmax(9rem,11rem)_1rem] sm:items-center"
+                  className="grid items-start gap-x-2.5 gap-y-1 py-3 first:pt-0 last:pb-0 sm:grid-cols-[7.5rem_minmax(0,1fr)_minmax(8rem,10.5rem)_1rem] sm:items-center sm:gap-x-3"
                 >
-                  <span className={`text-xs font-bold leading-5 ${row.tagColor}`}>
+                  <span className={`text-[0.6875rem] font-bold leading-4 ${row.tagColor}`}>
                     {row.tag}
                   </span>
                   <div className="min-w-0">
-                    <p className="text-sm font-bold text-[#141B2B]">{row.title}</p>
-                    <p className="mt-0.5 text-sm leading-5 text-[#64748B]">
+                    <p className="text-xs font-bold text-[#141B2B] sm:text-sm">{row.title}</p>
+                    <p className="mt-0.5 text-[0.6875rem] leading-4 text-[#64748B] sm:text-xs sm:leading-5">
                       {row.description}
                     </p>
                   </div>
-                  <p className="text-sm italic leading-5 text-[#E11D48] sm:text-right">
+                  <p className="text-[0.6875rem] italic leading-4 text-[#E11D48] sm:text-xs sm:text-right">
                     &ldquo;{row.example}&rdquo;
                   </p>
                   <span
@@ -326,7 +324,7 @@ export function WritingTask1Feedback() {
         </div>
 
         {/* Sentence improvements + phrasing */}
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)] lg:items-start lg:gap-5">
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-start lg:gap-5">
           <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.12)] sm:p-6">
             <div className="flex items-center justify-between gap-3">
               <h2 className="text-base font-bold text-[#141B2B]">
@@ -352,20 +350,20 @@ export function WritingTask1Feedback() {
                 <div className="mt-4 rounded-2xl bg-[#F3F5FE] p-4 sm:p-5">
                   <div className="relative grid gap-3 sm:grid-cols-2 sm:gap-4">
                     <div className="rounded-xl border border-[#E2E8F0] bg-white p-4">
-                      <p className="inline-flex items-center gap-1.5 text-[0.6875rem] font-bold tracking-wide text-[#64748B]">
+                      <p className="inline-flex items-center gap-1.5 whitespace-nowrap text-[0.6875rem] font-bold tracking-wide text-[#64748B]">
                         <PencilTiny />
                         YOU WROTE
                       </p>
-                      <p className="mt-2 text-sm leading-6 text-[#334155]">
+                      <p className="mt-2 text-xs leading-5 text-[#334155] sm:text-sm sm:leading-6">
                         {current.wrote}
                       </p>
                     </div>
                     <div className="rounded-xl border border-[#E2E8F0] bg-white p-4">
-                      <p className="inline-flex items-center gap-1.5 text-[0.6875rem] font-bold tracking-wide text-[#16A34A]">
+                      <p className="inline-flex items-center gap-1.5 whitespace-nowrap text-[0.6875rem] font-bold tracking-wide text-[#16A34A]">
                         <BulbTiny className="text-[#16A34A]" />
                         TRY THIS
                       </p>
-                      <p className="mt-2 text-sm leading-6 text-[#334155]">
+                      <p className="mt-2 text-xs leading-5 text-[#334155] sm:text-sm sm:leading-6">
                         {current.try}
                       </p>
                     </div>
@@ -373,7 +371,7 @@ export function WritingTask1Feedback() {
                       <ArrowRightIcon />
                     </span>
                   </div>
-                  <p className="mt-4 text-sm leading-6 text-[#1E40AF]">
+                  <p className="mt-3 text-[0.6875rem] leading-4 text-[#1E40AF] sm:text-xs sm:leading-5">
                     <strong>Why this is better:</strong> {current.why}
                   </p>
                 </div>
@@ -396,7 +394,7 @@ export function WritingTask1Feedback() {
 
           <section className="rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.12)] sm:p-6">
             <div className="flex items-center gap-2.5">
-              <span className="flex size-9 items-center justify-center rounded-full bg-[#FFF2E6] text-[#F59E0B]">
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[#FFF2E6] text-[#F59E0B]">
                 <BulbTiny className="size-4" />
               </span>
               <h2 className="text-base font-bold text-[#141B2B]">Better phrasing</h2>
@@ -406,10 +404,10 @@ export function WritingTask1Feedback() {
                 “
               </span>
               <div className="min-w-0">
-                <p className="text-xl font-bold leading-snug text-[#141B2B]">
+                <p className="text-lg font-bold leading-snug text-[#141B2B] sm:text-xl">
                   &ldquo;experienced a gradual increase&rdquo;
                 </p>
-                <p className="mt-2 text-sm leading-6 text-[#6B7280]">
+                <p className="mt-2 text-xs leading-5 text-[#6B7280] sm:text-sm sm:leading-6">
                   Use this structure to describe steady upward trends.
                 </p>
               </div>

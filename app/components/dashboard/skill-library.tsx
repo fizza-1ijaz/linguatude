@@ -1,5 +1,7 @@
 "use client";
 
+import { NotificationBellButton } from "@/app/components/dashboard/notification-bell-button";
+
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
@@ -85,20 +87,16 @@ export function SkillLibrary() {
   return (
     <DashboardShell
       title="Skill Library"
-      subtitle="Browse skills and track your learning progress."
       contentBgClassName="bg-[#F8F9FC]"
       headerRight={
-        <button
-          type="button"
-          className="relative inline-flex size-10 items-center justify-center rounded-full bg-white text-[#64748B] shadow-sm ring-1 ring-[#E2E8F0]"
-          aria-label="Notifications"
-        >
-          <BellIcon />
-          <span className="absolute right-2 top-2 size-2 rounded-full bg-[#EF4444] ring-2 ring-white" />
-        </button>
+        <NotificationBellButton />
       }
     >
-      <div className="mx-auto max-w-5xl space-y-5 pb-8">
+      <div className="mx-auto max-w-5xl space-y-4 pb-8">
+        <p className="text-sm text-[#64748B] ui-fade-up">
+          Browse skills and track your learning progress.
+        </p>
+
         <div className="flex flex-wrap items-center justify-between gap-3 ui-fade-up">
           <div className="flex flex-wrap gap-2">
             {FILTERS.map((f) => (
@@ -124,7 +122,7 @@ export function SkillLibrary() {
           </p>
         </div>
 
-        <ul className="space-y-3">
+        <ul className="space-y-2.5">
           {skills.map((skill, i) => {
             const Icon = skill.Icon;
             const delay =
@@ -137,25 +135,25 @@ export function SkillLibrary() {
                     : "ui-fade-up-delay-3";
             const card = (
               <div
-                className={`flex items-start gap-4 rounded-2xl border border-[#E2E8F0] bg-white p-4 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.16)] sm:p-5 ${delay} ${
+                className={`flex items-start gap-3 rounded-2xl border border-[#E2E8F0] bg-white px-3.5 py-2.5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.16)] sm:gap-3.5 sm:px-4 sm:py-3 ${delay} ${
                   skill.locked ? "" : "ui-hover-lift"
                 }`}
               >
                 <span
-                  className={`flex size-14 shrink-0 items-center justify-center rounded-2xl ${skill.iconBg} ${skill.iconColor}`}
+                  className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${skill.iconBg} ${skill.iconColor}`}
                 >
                   <Icon />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start justify-between gap-2.5">
                     <div className="min-w-0">
-                      <h3 className="text-base font-bold text-[#141B2B]">
+                      <h3 className="text-sm font-bold leading-snug text-[#141B2B] sm:text-[0.9375rem]">
                         {skill.title}
                       </h3>
-                      <p className="mt-1 text-sm text-[#64748B]">
+                      <p className="mt-0.5 text-xs leading-snug text-[#64748B] sm:text-sm sm:leading-5">
                         {skill.description}
                       </p>
-                      <p className="mt-2 inline-flex flex-wrap items-center gap-2 text-xs font-medium text-[#94A3B8]">
+                      <p className="mt-1 inline-flex flex-wrap items-center gap-1.5 text-[0.6875rem] font-medium leading-none text-[#94A3B8] sm:text-xs">
                         <span className="inline-flex items-center gap-1">
                           <BookTiny />
                           {skill.lessons}
@@ -168,7 +166,7 @@ export function SkillLibrary() {
                       </p>
                     </div>
                     <span
-                      className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[0.6875rem] font-bold tracking-wide ${
+                      className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[0.625rem] font-bold tracking-wide ${
                         skill.badge === "LOCKED"
                           ? "bg-[#E2E8F0] text-[#64748B]"
                           : "border border-[#BFDBFE] bg-white text-[#2b5ce6]"
@@ -178,9 +176,9 @@ export function SkillLibrary() {
                       {skill.badge}
                     </span>
                   </div>
-                  <div className="mt-4 flex items-end justify-end gap-3">
-                    <div className="w-36 text-right sm:w-44">
-                      <p className="text-xs font-medium text-[#94A3B8]">
+                  <div className="mt-1.5 flex items-end justify-end">
+                    <div className="w-32 text-right sm:w-40">
+                      <p className="text-[0.6875rem] font-medium leading-none text-[#94A3B8]">
                         Progress{" "}
                         <span
                           className={`font-bold tabular-nums ${
@@ -204,7 +202,7 @@ export function SkillLibrary() {
                           {skill.progress}%
                         </span>
                       </p>
-                      <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-[#E2E8F0]">
+                      <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-[#E2E8F0]">
                         <div
                           className={`h-full rounded-full ${skill.bar}`}
                           style={{ width: `${skill.progress}%` }}
@@ -248,23 +246,9 @@ export function SkillLibrary() {
   );
 }
 
-function BellIcon() {
-  return (
-    <svg viewBox="0 0 20 20" className="size-5" fill="none" aria-hidden>
-      <path
-        d="M10 2.5a4.5 4.5 0 0 0-4.5 4.5v2.2c0 .6-.2 1.2-.6 1.7L3.8 12.5c-.5.6-.1 1.5.7 1.5h11c.8 0 1.2-.9.7-1.5l-1.1-1.6c-.4-.5-.6-1.1-.6-1.7V7A4.5 4.5 0 0 0 10 2.5Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-      <path d="M8.2 14.5a1.8 1.8 0 0 0 3.6 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
 function DocIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="size-7" fill="none" aria-hidden>
+    <svg viewBox="0 0 24 24" className="size-5" fill="none" aria-hidden>
       <path
         d="M7 3.5h7l4 4V20a1.5 1.5 0 0 1-1.5 1.5h-9.5A1.5 1.5 0 0 1 5.5 20V5A1.5 1.5 0 0 1 7 3.5Z"
         stroke="currentColor"
@@ -277,7 +261,7 @@ function DocIcon() {
 
 function ChatIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="size-7" fill="none" aria-hidden>
+    <svg viewBox="0 0 24 24" className="size-5" fill="none" aria-hidden>
       <path
         d="M5 6.5A2.5 2.5 0 0 1 7.5 4h9A2.5 2.5 0 0 1 19 6.5v6A2.5 2.5 0 0 1 16.5 15H11l-4 4v-4H7.5A2.5 2.5 0 0 1 5 12.5v-6Z"
         stroke="currentColor"
@@ -290,7 +274,7 @@ function ChatIcon() {
 
 function AaIcon() {
   return (
-    <span className="text-lg font-bold tracking-tight" aria-hidden>
+    <span className="text-sm font-bold tracking-tight" aria-hidden>
       Aa
     </span>
   );
@@ -298,7 +282,7 @@ function AaIcon() {
 
 function HeadphoneIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="size-7" fill="none" aria-hidden>
+    <svg viewBox="0 0 24 24" className="size-5" fill="none" aria-hidden>
       <path
         d="M4.5 13v3a2 2 0 0 0 2 2H8v-5H6.5A2 2 0 0 0 4.5 15v-2a7.5 7.5 0 1 1 15 0v2a2 2 0 0 1-2 2H16v-5h1.5a2 2 0 0 1 2 2"
         stroke="currentColor"

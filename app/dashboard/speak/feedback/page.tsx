@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { SpeakFeedback } from "@/app/components/dashboard/speak-feedback";
 
 export const metadata: Metadata = {
@@ -8,5 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default function SpeakFeedbackPage() {
-  return <SpeakFeedback />;
+  return (
+    <Suspense fallback={null}>
+      <SpeakFeedback />
+    </Suspense>
+  );
 }

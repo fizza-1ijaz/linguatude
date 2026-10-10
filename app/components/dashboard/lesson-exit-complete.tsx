@@ -15,7 +15,7 @@ export function LessonExitComplete() {
   return (
     <DashboardShell
       title="Lesson Complete"
-      contentBgClassName="bg-[#F8F9FC]"
+      contentBgClassName="bg-white"
       mainClassName="flex flex-1 flex-col px-4 py-6 sm:px-6"
       headerLeft={
         <Link
@@ -33,8 +33,8 @@ export function LessonExitComplete() {
         </div>
       }
     >
-      <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center pb-8">
-        <div className="rounded-3xl border border-[#E2E8F0] bg-white px-6 py-8 text-center shadow-[0_16px_40px_-24px_rgba(15,23,42,0.28)] ui-fade-up">
+      <div className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center pb-8">
+        <div className="rounded-3xl border border-[#E2E8F0] bg-white px-8 py-8 text-center shadow-[0_16px_40px_-24px_rgba(15,23,42,0.28)] sm:px-10 sm:py-10 ui-fade-up">
           <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-[#DCFCE7] ui-soft-pulse">
             <CheckBig />
           </div>

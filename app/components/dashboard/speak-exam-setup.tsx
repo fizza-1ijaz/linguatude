@@ -1,5 +1,6 @@
 "use client";
 
+import { NotificationBellButton } from "@/app/components/dashboard/notification-bell-button";
 import Link from "next/link";
 import { useState } from "react";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
@@ -68,19 +69,12 @@ export function SpeakExamSetup() {
             <FlameIcon className="size-4 text-[#F97316]" />
             7 Day Streak
           </Link>
-          <button
-            type="button"
-            className="relative inline-flex size-10 items-center justify-center rounded-full bg-white text-[#64748B] shadow-sm ring-1 ring-[#E2E8F0]"
-            aria-label="Notifications"
-          >
-            <BellIcon />
-            <span className="absolute right-2 top-2 size-2 rounded-full bg-[#EF4444] ring-2 ring-white" />
-          </button>
+          <NotificationBellButton />
         </div>
       }
     >
-      <div className="mx-auto w-full max-w-3xl space-y-5 pb-8">
-        <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_4px_14px_-10px_rgba(15,23,42,0.12)] sm:p-6">
+      <div className="mx-auto w-full max-w-5xl space-y-5 pb-8">
+        <section className="rounded-2xl border border-[#E2E8F0] bg-white px-5 py-4 shadow-[0_4px_14px_-10px_rgba(15,23,42,0.12)] sm:px-6 sm:py-5">
           <div className="flex flex-wrap items-center gap-3">
             <span className="inline-flex items-center rounded-full bg-[#F1F5F9] px-3.5 py-1.5 text-sm font-semibold text-[#334155]">
               Exam: <span className="ml-1 font-bold">IELTS Academic</span>
@@ -93,7 +87,7 @@ export function SpeakExamSetup() {
             </Link>
           </div>
 
-          <h2 className="mt-5 text-base font-bold text-[#141B2B]">Which parts?</h2>
+          <h2 className="mt-4 text-base font-bold text-[#141B2B]">Which parts?</h2>
           <div className="mt-3 flex flex-wrap items-center gap-2">
             {PARTS.map((item) => {
               const selected = part === item.id;
@@ -128,7 +122,7 @@ export function SpeakExamSetup() {
           <button
             type="button"
             onClick={() => setExpectOpen((v) => !v)}
-            className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left"
+            className="flex w-full items-center justify-between gap-3 px-5 py-3.5 text-left sm:px-6"
           >
             <h2 className="text-base font-bold text-[#141B2B]">What to expect</h2>
             <span
@@ -145,7 +139,7 @@ export function SpeakExamSetup() {
                 return (
                   <li
                     key={row.id}
-                    className={`flex items-start gap-3 border-b border-[#F1F5F9] px-5 py-3.5 last:border-b-0 ${
+                    className={`flex items-start gap-3 border-b border-[#F1F5F9] px-5 py-3 last:border-b-0 sm:px-6 ${
                       "highlight" in row && row.highlight ? "bg-[#FFF7ED]" : ""
                     }`}
                   >
@@ -176,7 +170,7 @@ export function SpeakExamSetup() {
 
         <Link
           href="/dashboard/speak/microphone"
-          className="flex w-full items-center gap-3 rounded-2xl border border-[#FED7AA] bg-[#FFF1E6] px-4 py-3.5 text-left transition hover:bg-[#FFE8D6]"
+          className="flex w-full items-center gap-3 rounded-2xl border border-[#FED7AA] bg-[#FFF1E6] px-5 py-3 text-left transition hover:bg-[#FFE8D6] sm:px-6"
         >
           <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[#F97316] text-white">
             <MicWhiteIcon />
@@ -189,7 +183,7 @@ export function SpeakExamSetup() {
           </span>
         </Link>
 
-        <div className="flex items-center gap-3 rounded-2xl border border-[#E2E8F0] bg-white px-4 py-4">
+        <div className="flex items-center gap-3 rounded-2xl border border-[#E2E8F0] bg-white px-5 py-3.5 sm:px-6">
           <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#F1F5F9] text-[#64748B]">
             <SpeakerIcon />
           </span>
@@ -238,25 +232,6 @@ function FlameIcon({ className = "size-4" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 20 20" fill="currentColor" aria-hidden>
       <path d="M10.2 2.4c.4 2.1-.2 3.5-1.3 4.7-.9 1-1.4 1.8-1.4 3 0 1.4.9 2.5 2.2 2.5 1.4 0 2.4-1.1 2.4-2.6 0-.7-.2-1.3-.5-1.9 1.6 1 2.6 2.5 2.6 4.3 0 3-2.3 5.2-5.2 5.2S4 15.4 4 12.4c0-2.6 1.4-4.4 2.8-5.8C8.2 5.1 9.4 4 10.2 2.4Z" />
-    </svg>
-  );
-}
-
-function BellIcon() {
-  return (
-    <svg viewBox="0 0 20 20" className="size-5" fill="none" aria-hidden>
-      <path
-        d="M10 2.5a4.5 4.5 0 0 0-4.5 4.5v2.2c0 .6-.2 1.2-.6 1.7L3.8 12.5c-.5.6-.1 1.5.7 1.5h11c.8 0 1.2-.9.7-1.5l-1.1-1.6c-.4-.5-.6-1.1-.6-1.7V7A4.5 4.5 0 0 0 10 2.5Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M8.2 14.5a1.8 1.8 0 0 0 3.6 0"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
     </svg>
   );
 }

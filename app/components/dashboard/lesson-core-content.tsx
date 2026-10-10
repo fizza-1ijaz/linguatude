@@ -43,9 +43,8 @@ export function LessonCoreContent() {
           </span>
         </span>
       }
-      subtitle="Delivers the primary skill content."
-      contentBgClassName="bg-[#F8F9FC]"
-      mainClassName="flex flex-1 flex-col px-4 py-4 sm:px-5 lg:px-6"
+      contentBgClassName="bg-white"
+      mainClassName="flex flex-1 flex-col px-0 py-0"
       headerLeft={
         <Link
           href="/dashboard/skills/essay-development/ice-breaker"
@@ -74,59 +73,60 @@ export function LessonCoreContent() {
         </div>
       }
     >
-      <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-4 pb-24">
-        <div className="flex items-start gap-2.5 rounded-xl border border-[#BFDBFE] bg-[#EFF6FF] px-4 py-3 ui-fade-up">
-          <span className="mt-0.5 text-[#2b5ce6]">
-            <ClockIcon />
-          </span>
-          <p className="text-sm text-[#1E40AF]">
-            This is the Core Content (6 minutes). Study the content and answer
-            the questions.
-          </p>
-        </div>
+      <div className="flex min-h-0 flex-1 flex-col bg-white pb-24">
+        <div className="mx-auto grid w-full max-w-7xl flex-1 lg:grid-cols-2 lg:divide-x lg:divide-[#E2E8F0]">
+          {/* Left panel — passage */}
+          <section className="flex flex-col px-4 py-5 sm:px-6 lg:px-8 ui-fade-up">
+            <div className="mb-3 flex items-start gap-2 rounded-lg border border-[#BFDBFE] bg-[#EFF6FF] px-3 py-2">
+              <span className="mt-0.5 shrink-0 text-[#2b5ce6]">
+                <ClockIcon />
+              </span>
+              <p className="text-xs leading-5 text-[#1E40AF]">
+                This is the Core Content (6 minutes). Study the content and answer
+                the questions.
+              </p>
+            </div>
 
-        <div className="grid flex-1 gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-          <section className="ui-fade-up">
-            <p className="mb-3 text-sm text-[#64748B]">
+            <p className="mb-4 text-sm text-[#64748B]">
               Read the passage and answer the questions that follow.
             </p>
-            <div className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.12)] sm:p-6">
-              <h2 className="text-xl font-bold text-[#141B2B]">
-                The Impact of Urban Green Spaces
-              </h2>
-              <div className="mt-5 space-y-5">
-                <PassageBlock letter="A">
-                  Urban green spaces include parks, gardens, tree-lined streets,
-                  and other vegetated areas within cities. They provide residents
-                  with access to nature and play an important role in making
-                  dense urban environments more liveable.
-                </PassageBlock>
-                <PassageBlock letter="B">
-                  These spaces improve air quality, help reduce the urban heat
-                  island effect, and create opportunities for physical activity.
-                  In many cities, green corridors also support biodiversity by
-                  connecting habitats that would otherwise be fragmented.
-                </PassageBlock>
-                <PassageBlock letter="C">
-                  Beyond environmental benefits, green spaces can support mental
-                  well-being by offering places for rest, social connection, and
-                  recovery from daily stress.
-                </PassageBlock>
-              </div>
-              <div className="mt-6 flex flex-wrap gap-4 border-t border-[#E2E8F0] pt-4 text-xs font-medium text-[#64748B]">
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="size-3 rounded-sm bg-[#FDE68A]" />
-                  Topic sentence
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="size-3 rounded-sm bg-[#A5F3FC]" />
-                  Supporting detail / Example
-                </span>
-              </div>
+
+            <h2 className="text-xl font-bold text-[#141B2B]">
+              The Impact of Urban Green Spaces
+            </h2>
+            <div className="mt-5 space-y-5">
+              <PassageBlock letter="A">
+                Urban green spaces include parks, gardens, tree-lined streets,
+                and other vegetated areas within cities. They provide residents
+                with access to nature and play an important role in making dense
+                urban environments more liveable.
+              </PassageBlock>
+              <PassageBlock letter="B">
+                These spaces improve air quality, help reduce the urban heat
+                island effect, and create opportunities for physical activity. In
+                many cities, green corridors also support biodiversity by
+                connecting habitats that would otherwise be fragmented.
+              </PassageBlock>
+              <PassageBlock letter="C">
+                Beyond environmental benefits, green spaces can support mental
+                well-being by offering places for rest, social connection, and
+                recovery from daily stress.
+              </PassageBlock>
+            </div>
+            <div className="mt-6 flex flex-wrap gap-4 border-t border-[#E2E8F0] pt-4 text-xs font-medium text-[#64748B]">
+              <span className="inline-flex items-center gap-1.5">
+                <span className="size-3 rounded-sm bg-[#FDE68A]" />
+                Topic sentence
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <span className="size-3 rounded-sm bg-[#A5F3FC]" />
+                Supporting detail / Example
+              </span>
             </div>
           </section>
 
-          <section className="space-y-5 ui-fade-up-delay-1">
+          {/* Right panel — questions */}
+          <section className="flex flex-col space-y-5 border-t border-[#E2E8F0] px-4 py-5 sm:px-6 lg:border-t-0 lg:px-8 ui-fade-up-delay-1">
             <h2 className="text-lg font-bold text-[#141B2B]">Questions</h2>
             <QuestionBlock
               number={4}
@@ -147,23 +147,31 @@ export function LessonCoreContent() {
       </div>
 
       <div className="dashboard-panel-bottom border-t border-[#E2E8F0] bg-white/95 px-4 py-3 backdrop-blur sm:px-6">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3">
-          <div className="flex items-center gap-4 text-sm font-medium text-[#475569]">
-            <button type="button" className="inline-flex items-center gap-1.5 transition hover:text-[#2b5ce6]">
+        <div className="mx-auto grid max-w-7xl grid-cols-[1fr_auto_1fr] items-center gap-3">
+          <div className="justify-self-start">
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-[#475569] transition hover:text-[#2b5ce6]"
+            >
               <BookmarkIcon />
               Bookmark
             </button>
-            <button type="button" className="transition hover:text-[#2b5ce6]">
-              Show Word Count
-            </button>
           </div>
-          <Link
-            href="/dashboard/skills/essay-development/mid-check"
-            className="inline-flex h-11 items-center justify-center gap-1.5 rounded-xl bg-[#2b5ce6] px-5 text-sm font-semibold text-white transition hover:bg-[#244FE6]"
+          <button
+            type="button"
+            className="justify-self-center text-sm font-medium text-[#475569] transition hover:text-[#2b5ce6]"
           >
-            Continue
-            <span aria-hidden>→</span>
-          </Link>
+            Show Word Count
+          </button>
+          <div className="justify-self-end">
+            <Link
+              href="/dashboard/skills/essay-development/mid-check"
+              className="inline-flex h-11 items-center justify-center gap-1.5 rounded-xl bg-[#2b5ce6] px-5 text-sm font-semibold text-white transition hover:bg-[#244FE6]"
+            >
+              Continue
+              <span aria-hidden>→</span>
+            </Link>
+          </div>
         </div>
       </div>
     </DashboardShell>
@@ -249,7 +257,7 @@ function BackIcon() {
 
 function ClockIcon() {
   return (
-    <svg viewBox="0 0 16 16" className="size-4" fill="none" aria-hidden>
+    <svg viewBox="0 0 16 16" className="size-3.5" fill="none" aria-hidden>
       <circle cx="8" cy="8" r="5.5" stroke="currentColor" strokeWidth="1.4" />
       <path d="M8 5v3.2l2 1.3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
     </svg>

@@ -51,7 +51,7 @@ export function WritingModelAnswers() {
 
   const essayNodes = useMemo(() => {
     return paragraphs.map((para, pi) => {
-      let remaining = para;
+      let remaining: string = para;
       const parts: ReactNode[] = [];
       NOTES.forEach((n) => {
         const idx = remaining.indexOf(n.phrase);
@@ -124,33 +124,45 @@ export function WritingModelAnswers() {
             </button>
           </div>
 
-          <div className="flex items-start gap-2.5 rounded-xl border border-[#BFDBFE] bg-[#EFF6FF] px-4 py-3 text-sm font-medium text-[#1E40AF] ui-fade-up-delay-1">
+          <section className="rounded-2xl border border-[#E2E8F0] bg-white shadow-[0_8px_24px_-16px_rgba(15,23,42,0.12)] ui-fade-up-delay-1">
+            <div className="p-5 sm:p-6">
+              <span className="inline-flex items-center gap-1.5 rounded-md border border-[#E2E8F0] bg-[#F8FAFC] px-2.5 py-1 text-xs font-semibold text-[#64748B]">
+                <CalendarTiny />
+                287 words
+              </span>
+              <div
+                className={`mt-4 space-y-4 ${showFull ? "" : "max-h-48 overflow-hidden"}`}
+              >
+                {essayNodes}
+              </div>
+            </div>
+            <div className="border-t border-[#E2E8F0] px-5 py-3 sm:px-6">
+              <button
+                type="button"
+                onClick={() => setShowFull((v) => !v)}
+                className="mx-auto flex items-center justify-center gap-1.5 text-sm font-semibold text-[#141B2B] transition hover:text-[#2b5ce6]"
+              >
+                {showFull ? (
+                  <>
+                    Show less
+                    <ChevronUpBlack />
+                  </>
+                ) : (
+                  <>
+                    Show more
+                    <ChevronDownBlack />
+                  </>
+                )}
+              </button>
+            </div>
+          </section>
+
+          <div className="flex items-start gap-2.5 rounded-xl border border-[#BFDBFE] bg-[#EFF6FF] px-4 py-3 text-sm font-medium text-[#1E40AF] ui-fade-up-delay-2">
             <span className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-[#FEF08A] text-[#CA8A04]">
               <BulbIcon />
             </span>
             Highlighted phrases show examples of effective language or structure.
           </div>
-
-          <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.12)] sm:p-6 ui-fade-up-delay-2">
-            <span className="inline-flex items-center gap-1.5 rounded-md border border-[#E2E8F0] bg-[#F8FAFC] px-2.5 py-1 text-xs font-semibold text-[#64748B]">
-              <CalendarTiny />
-              287 words
-            </span>
-            <div
-              className={`mt-4 space-y-4 ${showFull ? "" : "max-h-48 overflow-hidden"}`}
-            >
-              {essayNodes}
-            </div>
-            <div className="mt-5 flex justify-center">
-              <button
-                type="button"
-                onClick={() => setShowFull((v) => !v)}
-                className="text-sm font-semibold text-[#2b5ce6] transition hover:underline"
-              >
-                {showFull ? "Show less ˄" : "Show more ˅"}
-              </button>
-            </div>
-          </section>
         </div>
 
         <aside className="hide-scrollbar max-h-[calc(100dvh-10.5rem)] space-y-4 overflow-y-auto overscroll-contain pb-2 lg:sticky lg:top-4 ui-fade-up-delay-1">
@@ -351,6 +363,34 @@ function BulbIcon() {
         strokeLinejoin="round"
       />
       <path d="M4.5 9.5h3M5 10.5h2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function ChevronUpBlack() {
+  return (
+    <svg viewBox="0 0 16 16" className="size-4 text-[#141B2B]" fill="none" aria-hidden>
+      <path
+        d="M3.5 10 8 5.5 12.5 10"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function ChevronDownBlack() {
+  return (
+    <svg viewBox="0 0 16 16" className="size-4 text-[#141B2B]" fill="none" aria-hidden>
+      <path
+        d="M3.5 6 8 10.5 12.5 6"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }

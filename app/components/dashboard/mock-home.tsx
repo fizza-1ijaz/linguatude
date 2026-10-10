@@ -81,7 +81,146 @@ export function MockHome() {
       contentBgClassName="bg-[#F8F9FC]"
       mainClassName="flex flex-1 flex-col px-4 py-5 sm:px-6 lg:px-8"
     >
-      <div className="mx-auto w-full max-w-4xl space-y-5 pb-10">
+      <div className="mx-auto w-full max-w-6xl space-y-5 pb-10">
+        <div className="grid items-stretch gap-5 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+          <div className="flex flex-col gap-5">
+            <section className="overflow-hidden rounded-2xl border border-[#FDBA74] bg-white shadow-[0_8px_24px_-18px_rgba(15,23,42,0.14)] ui-fade-up-delay-1">
+              <div className="h-1.5 bg-[#F97316]" />
+              <div className="p-5 sm:p-6">
+                <div className="flex items-center gap-3">
+                  <span className="flex size-10 items-center justify-center rounded-full bg-[#F97316] text-white">
+                    <BoltIcon />
+                  </span>
+                  <h2 className="text-lg font-bold text-[#141B2B]">Full Mock Tests</h2>
+                </div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {["30 minutes", "All 4 skills", "Free (1 per month)"].map((t) => (
+                    <span
+                      key={t}
+                      className="rounded-full bg-[#FFEDD5] px-3 py-1 text-xs font-semibold text-[#EA580C]"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                <p className="mt-3 text-sm text-[#64748B]">
+                  Test your skills with a complete mock experience. Available with Premium
+                </p>
+                <Link
+                  href="/dashboard/premium"
+                  className="mt-4 inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-xl bg-[#2b5ce6] text-sm font-semibold text-white transition hover:bg-[#244FE6]"
+                >
+                  Upgrade to Premium
+                  <span aria-hidden>→</span>
+                </Link>
+              </div>
+            </section>
+
+            <section className="overflow-hidden rounded-2xl border border-[#BFDBFE] bg-white shadow-[0_8px_24px_-18px_rgba(15,23,42,0.14)] ui-fade-up-delay-2">
+              <div className="h-1.5 bg-[#2b5ce6]" />
+              <div className="p-5 sm:p-6">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <span className="flex size-10 items-center justify-center rounded-full bg-[#2b5ce6] text-white">
+                      <ShieldCheckIcon />
+                    </span>
+                    <h2 className="text-lg font-bold text-[#141B2B]">Full Mock Test</h2>
+                  </div>
+                  <span className="flex size-8 items-center justify-center rounded-full bg-[#F1F5F9] text-[#64748B]">
+                    <LockIcon />
+                  </span>
+                </div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {["30 minutes", "Full exam format", "Premium"].map((t) => (
+                    <span
+                      key={t}
+                      className="rounded-full bg-[#EFF6FF] px-3 py-1 text-xs font-semibold text-[#2563EB]"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                <p className="mt-3 text-sm leading-6 text-[#64748B]">
+                  Full-length simulation matching real exam timing exactly.
+                  <br />
+                  The most accurate band estimate available on the platform.
+                </p>
+                <div className="mt-4 flex flex-col gap-3 rounded-xl bg-[#F1F5F9] px-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-4">
+                  <p className="inline-flex items-center gap-2 text-sm text-[#64748B]">
+                    <LockIcon />
+                    Full Mock Tests are available with a Premium subscription.
+                  </p>
+                  <Link
+                    href="/dashboard/mock/full"
+                    className="inline-flex h-10 shrink-0 items-center justify-center rounded-xl border border-[#BFDBFE] bg-white px-4 text-sm font-bold text-[#2b5ce6] transition hover:bg-[#EEF2FF]"
+                  >
+                    Start Full Mock
+                  </Link>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <section className="flex h-full flex-col rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-18px_rgba(15,23,42,0.12)] sm:p-6 ui-fade-up-delay-3">
+            <h2 className="text-base font-bold text-[#141B2B]">Your mock test history</h2>
+            <ul className="mt-4 flex flex-1 flex-col justify-between gap-2.5">
+              {HISTORY.map((row) => {
+                const overall = TONE[row.overallTone];
+                const tag =
+                  row.tagTone === "blue"
+                    ? "bg-[#DBEAFE] text-[#2563EB]"
+                    : "bg-[#FFEDD5] text-[#EA580C]";
+                return (
+                  <li key={row.date}>
+                    <Link
+                      href="/dashboard/mock/full"
+                      className="flex items-center gap-3 rounded-xl border border-[#E2E8F0] bg-white px-3 py-2.5 transition hover:border-[#BFDBFE] sm:gap-3.5 sm:px-3.5"
+                    >
+                      <div className="min-w-[5.5rem] shrink-0">
+                        <span
+                          className={`inline-flex rounded-full px-2.5 py-0.5 text-[0.6875rem] font-bold ${tag}`}
+                        >
+                          Full Mock
+                        </span>
+                        <p className="mt-1 text-xs text-[#94A3B8]">{row.date}</p>
+                      </div>
+                      <span
+                        className={`flex size-11 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold ${overall.ring} ${overall.text}`}
+                      >
+                        {row.overall}
+                      </span>
+                      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-1.5 gap-y-1">
+                        {row.scores.map((s) => {
+                          const t = TONE[s.tone as keyof typeof TONE];
+                          return (
+                            <span
+                              key={s.k}
+                              className={`rounded-full px-2 py-0.5 text-[0.6875rem] font-bold ${t.bg} ${t.text}`}
+                            >
+                              {s.k} {s.v}
+                            </span>
+                          );
+                        })}
+                      </div>
+                      <span className="shrink-0 text-[#CBD5E1]" aria-hidden>
+                        ›
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+            <div className="mt-4 text-center">
+              <Link
+                href="/dashboard/mock/full"
+                className="text-sm font-semibold text-[#2b5ce6] transition hover:underline"
+              >
+                View all results →
+              </Link>
+            </div>
+          </section>
+        </div>
+
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#D1FAE5] bg-[#F4FAF6] px-4 py-4 sm:px-5 ui-fade-up">
           <div className="flex items-center gap-3">
             <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#D1FAE5] text-[#166534]">
@@ -102,139 +241,6 @@ export function MockHome() {
             </div>
           </div>
         </div>
-
-        <section className="overflow-hidden rounded-2xl border border-[#FDBA74] bg-white shadow-[0_8px_24px_-18px_rgba(15,23,42,0.14)] ui-fade-up-delay-1">
-          <div className="h-1.5 bg-[#F97316]" />
-          <div className="p-5 sm:p-6">
-            <div className="flex items-center gap-3">
-              <span className="flex size-10 items-center justify-center rounded-full bg-[#F97316] text-white">
-                <BoltIcon />
-              </span>
-              <h2 className="text-lg font-bold text-[#141B2B]">Full Mock Tests</h2>
-            </div>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {["30 minutes", "All 4 skills", "Free (1 per month)"].map((t) => (
-                <span
-                  key={t}
-                  className="rounded-full bg-[#FFEDD5] px-3 py-1 text-xs font-semibold text-[#EA580C]"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-            <p className="mt-3 text-sm text-[#64748B]">
-              Test your skills with a complete mock experience. Available with Premium
-            </p>
-            <Link
-              href="/pricing"
-              className="mt-4 inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-xl bg-[#2b5ce6] text-sm font-semibold text-white transition hover:bg-[#244FE6]"
-            >
-              Upgrade to Premium
-              <span aria-hidden>→</span>
-            </Link>
-          </div>
-        </section>
-
-        <section className="overflow-hidden rounded-2xl border border-[#BFDBFE] bg-white shadow-[0_8px_24px_-18px_rgba(15,23,42,0.14)] ui-fade-up-delay-2">
-          <div className="h-1.5 bg-[#2b5ce6]" />
-          <div className="p-5 sm:p-6">
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <span className="flex size-10 items-center justify-center rounded-full bg-[#2b5ce6] text-white">
-                  <ShieldCheckIcon />
-                </span>
-                <h2 className="text-lg font-bold text-[#141B2B]">Full Mock Test</h2>
-              </div>
-              <span className="flex size-8 items-center justify-center rounded-full bg-[#F1F5F9] text-[#64748B]">
-                <LockIcon />
-              </span>
-            </div>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {["30 minutes", "Full exam format", "Premium"].map((t) => (
-                <span
-                  key={t}
-                  className="rounded-full bg-[#EFF6FF] px-3 py-1 text-xs font-semibold text-[#2563EB]"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-            <p className="mt-3 text-sm leading-6 text-[#64748B]">
-              Full-length simulation matching real exam timing exactly.
-              <br />
-              The most accurate band estimate available on the platform.
-            </p>
-            <div className="mt-4 flex flex-col gap-3 rounded-xl bg-[#F1F5F9] px-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-4">
-              <p className="inline-flex items-center gap-2 text-sm text-[#64748B]">
-                <LockIcon />
-                Full Mock Tests are available with a Premium subscription.
-              </p>
-              <Link
-                href="/dashboard/mock/full"
-                className="inline-flex h-10 shrink-0 items-center justify-center rounded-xl border border-[#E2E8F0] bg-white px-4 text-sm font-bold text-[#2b5ce6] transition hover:bg-[#EEF2FF]"
-              >
-                Start Full Mock
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-18px_rgba(15,23,42,0.12)] sm:p-6 ui-fade-up-delay-3">
-          <h2 className="text-base font-bold text-[#141B2B]">Your mock test history</h2>
-          <ul className="mt-4 space-y-3">
-            {HISTORY.map((row) => {
-              const overall = TONE[row.overallTone];
-              const tag =
-                row.tagTone === "blue"
-                  ? "bg-[#DBEAFE] text-[#1D4ED8]"
-                  : "bg-[#FFEDD5] text-[#C2410C]";
-              return (
-                <li key={row.date}>
-                  <Link
-                    href="/dashboard/mock/full"
-                    className="flex flex-wrap items-center gap-3 rounded-xl border border-[#E2E8F0] bg-white px-3 py-3 transition hover:border-[#BFDBFE] sm:flex-nowrap sm:gap-4 sm:px-4"
-                  >
-                    <div className="min-w-[6.5rem]">
-                      <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[0.6875rem] font-bold ${tag}`}>
-                        Full Mock
-                      </span>
-                      <p className="mt-1 text-xs text-[#94A3B8]">{row.date}</p>
-                    </div>
-                    <span
-                      className={`flex size-12 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold ${overall.ring} ${overall.text}`}
-                    >
-                      {row.overall}
-                    </span>
-                    <div className="flex min-w-0 flex-1 flex-wrap gap-1.5">
-                      {row.scores.map((s) => {
-                        const t = TONE[s.tone as keyof typeof TONE];
-                        return (
-                          <span
-                            key={s.k}
-                            className={`rounded-md px-2 py-1 text-[0.6875rem] font-bold ${t.bg} ${t.text}`}
-                          >
-                            {s.k} {s.v}
-                          </span>
-                        );
-                      })}
-                    </div>
-                    <span className="ml-auto text-[#CBD5E1]" aria-hidden>
-                      ›
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-          <div className="mt-4 text-center">
-            <Link
-              href="/dashboard/mock/full"
-              className="text-sm font-semibold text-[#2b5ce6] transition hover:underline"
-            >
-              View all results →
-            </Link>
-          </div>
-        </section>
       </div>
     </DashboardShell>
   );

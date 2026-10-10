@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
+import { Reveal, Stagger, StaggerItem } from "@/app/components/marketing-motion";
 
 const FEATURES = [
   {
@@ -88,6 +92,8 @@ const FEATURES = [
 ] as const;
 
 export function HomeFeatures() {
+  const reduce = useReducedMotion();
+
   return (
     <section
       id="features"
@@ -95,46 +101,67 @@ export function HomeFeatures() {
       aria-labelledby="features-heading"
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <h2
-          id="features-heading"
-          className="text-center text-balance text-3xl font-extrabold tracking-tight text-[#1a1a2e] sm:text-4xl lg:text-[2.5rem] lg:leading-[1.5]"
-        >
-          Every task type.{" "}
-          <span className="text-[#2D5BFF]">Scored in seconds.</span>
-        </h2>
+        <Reveal>
+          <h2
+            id="features-heading"
+            className="text-center text-balance text-3xl font-extrabold tracking-tight text-[#1a1a2e] sm:text-4xl lg:text-[2.5rem] lg:leading-[1.5]"
+          >
+            Every task type.{" "}
+            <span className="text-[#2D5BFF]">Scored in seconds.</span>
+          </h2>
+        </Reveal>
 
-        <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-5 lg:mt-12 lg:gap-6">
+        <Stagger className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-5 lg:mt-12 lg:gap-6">
           {FEATURES.map((feature) => (
-            <article
-              key={feature.title}
-              className={`relative flex min-h-[22rem] flex-col overflow-hidden rounded-3xl border bg-white p-8 ${feature.border} ${feature.shadow}`}
-            >
-              <div className={`pointer-events-none absolute inset-0 rounded-3xl ${feature.inset}`} aria-hidden />
-              {feature.bg}
+            <StaggerItem key={feature.title} as="article">
+              <motion.div
+                className={`relative flex min-h-[22rem] flex-col overflow-hidden rounded-3xl border bg-white p-8 ${feature.border} ${feature.shadow}`}
+                whileHover={
+                  reduce
+                    ? undefined
+                    : {
+                        y: -8,
+                        boxShadow:
+                          "0 18px 40px -18px rgba(15,23,42,0.28), 0 8px 16px -10px rgba(45,91,255,0.2)",
+                      }
+                }
+                transition={{ type: "spring", stiffness: 320, damping: 22 }}
+              >
+                <div className={`pointer-events-none absolute inset-0 rounded-3xl ${feature.inset}`} aria-hidden />
+                {feature.bg}
 
-              <div className="relative z-10 flex h-full flex-col">
-                <div
-                  className={`mb-6 flex size-16 items-center justify-center rounded-full ${feature.iconWrap}`}
-                >
-                  {feature.iconInner}
+                <div className="relative z-10 flex h-full flex-col">
+                  <motion.div
+                    className={`mb-6 flex size-16 items-center justify-center rounded-full ${feature.iconWrap}`}
+                    whileHover={reduce ? undefined : { rotate: [-4, 4, 0], scale: 1.06 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    {feature.iconInner}
+                  </motion.div>
+
+                  <h3 className="text-xl font-bold text-[#111827]">{feature.title}</h3>
+                  <p className="mt-3 flex-1 text-sm leading-relaxed text-[#4b5563]">
+                    {feature.description}
+                  </p>
+
+                  <Link
+                    href={feature.href}
+                    className={`mt-6 inline-flex size-10 items-center justify-center overflow-clip rounded-full border-2 ${feature.arrowBorder} transition hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/40`}
+                    aria-label={`Learn more about ${feature.title}`}
+                  >
+                    <motion.span
+                      className="inline-flex"
+                      whileHover={reduce ? undefined : { x: 3 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 18 }}
+                    >
+                      <Image src={feature.arrow} alt="" width={20} height={20} className="size-5" />
+                    </motion.span>
+                  </Link>
                 </div>
-
-                <h3 className="text-xl font-bold text-[#111827]">{feature.title}</h3>
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-[#4b5563]">
-                  {feature.description}
-                </p>
-
-                <Link
-                  href={feature.href}
-                  className={`mt-6 inline-flex size-10 items-center justify-center overflow-clip rounded-full border-2 ${feature.arrowBorder} transition hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/40`}
-                  aria-label={`Learn more about ${feature.title}`}
-                >
-                  <Image src={feature.arrow} alt="" width={20} height={20} className="size-5" />
-                </Link>
-              </div>
-            </article>
+              </motion.div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </div>
     </section>
   );

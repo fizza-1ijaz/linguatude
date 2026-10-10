@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
+import { Reveal, Stagger, StaggerItem } from "@/app/components/marketing-motion";
 
 const FEATURES = [
   {
@@ -61,55 +65,73 @@ const FEATURES = [
 ] as const;
 
 function StartFreeButton({ className }: { className?: string }) {
+  const reduce = useReducedMotion();
+
   return (
-    <Link
-      href="/#start"
-      className={`inline-flex items-center justify-center gap-2 rounded-xl bg-[#2D5BFF] px-8 py-4 text-lg font-bold text-white transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/60 ${className ?? ""}`}
+    <motion.div
+      whileHover={reduce ? undefined : { scale: 1.03, y: -2 }}
+      whileTap={reduce ? undefined : { scale: 0.98 }}
+      className="inline-flex"
     >
-      Start free
-      <span className="relative size-4 shrink-0 overflow-clip">
-        <Image
-          src="/features/icon-arrow.svg"
-          alt=""
-          width={16}
-          height={16}
-          className="size-full"
-        />
-      </span>
-    </Link>
+      <Link
+        href="/#start"
+        className={`inline-flex items-center justify-center gap-2 rounded-xl bg-[#2D5BFF] px-8 py-4 text-lg font-bold text-white transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/60 ${className ?? ""}`}
+      >
+        Start free
+        <span className="relative size-4 shrink-0 overflow-clip">
+          <Image
+            src="/features/icon-arrow.svg"
+            alt=""
+            width={16}
+            height={16}
+            className="size-full"
+          />
+        </span>
+      </Link>
+    </motion.div>
   );
 }
 
 export function FeaturesPageContent() {
+  const reduce = useReducedMotion();
+
   return (
     <>
       <section
         className="mkt-hero-bottom relative isolate overflow-hidden"
         aria-labelledby="features-hero-heading"
       >
-        <div className="mx-auto flex w-full max-w-5xl flex-col items-center px-4 pb-14 pt-12 text-center sm:px-6 sm:pb-16 sm:pt-16 lg:px-8 lg:pb-20 lg:pt-[5.375rem]">
-          <p className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 text-sm font-extrabold uppercase tracking-[1.4px] text-[#2D5BFF] shadow-[0_4px_8px_rgba(0,0,0,0.25)] sm:text-base">
-            All the tools you need
-          </p>
+        <Stagger className="mx-auto flex w-full max-w-5xl flex-col items-center px-4 pb-14 pt-12 text-center sm:px-6 sm:pb-16 sm:pt-16 lg:px-8 lg:pb-20 lg:pt-[5.375rem]">
+          <StaggerItem>
+            <p className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 text-sm font-extrabold uppercase tracking-[1.4px] text-[#2D5BFF] shadow-[0_4px_8px_rgba(0,0,0,0.25)] sm:text-base">
+              All the tools you need
+            </p>
+          </StaggerItem>
 
-          <h1
-            id="features-hero-heading"
-            className="mt-6 max-w-4xl text-balance text-4xl font-extrabold leading-[1.1] tracking-[-0.02em] text-[#191c1f] sm:text-5xl lg:text-[3.5rem] lg:leading-[1.1]"
-          >
-            Powerful features.
-            <br />
-            <span className="text-[#2D5BFF]">Built for your exams.</span>
-          </h1>
+          <StaggerItem>
+            <h1
+              id="features-hero-heading"
+              className="mt-6 max-w-4xl text-balance text-4xl font-extrabold leading-[1.1] tracking-[-0.02em] text-[#191c1f] sm:text-5xl lg:text-[3.5rem] lg:leading-[1.1]"
+            >
+              Powerful features.
+              <br />
+              <span className="text-[#2D5BFF]">Built for your exams.</span>
+            </h1>
+          </StaggerItem>
 
-          <p className="mt-5 max-w-2xl text-pretty text-lg font-medium leading-7 text-[#464557] sm:text-xl">
-            Everything you need to prepare smarter and perform your best for PTE
-            and IELTS — in one place.
-          </p>
+          <StaggerItem>
+            <p className="mt-5 max-w-2xl text-pretty text-lg font-medium leading-7 text-[#464557] sm:text-xl">
+              Everything you need to prepare smarter and perform your best for PTE
+              and IELTS — in one place.
+            </p>
+          </StaggerItem>
 
-          <div className="mt-6 sm:mt-7">
-            <StartFreeButton />
-          </div>
-        </div>
+          <StaggerItem>
+            <div className="mt-6 sm:mt-7">
+              <StartFreeButton />
+            </div>
+          </StaggerItem>
+        </Stagger>
       </section>
 
       <section
@@ -132,76 +154,106 @@ export function FeaturesPageContent() {
           />
         </div>
 
-        <ul className="mx-auto grid max-w-6xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <Stagger
+          as="ul"
+          className="mx-auto grid max-w-6xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
+        >
           {FEATURES.map((feature) => (
-            <li
-              key={feature.title.join(" ")}
-              className="flex flex-col items-center rounded-2xl border border-[rgba(199,196,219,0.3)] bg-white px-6 py-8 text-center shadow-[0_4px_8px_rgba(0,0,0,0.25),0_8px_30px_rgba(0,0,0,0.04)]"
-            >
-              <span className="flex size-16 shrink-0 items-center justify-center rounded-full bg-[#d6dfff]">
-                <span className={`relative overflow-clip ${feature.iconClass}`}>
-                  <Image
-                    src={feature.icon}
-                    alt=""
-                    width={30}
-                    height={30}
-                    className="size-full"
-                  />
-                </span>
-              </span>
-
-              <h3 className="mt-6 text-xl font-bold leading-8 text-[#191c1f] sm:text-2xl">
-                {feature.title.map((line) => (
-                  <span key={line} className="block">
-                    {line}
+            <StaggerItem key={feature.title.join(" ")} as="li">
+              <motion.div
+                className="flex h-full flex-col items-center rounded-2xl border border-[rgba(199,196,219,0.3)] bg-white px-6 py-8 text-center shadow-[0_4px_8px_rgba(0,0,0,0.25),0_8px_30px_rgba(0,0,0,0.04)]"
+                whileHover={
+                  reduce
+                    ? undefined
+                    : {
+                        y: -8,
+                        boxShadow:
+                          "0 20px 40px -18px rgba(45,91,255,0.25), 0 8px 16px -10px rgba(15,23,42,0.12)",
+                      }
+                }
+                transition={{ type: "spring", stiffness: 320, damping: 22 }}
+              >
+                <motion.span
+                  className="flex size-16 shrink-0 items-center justify-center rounded-full bg-[#d6dfff]"
+                  whileHover={reduce ? undefined : { scale: 1.08, rotate: 4 }}
+                >
+                  <span className={`relative overflow-clip ${feature.iconClass}`}>
+                    <Image
+                      src={feature.icon}
+                      alt=""
+                      width={30}
+                      height={30}
+                      className="size-full"
+                    />
                   </span>
-                ))}
-              </h3>
+                </motion.span>
 
-              <span
-                className="mt-4 h-0.5 w-8 rounded-full bg-[#2D5BFF]"
-                aria-hidden
-              />
+                <h3 className="mt-6 text-xl font-bold leading-8 text-[#191c1f] sm:text-2xl">
+                  {feature.title.map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </h3>
 
-              <p className="mt-4 text-sm leading-[1.625] text-[#464557]">
-                {feature.description}
-              </p>
-            </li>
+                <span
+                  className="mt-4 h-0.5 w-8 rounded-full bg-[#2D5BFF]"
+                  aria-hidden
+                />
+
+                <p className="mt-4 text-sm leading-[1.625] text-[#464557]">
+                  {feature.description}
+                </p>
+              </motion.div>
+            </StaggerItem>
           ))}
-        </ul>
+        </Stagger>
       </section>
 
       <section
         className="bg-white px-4 py-12 sm:px-6 sm:py-14 lg:px-8 lg:pb-16"
         aria-labelledby="features-cta-heading"
       >
-        <div className="mx-auto flex max-w-5xl flex-col items-start justify-between gap-8 rounded-2xl border border-[#e3dfff] bg-[#f4f6f9] p-8 shadow-[0_4px_8px_rgba(0,0,0,0.25)] sm:p-10 lg:flex-row lg:items-center">
-          <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
-            <span className="flex size-20 shrink-0 items-center justify-center rounded-full bg-[#d6dfff] shadow-sm">
-              <span className="relative h-[1.875rem] w-6 overflow-clip">
-                <Image
-                  src="/features/icon-shield.svg"
-                  alt=""
-                  width={24}
-                  height={30}
-                  className="size-full"
-                />
-              </span>
-            </span>
-            <div>
-              <h2
-                id="features-cta-heading"
-                className="text-xl font-bold leading-8 text-[#191c1f] sm:text-2xl"
+        <Reveal>
+          <motion.div
+            className="mx-auto flex max-w-5xl flex-col items-start justify-between gap-8 rounded-2xl border border-[#e3dfff] bg-[#f4f6f9] p-8 shadow-[0_4px_8px_rgba(0,0,0,0.25)] sm:p-10 lg:flex-row lg:items-center"
+            whileHover={
+              reduce
+                ? undefined
+                : { boxShadow: "0 20px 40px -18px rgba(45,91,255,0.22)" }
+            }
+          >
+            <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
+              <motion.span
+                className="flex size-20 shrink-0 items-center justify-center rounded-full bg-[#d6dfff] shadow-sm"
+                animate={reduce ? undefined : { y: [0, -5, 0] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
               >
-                Smarter preparation. Better results.
-              </h2>
-              <p className="mt-2 text-base leading-7 text-[#464557] sm:text-lg">
-                All the features you need to achieve your target band.
-              </p>
+                <span className="relative h-[1.875rem] w-6 overflow-clip">
+                  <Image
+                    src="/features/icon-shield.svg"
+                    alt=""
+                    width={24}
+                    height={30}
+                    className="size-full"
+                  />
+                </span>
+              </motion.span>
+              <div>
+                <h2
+                  id="features-cta-heading"
+                  className="text-xl font-bold leading-8 text-[#191c1f] sm:text-2xl"
+                >
+                  Smarter preparation. Better results.
+                </h2>
+                <p className="mt-2 text-base leading-7 text-[#464557] sm:text-lg">
+                  All the features you need to achieve your target band.
+                </p>
+              </div>
             </div>
-          </div>
-          <StartFreeButton className="w-full shrink-0 sm:w-auto" />
-        </div>
+            <StartFreeButton className="w-full shrink-0 sm:w-auto" />
+          </motion.div>
+        </Reveal>
       </section>
     </>
   );

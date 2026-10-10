@@ -1,5 +1,6 @@
 "use client";
 
+import { NotificationBellButton } from "@/app/components/dashboard/notification-bell-button";
 import Link from "next/link";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
 
@@ -10,16 +11,10 @@ export function LessonGrammar() {
       contentBgClassName="bg-white"
       mainClassName="flex flex-1 flex-col px-4 py-5 sm:px-6"
       headerRight={
-        <button
-          type="button"
-          className="relative inline-flex size-10 items-center justify-center rounded-full text-[#64748B]"
-          aria-label="Notifications"
-        >
-          <BellIcon />
-        </button>
+        <NotificationBellButton />
       }
     >
-      <div className="mx-auto w-full max-w-lg space-y-4 pb-8">
+      <div className="mx-auto w-full max-w-3xl space-y-4 pb-8">
         <div className="flex items-start gap-2.5 rounded-xl bg-[#EEF2FF] px-4 py-3.5 ui-fade-up">
           <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-[#2b5ce6] text-[0.625rem] font-bold text-white">
             i
@@ -28,7 +23,7 @@ export function LessonGrammar() {
             <p className="text-sm font-bold text-[#1D4ED8]">
               Items generated from user&apos;s logged errors
             </p>
-            <p className="mt-0.5 text-sm text-[#3B82F6]">
+            <p className="mt-0.5 text-sm text-[#64748B]">
               Review and practice the grammar points you missed.
             </p>
           </div>
@@ -63,7 +58,7 @@ export function LessonGrammar() {
           </span>
           <div>
             <p className="text-sm font-bold text-[#1D4ED8]">How it works</p>
-            <p className="mt-0.5 text-sm leading-6 text-[#3B82F6]">
+            <p className="mt-0.5 text-sm leading-6 text-[#64748B]">
               We&apos;ve created these items from the mistakes you&apos;ve made.
               Practice them to strengthen your grammar and improve accuracy.
             </p>
@@ -71,20 +66,6 @@ export function LessonGrammar() {
         </div>
       </div>
     </DashboardShell>
-  );
-}
-
-function BellIcon() {
-  return (
-    <svg viewBox="0 0 20 20" className="size-5" fill="none" aria-hidden>
-      <path
-        d="M10 2.5a4.5 4.5 0 0 0-4.5 4.5v2.2c0 .6-.2 1.2-.6 1.7L3.8 12.5c-.5.6-.1 1.5.7 1.5h11c.8 0 1.2-.9.7-1.5l-1.1-1.6c-.4-.5-.6-1.1-.6-1.7V7A4.5 4.5 0 0 0 10 2.5Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-      <path d="M8.2 14.5a1.8 1.8 0 0 0 3.6 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
   );
 }
 
