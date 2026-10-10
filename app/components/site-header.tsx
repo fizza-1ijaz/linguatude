@@ -40,7 +40,7 @@ function LogoMark() {
 function StartFreeButton({ className }: { className?: string }) {
   return (
     <Link
-      href="/#start"
+      href="/login"
       className={`inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full bg-[#2D5BFF] px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_20px_-8px_rgba(45,91,255,0.55)] transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/50 focus-visible:ring-offset-2 ${className ?? ""}`}
     >
       Start free

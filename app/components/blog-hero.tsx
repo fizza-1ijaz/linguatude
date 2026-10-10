@@ -53,7 +53,7 @@ export function BlogHero({
 
           <div className="mt-6">
             <Link
-              href="/#start"
+              href="/login"
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#2D5BFF] px-8 py-4 text-lg font-bold text-white transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/60"
             >
               Start free

@@ -112,7 +112,7 @@ export function BlogPostContent({ blog, categories = [] }: Props) {
 
               <div className="mt-6">
                 <Link
-                  href="/#start"
+                  href="/login"
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#2D5BFF] px-8 py-3.5 text-base font-semibold text-white shadow-[0_4px_6px_-1px_rgba(76,36,251,0.2)] transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/60"
                 >
                   Start free
@@ -179,7 +179,7 @@ export function BlogPostContent({ blog, categories = [] }: Props) {
               </div>
               <div className="flex w-full shrink-0 flex-col items-center gap-2 sm:w-auto">
                 <Link
-                  href="/#start"
+                  href="/login"
                   className="inline-flex w-full items-center justify-center rounded-lg bg-[#2D5BFF] px-8 py-3 text-base font-medium text-white transition hover:bg-[#244FE6] sm:w-auto"
                 >
                   Start free

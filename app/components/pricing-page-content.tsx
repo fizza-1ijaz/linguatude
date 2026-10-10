@@ -29,7 +29,7 @@ function StartFreeButton({ className }: { className?: string }) {
       className="inline-flex"
     >
       <Link
-        href="/#start"
+        href="/login"
         className={`inline-flex items-center justify-center gap-2 rounded-xl bg-[#2D5BFF] px-8 py-4 text-lg font-bold text-white transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/60 ${className ?? ""}`}
       >
         Start free
@@ -229,7 +229,7 @@ export function PricingPageContent() {
                       </ul>
 
                       <Link
-                        href="/#start"
+                        href="/login"
                         className={`mt-6 inline-flex w-full items-center justify-center rounded-xl px-5 py-3 text-base font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/60 ${
                           plan.ctaVariant === "primary"
                             ? "bg-[#2D5BFF] text-white hover:bg-[#244FE6]"

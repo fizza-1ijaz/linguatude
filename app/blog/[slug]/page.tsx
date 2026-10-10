@@ -113,7 +113,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   New articles will appear here once they are published.
                 </p>
                 <Link
-                  href="/#start"
+                  href="/login"
                   className="mt-6 inline-flex rounded-xl bg-[#2D5BFF] px-8 py-3.5 text-base font-semibold text-white"
                 >
                   Start free

@@ -37,7 +37,7 @@ export function IeltsGeneralCta() {
 
             <div className="mt-8">
               <Link
-                href="#start"
+                href="/login"
                 className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-base font-bold text-[#1a1a24] transition hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
               >
                 Start Free

@@ -24,7 +24,7 @@ export function PteCtaBanner() {
           Start preparing today and move closer to your Australia goals.
         </p>
         <Link
-          href="#start"
+          href="/login"
           className="relative mt-5 inline-flex items-center gap-2 rounded-lg bg-white px-6 py-2.5 text-base font-bold text-[#1d4ed8] shadow-sm transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
         >
           Start free
