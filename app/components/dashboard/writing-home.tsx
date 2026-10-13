@@ -87,7 +87,7 @@ export function WritingHome() {
   return (
     <DashboardShell
       title="Writing"
-      contentBgClassName="bg-[#F8F9FC]"
+      contentBgClassName="bg-white"
       headerRight={
         <NotificationBellButton />
       }

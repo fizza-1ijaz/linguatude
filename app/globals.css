@@ -618,6 +618,25 @@ body:has(.onboarding-shell) {
   background: #2b5ce6;
 }
 
+/* Help Center chat — always-visible blue vertical scrollbar */
+.help-chat-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #2b5ce6 transparent;
+}
+
+.help-chat-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.help-chat-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.help-chat-scroll::-webkit-scrollbar-thumb {
+  background: #2b5ce6;
+  border-radius: 999px;
+}
+
 @media (min-width: 768px) {
   .auth-shell {
     height: 100dvh;

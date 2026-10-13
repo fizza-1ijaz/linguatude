@@ -20,8 +20,8 @@ export function SpeakTestResults() {
   return (
     <DashboardShell
       title="Test Results"
-      contentBgClassName="bg-[#F8F9FC]"
-      mainClassName="flex-1 px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-7"
+      contentBgClassName="bg-white"
+      mainClassName="flex-1 px-[1cm] py-5 sm:px-[1cm] sm:py-6 lg:px-[1cm] lg:py-7"
     >
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-5 pb-8">
         {/* Summary */}

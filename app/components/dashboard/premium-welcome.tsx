@@ -25,7 +25,7 @@ export function PremiumWelcome() {
     <DashboardShell
       title={<span className="sr-only">Welcome to Premium</span>}
       contentBgClassName="bg-white"
-      mainClassName="flex flex-1 flex-col px-4 py-8 sm:px-6"
+      mainClassName="flex flex-1 flex-col px-[1cm] py-8 sm:px-[1cm] lg:px-[1cm]"
     >
       <div className="mx-auto flex w-full max-w-lg flex-1 flex-col items-center pb-10 text-center">
         <div className="relative flex size-20 items-center justify-center">

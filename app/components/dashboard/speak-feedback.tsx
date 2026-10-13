@@ -69,8 +69,8 @@ function Part2Detail() {
   return (
     <DashboardShell
       title="Part 2 Detail"
-      contentBgClassName="bg-[#F8F9FC]"
-      mainClassName="flex-1 px-4 py-5 sm:px-5 lg:px-6"
+      contentBgClassName="bg-white"
+      mainClassName="flex-1 px-[1cm] py-5 sm:px-[1cm] lg:px-[1cm]"
       headerLeft={
         <Link
           href="/dashboard/speak/test-results"
@@ -281,8 +281,8 @@ function SpeakFeedbackDefault({
   return (
     <DashboardShell
       title={fromExam && part ? PART_TITLES[part] : "Your Feedback"}
-      contentBgClassName="bg-[#F8F9FC]"
-      mainClassName="flex-1 px-4 py-5 sm:px-5 lg:px-6"
+      contentBgClassName="bg-white"
+      mainClassName="flex-1 px-[1cm] py-5 sm:px-[1cm] lg:px-[1cm]"
       headerLeft={
         <Link
           href={fromExam ? "/dashboard/speak/test-results" : "/dashboard/speak"}

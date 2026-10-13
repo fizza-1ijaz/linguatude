@@ -338,7 +338,7 @@ export function DashboardHome() {
                     locked
                   />
                   <QuickTile
-                    href="/dashboard/streak"
+                    href="/dashboard/progress"
                     label="My Progress"
                     Icon={ChartQuickIcon}
                   />

@@ -10,8 +10,8 @@ export function SpeakMicrophone() {
   return (
     <DashboardShell
       title="Microphone Access"
-      contentBgClassName="bg-[#F8F9FC]"
-      mainClassName="flex-1 px-4 py-6 sm:px-6 lg:px-8"
+      contentBgClassName="bg-white"
+      mainClassName="flex-1 px-[1cm] py-6 sm:px-[1cm] lg:px-[1cm]"
       headerLeft={
         <Link
           href="/dashboard/speak"

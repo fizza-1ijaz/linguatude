@@ -78,8 +78,8 @@ export function MockHome() {
     <DashboardShell
       title="Mock Tests"
       subtitle="Practice with timed full exams and track your history."
-      contentBgClassName="bg-[#F8F9FC]"
-      mainClassName="flex flex-1 flex-col px-4 py-5 sm:px-6 lg:px-8"
+      contentBgClassName="bg-white"
+      mainClassName="flex flex-1 flex-col px-[1cm] py-5 sm:px-[1cm] lg:px-[1cm]"
     >
       <div className="mx-auto w-full max-w-6xl space-y-5 pb-10">
         <div className="grid items-stretch gap-5 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">

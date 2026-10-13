@@ -47,8 +47,8 @@ export function LessonMidCheck() {
         </span>
       }
       subtitle="Check your understanding so far"
-      contentBgClassName="bg-[#F8F9FC]"
-      mainClassName="flex flex-1 flex-col px-4 py-4 sm:px-5 lg:px-6"
+      contentBgClassName="bg-white"
+      mainClassName="flex flex-1 flex-col px-[1cm] py-4 sm:px-[1cm] lg:px-[1cm]"
       headerLeft={
         <Link
           href="/dashboard/skills/essay-development/core"

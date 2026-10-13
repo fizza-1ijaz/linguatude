@@ -29,7 +29,7 @@ export function WritingTask1() {
   return (
     <DashboardShell
       title="Task 1"
-      contentBgClassName="bg-[#F8F9FC]"
+      contentBgClassName="bg-white"
       headerLeft={
         <Link
           href="/dashboard/writing"

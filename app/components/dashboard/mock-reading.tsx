@@ -99,8 +99,8 @@ export function MockReading() {
           Reading
         </span>
       }
-      contentBgClassName="bg-[#F8F9FC]"
-      mainClassName="flex flex-1 flex-col px-4 py-4 sm:px-5 lg:px-6"
+      contentBgClassName="bg-white"
+      mainClassName="flex flex-1 flex-col px-[1cm] py-4 sm:px-[1cm] lg:px-[1cm]"
       headerRight={
         <div className="flex items-center gap-4 sm:gap-6">
           <span className="rounded-full bg-[#2b5ce6] px-5 py-1.5 text-sm font-bold tabular-nums text-white">
@@ -112,7 +112,7 @@ export function MockReading() {
         </div>
       }
     >
-      <div className="mx-auto grid w-full max-w-6xl flex-1 gap-4 pb-36 lg:grid-cols-2">
+      <div className="mx-auto grid w-full max-w-7xl flex-1 gap-4 pb-36 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.25fr)]">
         <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.12)] sm:p-6">
           <div className="flex gap-1 border-b border-[#E2E8F0]">
             {PASSAGES.map((p, i) => (
@@ -152,7 +152,7 @@ export function MockReading() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.12)] sm:p-6">
+        <section className="min-w-0 rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.12)] sm:p-6 lg:p-7">
           <h2 className="text-base font-bold text-[#141B2B]">Questions 1–5</h2>
           <p className="mt-1 text-sm text-[#64748B]">Choose the correct answer.</p>
           <div className="mt-3 border-t border-[#E2E8F0]" />
@@ -240,8 +240,8 @@ export function MockReading() {
         </section>
       </div>
 
-      <div className="dashboard-panel-bottom border-t border-[#E2E8F0] bg-[#F8F9FC] px-4 py-3 sm:px-6">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3">
+      <div className="dashboard-panel-bottom border-t border-[#E2E8F0] bg-white px-[1cm] py-3 sm:px-[1cm] lg:px-[1cm]">
+        <div className="mx-auto flex max-w-7xl flex-col gap-3">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-1.5">

@@ -62,7 +62,7 @@ export function SkillProgressUpdated() {
     <DashboardShell
       title="Skill Library"
       contentBgClassName="bg-white"
-      mainClassName="flex flex-1 flex-col px-4 py-6 sm:px-6"
+      mainClassName="flex flex-1 flex-col px-[1cm] py-6 sm:px-[1cm] lg:px-[1cm]"
       headerRight={
         <NotificationBellButton />
       }

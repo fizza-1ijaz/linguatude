@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { StreakAchievements } from "@/app/components/dashboard/streak-achievements";
+import { ProgressStreakCalendar } from "@/app/components/dashboard/progress-streak-calendar";
 
 export const metadata: Metadata = {
-  title: "Streak & Achievements | Linguatude",
-  description: "Track your Linguatude streak, XP, and weekly progress.",
+  title: "Streak & Calendar | Linguatude",
+  description: "Your consistency and activity over time.",
   robots: { index: false, follow: false },
 };
 
 export default function StreakPage() {
-  return <StreakAchievements />;
+  return <ProgressStreakCalendar />;
 }

@@ -87,7 +87,7 @@ export function SkillLibrary() {
   return (
     <DashboardShell
       title="Skill Library"
-      contentBgClassName="bg-[#F8F9FC]"
+      contentBgClassName="bg-white"
       headerRight={
         <NotificationBellButton />
       }

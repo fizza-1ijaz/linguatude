@@ -22,7 +22,7 @@ function PremiumConfirmInner() {
     <DashboardShell
       title={<span className="sr-only">Confirm Trial</span>}
       contentBgClassName="bg-white"
-      mainClassName="flex flex-1 flex-col px-4 py-6 sm:px-6"
+      mainClassName="flex flex-1 flex-col px-[1cm] py-6 sm:px-[1cm] lg:px-[1cm]"
       headerRight={
         <div className="relative">
           <Link
@@ -42,7 +42,7 @@ function PremiumConfirmInner() {
         </div>
       }
     >
-      <div className="mx-auto flex w-full max-w-lg flex-1 flex-col items-center pb-10">
+      <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center pb-10">
         <div className="flex size-[4.25rem] items-center justify-center rounded-full border-[2.5px] border-[#FB923C] bg-white text-[#F97316] shadow-[0_0_28px_rgba(249,115,22,0.28)]">
           <StarOutline />
         </div>

@@ -85,8 +85,8 @@ export function WritingModelAnswers() {
   return (
     <DashboardShell
       title="Model Answers"
-      contentBgClassName="bg-[#F8F9FC]"
-      mainClassName="flex min-h-0 flex-1 flex-col px-4 py-5 sm:px-6 lg:px-8"
+      contentBgClassName="bg-white"
+      mainClassName="flex min-h-0 flex-1 flex-col px-[1cm] py-5 sm:px-[1cm] lg:px-[1cm]"
       headerLeft={
         <Link
           href="/dashboard/writing/task1/feedback"

@@ -7,13 +7,14 @@ import { usePathname } from "next/navigation";
 
 const EXAM_STORAGE_KEY = "linguatude_dashboard_exam";
 
-const NAV = [
+const NAV_BASE = [
   { href: "/dashboard", label: "Home", icon: HomeIcon, match: "exact" as const },
   {
     href: "/dashboard/skills",
     label: "Practice",
     icon: PracticeIcon,
     match: "prefix" as const,
+    pteHref: "/dashboard/pte",
   },
   {
     href: "/dashboard/speak",
@@ -34,13 +35,13 @@ const NAV = [
     match: "prefix" as const,
   },
   {
-    href: "/dashboard/streak",
+    href: "/dashboard/progress",
     label: "Progress",
     icon: ChartIcon,
     match: "prefix" as const,
   },
   {
-    href: "/dashboard/switch-exam",
+    href: "/dashboard/account",
     label: "Account",
     icon: UserIcon,
     match: "prefix" as const,
@@ -57,6 +58,7 @@ export function DashboardShell({
   headerRight,
   mainClassName,
   contentBgClassName = "bg-white",
+  hideHeader = false,
 }: {
   children: React.ReactNode;
   title: React.ReactNode;
@@ -65,6 +67,7 @@ export function DashboardShell({
   headerRight?: React.ReactNode;
   mainClassName?: string;
   contentBgClassName?: string;
+  hideHeader?: boolean;
 }) {
   const pathname = usePathname();
   const [exam, setExam] = useState<ExamChoice>("ielts");
@@ -162,17 +165,23 @@ export function DashboardShell({
         </div>
 
         <nav className="hide-scrollbar mb-3 flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto overscroll-contain">
-          {NAV.map((item) => {
+          {NAV_BASE.map((item) => {
+            const href =
+              exam === "pte" && "pteHref" in item && item.pteHref
+                ? item.pteHref
+                : item.href;
             const active =
               item.match === "exact"
-                ? pathname === item.href
-                : pathname === item.href ||
-                  Boolean(pathname?.startsWith(`${item.href}/`));
+                ? pathname === href
+                : pathname === href ||
+                  Boolean(pathname?.startsWith(`${href}/`)) ||
+                  (href === "/dashboard/pte" &&
+                    Boolean(pathname?.startsWith("/dashboard/pte")));
             const Icon = item.icon;
             return (
               <Link
                 key={item.label}
-                href={item.href}
+                href={href}
                 className={`relative flex shrink-0 items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] font-semibold transition ${
                   active
                     ? "bg-[#EEF2FF] text-[#2b5ce6]"
@@ -194,9 +203,21 @@ export function DashboardShell({
 
         <div className="mt-auto shrink-0 space-y-0.5 border-t border-[#E2E8F0] pt-3">
           <Link
-            href="/contact"
-            className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] font-semibold text-[#64748B] transition hover:bg-[#F8FAFC] hover:text-[#1E293B]"
+            href="/dashboard/help"
+            className={`relative flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] font-semibold transition ${
+              pathname === "/dashboard/help" ||
+              Boolean(pathname?.startsWith("/dashboard/help/"))
+                ? "bg-[#EEF2FF] text-[#2b5ce6]"
+                : "text-[#64748B] hover:bg-[#F8FAFC] hover:text-[#1E293B]"
+            }`}
           >
+            {pathname === "/dashboard/help" ||
+            Boolean(pathname?.startsWith("/dashboard/help/")) ? (
+              <span
+                className="absolute inset-y-1.5 right-0 w-[3px] rounded-full bg-[#2b5ce6]"
+                aria-hidden
+              />
+            ) : null}
             <HelpIcon />
             Help Center
           </Link>
@@ -237,40 +258,42 @@ export function DashboardShell({
       <div
         className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto ${contentBgClassName}`}
       >
-        <header className="sticky top-0 z-20 flex items-center justify-between gap-4 border-b border-[#E2E8F0]/80 bg-white/95 px-4 py-3.5 backdrop-blur sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3">
-            {headerLeft}
-            <Link
-              href="/dashboard"
-              className="inline-flex size-9 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-[#E2E8F0] lg:hidden"
-              aria-label="Home"
-            >
-              <Image
-                src="/linguatude.webp"
-                alt=""
-                width={20}
-                height={20}
-                className="size-5 overflow-hidden rounded object-cover"
-              />
-            </Link>
-            <div className="min-w-0">
-              <h1 className="text-lg font-bold tracking-tight text-[#111827] sm:text-xl">
-                {title}
-              </h1>
-              {subtitle ? (
-                <p className="mt-0.5 max-w-xl text-[13px] leading-5 text-[#64748B]">
-                  {subtitle}
-                </p>
-              ) : null}
+        {hideHeader ? null : (
+          <header className="sticky top-0 z-20 flex items-center justify-between gap-4 border-b border-[#E2E8F0]/80 bg-white/95 px-4 py-3.5 backdrop-blur sm:px-6 lg:px-8">
+            <div className="flex items-center gap-3">
+              {headerLeft}
+              <Link
+                href="/dashboard"
+                className="inline-flex size-9 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-[#E2E8F0] lg:hidden"
+                aria-label="Home"
+              >
+                <Image
+                  src="/linguatude.webp"
+                  alt=""
+                  width={20}
+                  height={20}
+                  className="size-5 overflow-hidden rounded object-cover"
+                />
+              </Link>
+              <div className="min-w-0">
+                <h1 className="text-lg font-bold tracking-tight text-[#111827] sm:text-xl">
+                  {title}
+                </h1>
+                {subtitle ? (
+                  <p className="mt-0.5 max-w-xl text-[13px] leading-5 text-[#64748B]">
+                    {subtitle}
+                  </p>
+                ) : null}
+              </div>
             </div>
-          </div>
-          {headerRight}
-        </header>
+            {headerRight}
+          </header>
+        )}
 
         <main
           className={
             mainClassName ??
-            "flex-1 px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-6"
+            "flex-1 px-[1cm] py-4 sm:py-5 lg:py-6"
           }
         >
           {children}

@@ -53,8 +53,8 @@ export function LessonListening() {
           </span>
         </span>
       }
-      contentBgClassName="bg-[#F8F9FC]"
-      mainClassName="flex flex-1 flex-col px-4 py-4 sm:px-5 lg:px-6"
+      contentBgClassName="bg-white"
+      mainClassName="flex flex-1 flex-col px-[1cm] py-4 sm:px-[1cm] lg:px-[1cm]"
       headerLeft={
         <Link
           href="/dashboard/skills"
@@ -233,7 +233,7 @@ export function LessonListening() {
         </div>
       </div>
 
-      <div className="dashboard-panel-bottom border-t border-[#E2E8F0] bg-[#F1F5F9]/95 px-4 py-3 backdrop-blur sm:px-6">
+      <div className="dashboard-panel-bottom border-t border-[#E2E8F0] bg-white px-4 py-3 sm:px-6">
         <div className="mx-auto max-w-4xl">
           <Link
             href="/dashboard/skills/vocabulary"

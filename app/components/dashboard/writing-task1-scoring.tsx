@@ -41,7 +41,7 @@ export function WritingTask1Scoring() {
     <DashboardShell
       title="Scoring"
       contentBgClassName="bg-white"
-      mainClassName="flex flex-1 flex-col px-4 py-6 sm:px-6 lg:px-8"
+      mainClassName="flex flex-1 flex-col px-[1cm] py-6 sm:px-[1cm] lg:px-[1cm]"
       headerLeft={
         <Link
           href="/dashboard/writing/task1/write"

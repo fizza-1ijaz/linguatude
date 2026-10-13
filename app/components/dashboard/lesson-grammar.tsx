@@ -9,7 +9,7 @@ export function LessonGrammar() {
     <DashboardShell
       title="Grammar Practice"
       contentBgClassName="bg-white"
-      mainClassName="flex flex-1 flex-col px-4 py-5 sm:px-6"
+      mainClassName="flex flex-1 flex-col px-[1cm] py-5 sm:px-[1cm] lg:px-[1cm]"
       headerRight={
         <NotificationBellButton />
       }

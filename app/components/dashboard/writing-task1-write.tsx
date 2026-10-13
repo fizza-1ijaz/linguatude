@@ -97,8 +97,8 @@ export function WritingTask1Write() {
   return (
     <DashboardShell
       title="Task 1"
-      contentBgClassName="bg-[#F8F9FC]"
-      mainClassName="flex-1 px-4 py-4 sm:px-5 lg:px-6"
+      contentBgClassName="bg-white"
+      mainClassName="flex-1 px-[1cm] py-4 sm:px-[1cm] lg:px-[1cm]"
       headerLeft={
         <Link
           href="/dashboard/writing/task1"
@@ -278,7 +278,7 @@ export function WritingTask1Write() {
       </div>
 
       {showUnderWordFooter ? (
-        <div className="dashboard-panel-bottom border-t border-[#BFDBFE] bg-[#EFF6FF] px-4 py-3 sm:px-6">
+        <div className="dashboard-panel-bottom border-t border-[#BFDBFE] bg-white px-4 py-3 sm:px-6">
           <div className="mx-auto flex max-w-5xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="inline-flex items-start gap-2 text-sm font-medium text-[#1E40AF]">
               <InfoRefreshIcon />

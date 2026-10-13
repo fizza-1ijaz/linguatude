@@ -67,8 +67,8 @@ export function MockListening() {
           Listening
         </span>
       }
-      contentBgClassName="bg-[#F8F9FC]"
-      mainClassName="flex flex-1 flex-col px-4 py-4 sm:px-5 lg:px-6"
+      contentBgClassName="bg-white"
+      mainClassName="flex flex-1 flex-col px-[1cm] py-4 sm:px-[1cm] lg:px-[1cm]"
       headerRight={
         <div className="flex items-center gap-4 sm:gap-6">
           <span className="rounded-xl bg-[#2b5ce6] px-4 py-1.5 text-sm font-bold tabular-nums text-white">
@@ -80,7 +80,7 @@ export function MockListening() {
         </div>
       }
     >
-      <div className="mx-auto w-full max-w-3xl flex-1 space-y-4 pb-28">
+      <div className="mx-auto w-full max-w-6xl flex-1 space-y-4 pb-28">
         <div className="flex items-center gap-2 rounded-xl border border-[#FDBA74] bg-[#FFF7ED] px-4 py-3">
           <ClockIcon />
           <p className="text-sm text-[#9A3412]">
@@ -178,8 +178,8 @@ export function MockListening() {
         </section>
       </div>
 
-      <div className="dashboard-panel-bottom border-t border-[#E2E8F0] bg-white px-4 py-3 sm:px-6">
-        <div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
+      <div className="dashboard-panel-bottom border-t border-[#E2E8F0] bg-white px-[1cm] py-3 sm:px-[1cm] lg:px-[1cm]">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3">
           <div>
             <p className="text-[0.6875rem] font-medium uppercase tracking-wide text-[#94A3B8]">
               Questions answered

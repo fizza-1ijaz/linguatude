@@ -23,7 +23,7 @@ export function PremiumPurchase() {
     <DashboardShell
       title={<span className="sr-only">Premium</span>}
       contentBgClassName="bg-white"
-      mainClassName="flex flex-1 flex-col px-4 py-6 sm:px-6"
+      mainClassName="flex flex-1 flex-col px-[1cm] py-6 sm:px-[1cm] lg:px-[1cm]"
       headerRight={
         <div className="relative">
           <Link

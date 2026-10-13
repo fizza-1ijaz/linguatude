@@ -56,9 +56,9 @@ export function MockResultsLoading() {
     <DashboardShell
       title="Results Loading"
       contentBgClassName="bg-white"
-      mainClassName="flex flex-1 flex-col px-4 py-6 sm:px-6"
+      mainClassName="flex flex-1 flex-col px-[1cm] py-6 sm:px-[1cm] lg:px-[1cm]"
     >
-      <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-4 pb-8">
+      <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-4 pb-8">
         {SECTIONS.map((s) => (
           <div
             key={s.id}
@@ -93,15 +93,15 @@ export function MockResultsLoading() {
         </div>
 
         <div className="mt-4 rounded-2xl border border-[#BFDBFE] bg-[#F5F8FF] p-5 shadow-sm sm:p-6">
-          <div className="grid gap-6 sm:grid-cols-2 sm:gap-0">
-            <div className="sm:pr-6">
+          <div className="relative grid gap-6 sm:grid-cols-2 sm:gap-0">
+            <div className="flex flex-col items-center text-center sm:px-6">
               <p className="inline-flex items-center gap-2 text-sm font-semibold text-[#15803D]">
-                <BoxIcon />
+                <StarTiny />
                 When all sections are complete
               </p>
               <Link
                 href="/dashboard/mock/results"
-                className={`mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold text-white transition ${
+                className={`mt-4 inline-flex h-12 w-full max-w-sm items-center justify-center gap-2 rounded-xl text-sm font-semibold text-white transition ${
                   ready
                     ? "bg-[#15803D] hover:bg-[#166534]"
                     : "pointer-events-none bg-[#86EFAC]/80"
@@ -110,23 +110,33 @@ export function MockResultsLoading() {
                 <ChartTiny />
                 See Your Results
               </Link>
-              <p className="mt-2 text-center text-xs italic text-[#94A3B8]">
+              <p className="mt-2 text-xs italic text-[#94A3B8]">
                 This button will appear when your results are ready.
               </p>
             </div>
-            <div className="border-t border-[#E2E8F0] pt-6 sm:border-l sm:border-t-0 sm:pl-6 sm:pt-0">
+
+            <div
+              className="pointer-events-none absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 sm:block"
+              aria-hidden
+            >
+              <span className="flex size-9 items-center justify-center rounded-full border border-[#E2E8F0] bg-white text-xs font-medium text-[#94A3B8] shadow-sm">
+                or
+              </span>
+            </div>
+
+            <div className="flex flex-col items-center border-t border-[#E2E8F0] pt-6 text-center sm:border-l sm:border-t-0 sm:px-6 sm:pt-0">
               <p className="inline-flex items-center gap-2 text-sm font-semibold text-[#1D4ED8]">
                 <ClockTiny className="text-[#2b5ce6]" />
                 Taking longer than expected?
               </p>
               <Link
                 href="/dashboard"
-                className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-[#2b5ce6] bg-[#EFF6FF] text-sm font-semibold text-[#1D4ED8] transition hover:bg-[#DBEAFE]"
+                className="mt-4 inline-flex h-12 w-full max-w-sm items-center justify-center gap-2 rounded-xl border border-[#2b5ce6] bg-white text-sm font-semibold text-[#1D4ED8] transition hover:bg-[#EFF6FF]"
               >
                 <HomeTiny />
                 Go to Home we&apos;ll notify you when ready
               </Link>
-              <p className="mt-2 text-center text-xs text-[#94A3B8]">
+              <p className="mt-2 text-xs text-[#94A3B8]">
                 You&apos;ll get a notification when your results are ready.
               </p>
             </div>
@@ -176,10 +186,10 @@ function ClockTiny({ className = "text-[#EA580C]" }: { className?: string }) {
   );
 }
 
-function BoxIcon() {
+function StarTiny() {
   return (
-    <svg viewBox="0 0 14 14" className="size-3.5" fill="none" aria-hidden>
-      <rect x="2.5" y="2.5" width="9" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
+    <svg viewBox="0 0 14 14" className="size-3.5 text-[#16A34A]" fill="currentColor" aria-hidden>
+      <path d="m7 1.8 1.4 2.8 3.1.5-2.25 2.2.5 3.1L7 8.9l-2.75 1.5.5-3.1L2.5 5.1l3.1-.5L7 1.8Z" />
     </svg>
   );
 }

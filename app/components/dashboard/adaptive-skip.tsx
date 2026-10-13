@@ -8,8 +8,8 @@ export function AdaptiveSkip() {
   return (
     <DashboardShell
       title="Lesson Queue"
-      contentBgClassName="bg-[#F8F9FC]"
-      mainClassName="flex flex-1 flex-col px-4 py-5 sm:px-6"
+      contentBgClassName="bg-white"
+      mainClassName="flex flex-1 flex-col px-[1cm] py-5 sm:px-[1cm] lg:px-[1cm]"
       headerRight={
         <NotificationBellButton />
       }

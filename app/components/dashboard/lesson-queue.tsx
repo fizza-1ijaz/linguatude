@@ -49,8 +49,8 @@ export function LessonQueue() {
   return (
     <DashboardShell
       title="Lesson Queue"
-      contentBgClassName="bg-[#F8F9FC]"
-      mainClassName="flex-1 px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-6"
+      contentBgClassName="bg-white"
+      mainClassName="flex-1 px-[1cm] py-4 sm:px-[1cm] sm:py-5 lg:px-[1cm] lg:py-6"
       headerLeft={
         <Link
           href="/dashboard/skills"

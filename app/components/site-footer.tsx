@@ -44,7 +44,7 @@ const COMPANY_LINKS = [
 
 const SUPPORT_LINKS = [
   { href: "/contact", label: "Contact Us" },
-  { href: "/#start", label: "Help Center" },
+  { href: "/dashboard/help", label: "Help Center" },
   { href: "/terms-of-service", label: "Terms of Service" },
   { href: "/privacy-policy", label: "Privacy Policy" },
 ] as const;

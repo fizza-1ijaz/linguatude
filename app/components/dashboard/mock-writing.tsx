@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
 
 const CHART_YEARS = ["1990", "2000", "2010", "2020"] as const;
@@ -43,8 +43,8 @@ export function MockWriting() {
           Writing
         </span>
       }
-      contentBgClassName="bg-[#F8F9FC]"
-      mainClassName="flex flex-1 flex-col px-4 py-4 sm:px-5 lg:px-6"
+      contentBgClassName="bg-white"
+      mainClassName="flex flex-1 flex-col px-[1cm] py-4 sm:px-[1cm] lg:px-[1cm]"
       headerRight={
         <div className="flex items-center gap-4 sm:gap-6">
           <span className="rounded-xl bg-[#2b5ce6] px-4 py-1.5 text-sm font-bold tabular-nums text-white">
@@ -56,12 +56,12 @@ export function MockWriting() {
         </div>
       }
     >
-      <div className="mx-auto w-full max-w-5xl flex-1 space-y-4 pb-28">
-        <div className="grid grid-cols-2 gap-3">
+      <div className="mx-auto w-full max-w-4xl flex-1 space-y-4 pb-28">
+        <div className="flex flex-wrap items-stretch gap-3">
           <button
             type="button"
             onClick={() => setTask(1)}
-            className={`rounded-xl px-4 py-3 text-sm font-bold transition ${
+            className={`min-w-[9rem] rounded-xl px-5 py-3 text-left text-sm font-bold transition ${
               task === 1
                 ? "bg-[#2b5ce6] text-white"
                 : "border border-[#E2E8F0] bg-white text-[#64748B]"
@@ -72,7 +72,7 @@ export function MockWriting() {
           <button
             type="button"
             disabled
-            className="rounded-xl border border-[#E2E8F0] bg-white px-4 py-3 text-sm font-bold text-[#94A3B8]"
+            className="min-w-[11rem] rounded-xl border border-[#E2E8F0] bg-white px-5 py-3 text-left text-sm font-bold text-[#94A3B8]"
           >
             <span className="inline-flex items-center gap-1.5">
               <LockTiny />
@@ -84,7 +84,7 @@ export function MockWriting() {
           </button>
         </div>
 
-        <div className="flex items-center gap-2 rounded-xl bg-[#EFF6FF] px-4 py-3 text-sm">
+        <div className="inline-flex max-w-full items-center gap-2 rounded-xl bg-[#EFF6FF] px-4 py-3 text-sm">
           <InfoIcon />
           <p>
             <span className="font-semibold text-[#334155]">Task 1: 150+ words</span>
@@ -93,50 +93,92 @@ export function MockWriting() {
           </p>
         </div>
 
-        <section className="rounded-2xl border border-[#E2E8F0] bg-white shadow-[0_8px_24px_-16px_rgba(15,23,42,0.12)]">
-          <div className="flex items-center justify-between gap-3 border-b border-[#E2E8F0] px-5 py-3">
+        <section className="rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-sm sm:p-6">
+          <div className="flex items-center justify-between gap-3">
             <h2 className="text-base font-bold text-[#141B2B]">Task 1</h2>
             <button
               type="button"
               onClick={() => setShowPrompt((v) => !v)}
-              className="inline-flex items-center gap-1 text-sm font-semibold text-[#2b5ce6]"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5E7EB] bg-white px-3 py-1.5 text-sm font-semibold text-[#334155] transition hover:bg-[#F8FAFC]"
             >
               {showPrompt ? "Hide prompt" : "Show prompt"}
-              <span aria-hidden>{showPrompt ? "⌃" : "⌄"}</span>
+              <span className="text-xs" aria-hidden>
+                {showPrompt ? "⌃" : "⌄"}
+              </span>
             </button>
           </div>
 
           {showPrompt ? (
-            <div className="px-5 py-4">
-              <p className="text-sm leading-6 text-[#334155]">
+            <div className="mt-4">
+              <p className="text-sm leading-6 text-[#475569]">
                 The chart below shows the percentage of the population living in urban
                 areas in five countries from 1990 to 2020. Summarise the information by
                 selecting and reporting the main features, and make comparisons where
                 relevant.
               </p>
-              <div className="mt-5 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-4">
-                <div className="flex h-40 items-end gap-3 sm:gap-6">
-                  {CHART_YEARS.map((year, yi) => (
-                    <div key={year} className="flex flex-1 flex-col items-center gap-1">
-                      <div className="flex h-28 w-full items-end justify-center gap-0.5">
-                        {COUNTRIES.map((c) => (
-                          <span
-                            key={c.name}
-                            className="w-1.5 rounded-t-sm sm:w-2"
-                            style={{
-                              height: `${c.values[yi]}%`,
-                              background: c.color,
-                            }}
-                          />
+              <div className="mt-4 rounded-xl border border-[#E5E7EB] bg-white p-4 sm:p-5">
+                <div className="flex gap-4">
+                  <div className="flex shrink-0 flex-col justify-between py-1 text-[0.625rem] font-medium text-[#94A3B8]">
+                    {["100%", "75%", "50%", "25%", "0%"].map((y) => (
+                      <span key={y}>{y}</span>
+                    ))}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="relative h-40 border-b border-l border-[#E2E8F0]">
+                      {[25, 50, 75].map((g) => (
+                        <span
+                          key={g}
+                          className="absolute inset-x-0 border-t border-[#F1F5F9]"
+                          style={{ bottom: `${g}%` }}
+                        />
+                      ))}
+                      <div className="absolute inset-0 flex items-end gap-4 px-2 sm:gap-8 sm:px-4">
+                        {CHART_YEARS.map((year, yi) => (
+                          <div
+                            key={year}
+                            className="flex flex-1 items-end justify-center gap-0.5"
+                          >
+                            {COUNTRIES.map((c) => (
+                              <span
+                                key={c.name}
+                                className="w-1.5 rounded-t-sm sm:w-2"
+                                style={{
+                                  height: `${c.values[yi]}%`,
+                                  background: c.color,
+                                }}
+                              />
+                            ))}
+                          </div>
                         ))}
                       </div>
-                      <span className="text-[0.625rem] font-medium text-[#64748B]">
-                        {year}
-                      </span>
                     </div>
-                  ))}
+                    <div className="mt-2 flex px-2 sm:px-4">
+                      {CHART_YEARS.map((year) => (
+                        <span
+                          key={year}
+                          className="flex-1 text-center text-[0.625rem] font-medium text-[#64748B]"
+                        >
+                          {year}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="hidden shrink-0 flex-col justify-center gap-2 sm:flex">
+                    {COUNTRIES.map((c) => (
+                      <span
+                        key={c.name}
+                        className="inline-flex items-center gap-1.5 text-[0.6875rem] text-[#64748B]"
+                      >
+                        <span
+                          className="size-2.5 rounded-sm"
+                          style={{ background: c.color }}
+                        />
+                        {c.name}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                <div className="mt-3 flex flex-wrap justify-center gap-3">
+                <div className="mt-3 flex flex-wrap justify-center gap-3 sm:hidden">
                   {COUNTRIES.map((c) => (
                     <span
                       key={c.name}
@@ -153,31 +195,59 @@ export function MockWriting() {
               </div>
             </div>
           ) : null}
+        </section>
 
-          <div className="border-t border-[#E2E8F0]">
-            <div className="flex flex-wrap gap-1 border-b border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2 text-sm text-[#64748B]">
-              {["B", "I", "U", "•", "1.", "☰"].map((t) => (
-                <button
-                  key={t}
-                  type="button"
-                  className="flex size-8 items-center justify-center rounded-md font-semibold hover:bg-white"
-                >
-                  {t}
-                </button>
-              ))}
-            </div>
-            <textarea
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              placeholder="Start writing your answer here..."
-              className="min-h-[14rem] w-full resize-y bg-white px-5 py-4 text-sm leading-6 text-[#141B2B] outline-none placeholder:text-[#94A3B8]"
-            />
+        <section className="overflow-hidden rounded-xl border border-[#E5E7EB] bg-white shadow-sm">
+          <div className="flex flex-wrap items-center gap-1 border-b border-[#E5E7EB] bg-[#EFF2F5] px-2 py-2">
+            <ToolbarBtn label="Undo">
+              <UndoIcon />
+            </ToolbarBtn>
+            <ToolbarBtn label="Redo" faded>
+              <RedoIcon />
+            </ToolbarBtn>
+            <ToolbarSep />
+            <ToolbarBtn label="Bold">
+              <span className="font-bold">B</span>
+            </ToolbarBtn>
+            <ToolbarBtn label="Italic">
+              <span className="italic">I</span>
+            </ToolbarBtn>
+            <ToolbarBtn label="Underline">
+              <span className="underline">U</span>
+            </ToolbarBtn>
+            <ToolbarSep />
+            <ToolbarBtn label="Bulleted list">
+              <BulletListIcon />
+            </ToolbarBtn>
+            <ToolbarBtn label="Numbered list">
+              <NumberListIcon />
+            </ToolbarBtn>
+            <ToolbarSep />
+            <ToolbarBtn label="Align left">
+              <AlignLeftIcon />
+            </ToolbarBtn>
+            <ToolbarBtn label="Align center">
+              <AlignCenterIcon />
+            </ToolbarBtn>
+            <ToolbarBtn label="Align right">
+              <AlignRightIcon />
+            </ToolbarBtn>
+            <ToolbarSep />
+            <ToolbarBtn label="Clear formatting">
+              <ClearFormatIcon />
+            </ToolbarBtn>
           </div>
+          <textarea
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Start writing your answer here..."
+            className="min-h-[16rem] w-full resize-y bg-white px-4 py-4 text-sm leading-6 text-[#141B2B] outline-none placeholder:text-[#94A3B8] sm:px-5"
+          />
         </section>
       </div>
 
-      <div className="dashboard-panel-bottom border-t border-[#E2E8F0] bg-white px-4 py-3 sm:px-6">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3">
+      <div className="dashboard-panel-bottom border-t border-[#E2E8F0] bg-white px-[1cm] py-3 sm:px-[1cm] lg:px-[1cm]">
+        <div className="mx-auto flex max-w-4xl items-center justify-between gap-3">
           <div className="inline-flex items-center gap-2 rounded-xl border border-[#E2E8F0] px-3 py-2">
             <ClockTiny />
             <div>
@@ -197,6 +267,32 @@ export function MockWriting() {
       </div>
     </DashboardShell>
   );
+}
+
+function ToolbarBtn({
+  children,
+  label,
+  faded,
+}: {
+  children: ReactNode;
+  label: string;
+  faded?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      className={`flex size-8 items-center justify-center rounded-md text-[#475569] transition hover:bg-white ${
+        faded ? "opacity-40" : ""
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function ToolbarSep() {
+  return <span className="mx-0.5 h-5 w-px bg-[#D1D5DB]" aria-hidden />;
 }
 
 function QuillIcon() {
@@ -235,6 +331,77 @@ function ClockTiny() {
     <svg viewBox="0 0 16 16" className="size-4 text-[#EA580C]" fill="none" aria-hidden>
       <circle cx="8" cy="8" r="5.5" stroke="currentColor" strokeWidth="1.4" />
       <path d="M8 5v3.2l2 1.3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function UndoIcon() {
+  return (
+    <svg viewBox="0 0 14 14" className="size-3.5" fill="none" aria-hidden>
+      <path d="M4.5 5.5H3V4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M3.2 5.5A5 5 0 1 1 4 11" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function RedoIcon() {
+  return (
+    <svg viewBox="0 0 14 14" className="size-3.5" fill="none" aria-hidden>
+      <path d="M9.5 5.5H11V4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10.8 5.5A5 5 0 1 0 10 11" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function BulletListIcon() {
+  return (
+    <svg viewBox="0 0 14 14" className="size-3.5" fill="none" aria-hidden>
+      <path d="M5 3.5h7M5 7h7M5 10.5h7" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      <circle cx="2.5" cy="3.5" r="0.9" fill="currentColor" />
+      <circle cx="2.5" cy="7" r="0.9" fill="currentColor" />
+      <circle cx="2.5" cy="10.5" r="0.9" fill="currentColor" />
+    </svg>
+  );
+}
+
+function NumberListIcon() {
+  return (
+    <svg viewBox="0 0 14 14" className="size-3.5" fill="none" aria-hidden>
+      <path d="M5 3.5h7M5 7h7M5 10.5h7" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      <path d="M2 2.8h1.2V5M2 5h2.2M2.2 8.2c.6-.5 1.8-.3 1.8.6 0 .9-1.1 1-1.8 1.4h2" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function AlignLeftIcon() {
+  return (
+    <svg viewBox="0 0 14 14" className="size-3.5" fill="none" aria-hidden>
+      <path d="M2 3.5h10M2 7h7M2 10.5h9" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function AlignCenterIcon() {
+  return (
+    <svg viewBox="0 0 14 14" className="size-3.5" fill="none" aria-hidden>
+      <path d="M2 3.5h10M3.5 7h7M2.5 10.5h9" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function AlignRightIcon() {
+  return (
+    <svg viewBox="0 0 14 14" className="size-3.5" fill="none" aria-hidden>
+      <path d="M2 3.5h10M5 7h7M3 10.5h9" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function ClearFormatIcon() {
+  return (
+    <svg viewBox="0 0 14 14" className="size-3.5" fill="none" aria-hidden>
+      <path d="M4 4h5.5M6.5 4v6.5M3 11.5h7" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      <path d="m3 3 8 8" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
     </svg>
   );
 }
