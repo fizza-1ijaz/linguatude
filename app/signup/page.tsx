@@ -16,7 +16,7 @@ export default function SignupPage() {
   return (
     <AuthShell wide>
       <AuthCard>
-        <header>
+        <header className="text-center">
           <h1 className="text-[1.5rem] font-extrabold leading-tight tracking-tight text-[#1e1b4b] sm:text-[1.75rem]">
             Create your account
           </h1>

@@ -19,7 +19,7 @@ export function AccountProfile() {
       headerLeft={<BackToAccount />}
       headerRight={<AccountHeaderRight />}
     >
-      <div className="flex w-full flex-col gap-5 pb-10">
+      <div className="mx-auto flex w-full max-w-xl flex-col gap-5 pb-10">
         <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm sm:p-6">
           <label className="block">
             <span className="text-sm font-bold text-[#141B2B]">Full name</span>

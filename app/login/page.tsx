@@ -35,7 +35,7 @@ export default function LoginPage() {
   return (
     <AuthShell wide>
       <AuthCard>
-        <header>
+        <header className="text-center">
           <h1 className="text-[1.5rem] font-extrabold leading-tight tracking-tight text-[#141b2b] sm:text-[1.75rem]">
             Welcome back
           </h1>
