@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { Float, Reveal, Stagger, StaggerItem } from "@/app/components/marketing-motion";
 
@@ -32,32 +31,6 @@ const TRUST_ITEMS = [
     icon: "/home/trust-shield-check.svg",
   },
 ] as const;
-
-function StartFreeButton({ className }: { className?: string }) {
-  const reduce = useReducedMotion();
-
-  return (
-    <motion.div
-      whileHover={reduce ? undefined : { scale: 1.03, y: -2 }}
-      whileTap={reduce ? undefined : { scale: 0.98 }}
-      transition={{ type: "spring", stiffness: 420, damping: 22 }}
-    >
-      <Link
-        href="/login"
-        className={`inline-flex items-center justify-center gap-2 rounded-xl bg-[#2D5BFF] px-6 py-3 text-base font-bold text-white shadow-[0_10px_15px_-3px_rgba(79,70,229,0.3),0_4px_6px_-4px_rgba(79,70,229,0.3)] transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/60 focus-visible:ring-offset-2 sm:px-8 sm:py-4 sm:text-lg ${className ?? ""}`}
-      >
-        Start free
-        <motion.span
-          className="relative size-5 shrink-0 overflow-clip"
-          animate={reduce ? undefined : { x: [0, 3, 0] }}
-          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <Image src="/home/icon-arrow.svg" alt="" width={20} height={20} className="size-full" />
-        </motion.span>
-      </Link>
-    </motion.div>
-  );
-}
 
 export function HomeHero() {
   const reduce = useReducedMotion();
@@ -96,8 +69,6 @@ export function HomeHero() {
 
             <StaggerItem>
               <div className="mt-8 flex w-full flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-6">
-                <StartFreeButton />
-
                 <div className="flex items-center gap-3">
                   <div className="flex" aria-hidden>
                     {AVATARS.map((src, i) => (

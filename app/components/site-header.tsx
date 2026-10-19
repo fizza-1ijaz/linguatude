@@ -9,7 +9,6 @@ const PRIMARY_LINKS = [
   { href: "/", label: "Home" },
   { href: "/pte", label: "PTE" },
   { href: "/ielts", label: "IELTS" },
-  { href: "/dashboard", label: "Dashboard" },
   { href: "/features", label: "Features" },
   { href: "/about", label: "About" },
 ] as const;
@@ -34,26 +33,6 @@ function LogoMark() {
         priority
       />
     </span>
-  );
-}
-
-function StartFreeButton({ className }: { className?: string }) {
-  return (
-    <Link
-      href="/login"
-      className={`inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full bg-[#2D5BFF] px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_20px_-8px_rgba(45,91,255,0.55)] transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/50 focus-visible:ring-offset-2 ${className ?? ""}`}
-    >
-      Start free
-      <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" aria-hidden>
-        <path
-          d="M3 8h9M9 4.5 12.5 8 9 11.5"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </Link>
   );
 }
 
@@ -168,14 +147,6 @@ export function SiteHeader() {
         </nav>
 
         <div className="ml-auto flex items-center gap-2 lg:ml-0">
-          <motion.div
-            className="hidden sm:inline-flex"
-            whileHover={reduce ? undefined : { scale: 1.03, y: -1 }}
-            whileTap={reduce ? undefined : { scale: 0.98 }}
-          >
-            <StartFreeButton />
-          </motion.div>
-
           <motion.button
             type="button"
             className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-[#2D5BFF] transition hover:bg-[#eff6ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/40 dark:hover:bg-[#1e3a8a]/40 xl:hidden"
@@ -235,9 +206,6 @@ export function SiteHeader() {
                   </Link>
                 </motion.div>
               ))}
-              <div className="mt-3 sm:hidden">
-                <StartFreeButton className="w-full" />
-              </div>
             </nav>
           </motion.div>
         ) : null}

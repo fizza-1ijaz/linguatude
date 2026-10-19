@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { Reveal, Stagger, StaggerItem } from "@/app/components/marketing-motion";
 
@@ -64,34 +63,6 @@ const FEATURES = [
   },
 ] as const;
 
-function StartFreeButton({ className }: { className?: string }) {
-  const reduce = useReducedMotion();
-
-  return (
-    <motion.div
-      whileHover={reduce ? undefined : { scale: 1.03, y: -2 }}
-      whileTap={reduce ? undefined : { scale: 0.98 }}
-      className="inline-flex"
-    >
-      <Link
-        href="/login"
-        className={`inline-flex items-center justify-center gap-2 rounded-xl bg-[#2D5BFF] px-8 py-4 text-lg font-bold text-white transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/60 ${className ?? ""}`}
-      >
-        Start free
-        <span className="relative size-4 shrink-0 overflow-clip">
-          <Image
-            src="/features/icon-arrow.svg"
-            alt=""
-            width={16}
-            height={16}
-            className="size-full"
-          />
-        </span>
-      </Link>
-    </motion.div>
-  );
-}
-
 export function FeaturesPageContent() {
   const reduce = useReducedMotion();
 
@@ -126,11 +97,6 @@ export function FeaturesPageContent() {
             </p>
           </StaggerItem>
 
-          <StaggerItem>
-            <div className="mt-6 sm:mt-7">
-              <StartFreeButton />
-            </div>
-          </StaggerItem>
         </Stagger>
       </section>
 
@@ -251,7 +217,6 @@ export function FeaturesPageContent() {
                 </p>
               </div>
             </div>
-            <StartFreeButton className="w-full shrink-0 sm:w-auto" />
           </motion.div>
         </Reveal>
       </section>

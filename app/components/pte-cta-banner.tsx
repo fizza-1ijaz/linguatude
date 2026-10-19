@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 
 export function PteCtaBanner() {
   return (
@@ -23,21 +22,6 @@ export function PteCtaBanner() {
         <p className="relative mt-2 text-base text-white">
           Start preparing today and move closer to your Australia goals.
         </p>
-        <Link
-          href="/login"
-          className="relative mt-5 inline-flex items-center gap-2 rounded-lg bg-white px-6 py-2.5 text-base font-bold text-[#1d4ed8] shadow-sm transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
-        >
-          Start free
-          <span className="relative size-4 shrink-0 overflow-clip">
-            <Image
-              src="/pte/cta-arrow.svg"
-              alt=""
-              width={16}
-              height={16}
-              className="size-full"
-            />
-          </span>
-        </Link>
       </div>
     </section>
   );

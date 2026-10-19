@@ -49,21 +49,6 @@ export function IeltsGeneralHero() {
 
             <div className="mt-5 flex w-full flex-col items-stretch gap-3 sm:mt-6 sm:flex-row sm:items-center sm:gap-4">
               <Link
-                href="/login"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#2D5BFF] px-5 py-2.5 text-sm font-bold text-white shadow-[0_10px_15px_-3px_rgba(79,70,229,0.3)] transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/60 sm:px-6 sm:py-3 sm:text-base"
-              >
-                Start free
-                <span className="relative size-4 shrink-0 overflow-clip sm:size-5">
-                  <Image
-                    src="/ielts-general/icon-arrow.svg"
-                    alt=""
-                    width={20}
-                    height={20}
-                    className="size-full"
-                  />
-                </span>
-              </Link>
-              <Link
                 href="#difference"
                 className="inline-flex items-center justify-center rounded-xl border border-[#2D5BFF] bg-white px-5 py-2.5 text-center text-sm font-bold text-[#2D5BFF] shadow-[0_4px_4px_rgba(0,0,0,0.25)] transition hover:bg-[#f8faff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/40 sm:px-6 sm:py-3 sm:text-base"
               >

@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 
 export function IeltsGeneralCta() {
   return (
@@ -35,23 +34,6 @@ export function IeltsGeneralCta() {
               confidence
             </p>
 
-            <div className="mt-8">
-              <Link
-                href="/login"
-                className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-base font-bold text-[#1a1a24] transition hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
-              >
-                Start Free
-                <span className="relative size-5 shrink-0 overflow-clip">
-                  <Image
-                    src="/ielts-general/icon-arrow.svg"
-                    alt=""
-                    width={20}
-                    height={20}
-                    className="size-full [filter:brightness(0)]"
-                  />
-                </span>
-              </Link>
-            </div>
           </div>
 
           <div className="relative min-h-[16rem] sm:min-h-[20rem] lg:min-h-full">

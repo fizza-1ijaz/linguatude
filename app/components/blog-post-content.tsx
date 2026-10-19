@@ -110,23 +110,6 @@ export function BlogPostContent({ blog, categories = [] }: Props) {
                 ) : null}
               </div>
 
-              <div className="mt-6">
-                <Link
-                  href="/login"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#2D5BFF] px-8 py-3.5 text-base font-semibold text-white shadow-[0_4px_6px_-1px_rgba(76,36,251,0.2)] transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/60"
-                >
-                  Start free
-                  <span className="relative size-4 shrink-0 overflow-clip">
-                    <Image
-                      src="/blog/icon-arrow.svg"
-                      alt=""
-                      width={16}
-                      height={16}
-                      className="size-full brightness-0 invert"
-                    />
-                  </span>
-                </Link>
-              </div>
             </div>
 
             <div
@@ -175,23 +158,6 @@ export function BlogPostContent({ blog, categories = [] }: Props) {
                 <p className="mt-2 text-base leading-6 text-[#6b7280]">
                   Practice with real-time feedback that shows you where pauses
                   help — and where they hurt.
-                </p>
-              </div>
-              <div className="flex w-full shrink-0 flex-col items-center gap-2 sm:w-auto">
-                <Link
-                  href="/login"
-                  className="inline-flex w-full items-center justify-center rounded-lg bg-[#2D5BFF] px-8 py-3 text-base font-medium text-white transition hover:bg-[#244FE6] sm:w-auto"
-                >
-                  Start free
-                </Link>
-                <p className="flex items-center gap-1 text-xs text-[#6b7280]">
-                  <span
-                    className="inline-flex size-3 items-center justify-center rounded-full bg-[#6b7280]/20 text-[0.55rem] font-bold text-[#6b7280]"
-                    aria-hidden
-                  >
-                    ✓
-                  </span>
-                  No credit card required
                 </p>
               </div>
             </aside>

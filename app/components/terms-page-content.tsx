@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 
 const SECTIONS = [
   {
@@ -50,23 +49,6 @@ export function TermsPageContent() {
                 Last updated 23 Jul 2026
               </p>
 
-              <div className="mt-6">
-                <Link
-                  href="/login"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#2D5BFF] px-8 py-3.5 text-base font-semibold text-white shadow-[0_4px_6px_-1px_rgba(76,36,251,0.2)] transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/60"
-                >
-                  Start free
-                  <svg viewBox="0 0 16 16" className="size-4" fill="none" aria-hidden>
-                    <path
-                      d="M3 8h9M9 4.5 12.5 8 9 11.5"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </Link>
-              </div>
             </div>
 
             <div

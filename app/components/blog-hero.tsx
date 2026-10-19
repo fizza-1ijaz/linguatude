@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 
 type Props = {
   headline?: string;
@@ -50,24 +49,6 @@ export function BlogHero({
           <p className="mt-5 max-w-md text-pretty text-lg font-medium leading-7 text-[#464557]">
             {subheadline}
           </p>
-
-          <div className="mt-6">
-            <Link
-              href="/login"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#2D5BFF] px-8 py-4 text-lg font-bold text-white transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/60"
-            >
-              Start free
-              <span className="relative size-4 shrink-0 overflow-clip">
-                <Image
-                  src="/blog/icon-arrow.svg"
-                  alt=""
-                  width={16}
-                  height={16}
-                  className="size-full brightness-0 invert"
-                />
-              </span>
-            </Link>
-          </div>
         </div>
       </div>
     </section>
