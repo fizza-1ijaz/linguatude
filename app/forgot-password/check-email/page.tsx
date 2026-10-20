@@ -5,7 +5,7 @@ import { CheckEmailContent } from "@/app/components/check-email-content";
 
 export const metadata: Metadata = {
   title: "Check your inbox | Linguatude",
-  description: "We've sent a password reset link to your email.",
+  description: "Enter the 6-digit verification code sent to your email.",
   alternates: { canonical: "/forgot-password/check-email" },
   robots: { index: false, follow: false },
 };
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function CheckEmailPage() {
   return (
     <AuthShell>
-      <AuthCard>
+      <AuthCard className="px-5 py-7 sm:px-8 sm:py-9">
         <Suspense
           fallback={
             <p className="text-center text-sm text-[#434655]">Loading…</p>
