@@ -100,7 +100,7 @@ export function MockReading() {
         </span>
       }
       contentBgClassName="bg-white"
-      mainClassName="flex flex-1 flex-col px-[1cm] py-4 sm:px-[1cm] lg:px-[1cm]"
+      mainClassName="flex px-4 sm:px-6 lg:px-[1cm] flex-1 flex-col py-4"
       headerRight={
         <div className="flex items-center gap-4 sm:gap-6">
           <span className="rounded-full bg-[#2b5ce6] px-5 py-1.5 text-sm font-bold tabular-nums text-white">
@@ -240,7 +240,7 @@ export function MockReading() {
         </section>
       </div>
 
-      <div className="dashboard-panel-bottom border-t border-[#E2E8F0] bg-white px-[1cm] py-3 sm:px-[1cm] lg:px-[1cm]">
+      <div className="dashboard-panel-bottom border-t border-[#E2E8F0] bg-white px-4 py-3 sm:px-6 lg:px-[1cm]">
         <div className="mx-auto flex max-w-7xl flex-col gap-3">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="min-w-0 flex-1">

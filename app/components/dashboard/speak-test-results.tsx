@@ -21,7 +21,7 @@ export function SpeakTestResults() {
     <DashboardShell
       title="Test Results"
       contentBgClassName="bg-white"
-      mainClassName="flex-1 px-[1cm] py-5 sm:px-[1cm] sm:py-6 lg:px-[1cm] lg:py-7"
+      mainClassName="flex-1 px-4 sm:px-6 lg:px-[1cm] py-5 sm:py-6 lg:py-7"
     >
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-5 pb-8">
         {/* Summary */}

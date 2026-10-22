@@ -79,7 +79,7 @@ export function MockHome() {
       title="Mock Tests"
       subtitle="Practice with timed full exams and track your history."
       contentBgClassName="bg-white"
-      mainClassName="flex flex-1 flex-col px-[1cm] py-5 sm:px-[1cm] lg:px-[1cm]"
+      mainClassName="flex px-4 sm:px-6 lg:px-[1cm] flex-1 flex-col py-5"
     >
       <div className="mx-auto w-full max-w-6xl space-y-5 pb-10">
         <div className="grid items-stretch gap-5 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">

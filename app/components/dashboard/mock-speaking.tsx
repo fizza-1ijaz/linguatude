@@ -38,7 +38,7 @@ export function MockSpeaking() {
         </span>
       }
       contentBgClassName="bg-white"
-      mainClassName="flex flex-1 flex-col px-[1cm] py-4 sm:px-[1cm] lg:px-[1cm]"
+      mainClassName="flex px-4 sm:px-6 lg:px-[1cm] flex-1 flex-col py-4"
       headerRight={
         <div className="flex items-center gap-5 sm:gap-8">
           <div className="text-right">

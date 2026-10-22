@@ -88,7 +88,7 @@ export function NotFoundContent() {
             </h2>
 
             <nav
-              className="mt-6 flex flex-wrap items-stretch justify-center sm:mt-7 lg:flex-nowrap"
+              className="mt-6 flex flex-wrap items-stretch justify-center gap-y-2 sm:mt-7"
               aria-label="Explore Linguatude"
             >
               {EXPLORE_LINKS.map((item, index) => (

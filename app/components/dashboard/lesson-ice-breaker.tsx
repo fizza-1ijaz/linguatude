@@ -45,7 +45,7 @@ export function LessonIceBreaker() {
         </span>
       }
       contentBgClassName="bg-white"
-      mainClassName="flex flex-1 flex-col px-[1cm] py-4 sm:px-[1cm] lg:px-[1cm]"
+      mainClassName="flex px-4 sm:px-6 lg:px-[1cm] flex-1 flex-col py-4"
       headerLeft={
         <Link
           href="/dashboard/skills/essay-development"
@@ -223,7 +223,7 @@ export function LessonIceBreaker() {
             Continue Now
           </Link>
         </div>
-        <div className="mx-auto grid max-w-6xl grid-cols-3 gap-2 border-t border-[#E2E8F0] px-4 py-2.5 sm:px-6">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-2 border-t border-[#E2E8F0] px-4 py-2.5 sm:grid-cols-3 sm:px-6">
           <StepPill active icon={<SnowflakeIcon />} label="Ice-Breaker" time="2 min" />
           <StepPill icon={<BookIcon />} label="Core Content" time="6 min" />
           <StepPill icon={<PencilIcon />} label="Exit Assessment" time="2 min" />

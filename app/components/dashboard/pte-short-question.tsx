@@ -23,7 +23,7 @@ export function PteShortQuestion() {
     <DashboardShell
       title="Answer Short Question"
       contentBgClassName="bg-[#F8FAFC]"
-      mainClassName="flex flex-1 flex-col px-[1cm] py-5"
+      mainClassName="flex px-4 sm:px-6 lg:px-[1cm] flex-1 flex-col py-5"
       headerRight={<PteTaskHeaderRight />}
     >
       <div className="mx-auto grid w-full max-w-6xl flex-1 gap-5 pb-8 lg:grid-cols-[minmax(0,1.55fr)_minmax(16rem,0.7fr)]">

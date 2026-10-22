@@ -12,7 +12,7 @@ export function MockRecommendedNext() {
       title={<span className="sr-only">Recommended next step</span>}
       hideHeader
       contentBgClassName="bg-white"
-      mainClassName="relative flex flex-1 flex-col px-[1cm] py-6"
+      mainClassName="relative flex flex-1 flex-col px-4 sm:px-6 lg:px-[1cm] py-6"
     >
       <div className="absolute right-[1cm] top-4 z-10 sm:top-6">
         <div className="relative">

@@ -98,7 +98,7 @@ export function WritingTask1Write() {
     <DashboardShell
       title="Task 1"
       contentBgClassName="bg-white"
-      mainClassName="flex-1 px-[1cm] py-4 sm:px-[1cm] lg:px-[1cm]"
+      mainClassName="flex-1 px-4 sm:px-6 lg:px-[1cm] py-4"
       headerLeft={
         <Link
           href="/dashboard/writing/task1"

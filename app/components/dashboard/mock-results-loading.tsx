@@ -56,7 +56,7 @@ export function MockResultsLoading() {
     <DashboardShell
       title="Results Loading"
       contentBgClassName="bg-white"
-      mainClassName="flex flex-1 flex-col px-[1cm] py-6 sm:px-[1cm] lg:px-[1cm]"
+      mainClassName="flex px-4 sm:px-6 lg:px-[1cm] flex-1 flex-col py-6"
     >
       <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-4 pb-8">
         {SECTIONS.map((s) => (

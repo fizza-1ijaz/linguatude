@@ -33,7 +33,7 @@ export function HelpCenter() {
     <DashboardShell
       title="Help Center"
       contentBgClassName="bg-white"
-      mainClassName="flex flex-1 flex-col px-[1cm] py-6"
+      mainClassName="flex px-4 sm:px-6 lg:px-[1cm] flex-1 flex-col py-6"
       headerRight={<NotificationBellButton />}
     >
       <div className="mx-auto grid w-full max-w-6xl flex-1 items-center gap-8 pb-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-10">

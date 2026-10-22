@@ -70,7 +70,7 @@ function Part2Detail() {
     <DashboardShell
       title="Part 2 Detail"
       contentBgClassName="bg-white"
-      mainClassName="flex-1 px-[1cm] py-5 sm:px-[1cm] lg:px-[1cm]"
+      mainClassName="flex-1 px-4 sm:px-6 lg:px-[1cm] py-5"
       headerLeft={
         <Link
           href="/dashboard/speak/test-results"
@@ -133,7 +133,7 @@ function Part2Detail() {
               <p className="mt-3 text-center text-xs text-[#94A3B8]">
                 AI-estimated. Not an official result.
               </p>
-              <div className="mt-5 grid w-full grid-cols-4 gap-2">
+              <div className="mt-5 grid w-full grid-cols-2 gap-2 sm:grid-cols-4">
                 {PART2_BAND_METRICS.map((m) => (
                   <div
                     key={m.label}
@@ -282,7 +282,7 @@ function SpeakFeedbackDefault({
     <DashboardShell
       title={fromExam && part ? PART_TITLES[part] : "Your Feedback"}
       contentBgClassName="bg-white"
-      mainClassName="flex-1 px-[1cm] py-5 sm:px-[1cm] lg:px-[1cm]"
+      mainClassName="flex-1 px-4 sm:px-6 lg:px-[1cm] py-5"
       headerLeft={
         <Link
           href={fromExam ? "/dashboard/speak/test-results" : "/dashboard/speak"}

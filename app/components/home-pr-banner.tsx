@@ -91,7 +91,7 @@ export function HomePrBanner() {
                           </span>
                         ) : null}
                       </p>
-                      <dl className="mt-3 grid grid-cols-4 gap-2">
+                      <dl className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
                         {skillScores.map((skill, i) => (
                           <motion.div
                             key={skill.label}

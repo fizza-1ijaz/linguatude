@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function CheckEmailPage() {
   return (
     <AuthShell>
-      <AuthCard className="px-5 py-7 sm:px-8 sm:py-9">
+      <AuthCard className="px-4 py-6 sm:px-8 sm:py-9">
         <Suspense
           fallback={
             <p className="text-center text-sm text-[#434655]">Loading…</p>

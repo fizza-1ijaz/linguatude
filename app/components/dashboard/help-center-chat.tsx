@@ -145,7 +145,7 @@ export function HelpCenterChat() {
       <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden lg:flex-row">
         {/* Chat pane */}
         <section className="flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden bg-white">
-          <div className="flex items-center justify-between gap-3 border-b border-[#E2E8F0] px-[1cm] py-3.5">
+          <div className="flex items-center justify-between gap-3 border-b border-[#E2E8F0] px-4 sm:px-6 lg:px-[1cm] py-3.5">
             <div className="flex min-w-0 items-center gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -183,7 +183,7 @@ export function HelpCenterChat() {
             </div>
           </div>
 
-          <div className="help-chat-scroll min-h-0 flex-1 space-y-5 overflow-y-auto overflow-x-hidden px-[1cm] py-5">
+          <div className="help-chat-scroll min-h-0 flex-1 space-y-5 overflow-y-auto overflow-x-hidden px-4 sm:px-6 lg:px-[1cm] py-5">
             {messages.map((m) =>
               m.role === "ayra" ? (
                 <div key={m.id} className="flex max-w-[85%] items-start gap-2.5 sm:max-w-[70%]">
@@ -215,7 +215,7 @@ export function HelpCenterChat() {
             <div ref={bottomRef} />
           </div>
 
-          <div className="border-t border-[#F1F5F9] px-[1cm] py-4">
+          <div className="border-t border-[#F1F5F9] px-4 sm:px-6 lg:px-[1cm] py-4">
             <div className="mb-3 flex flex-wrap gap-1.5">
               {SUGGESTIONS.map((s) => (
                 <button

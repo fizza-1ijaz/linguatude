@@ -33,7 +33,7 @@ export function AccountNotifications() {
     <DashboardShell
       title="Notification Preferences"
       contentBgClassName="bg-white"
-      mainClassName="flex flex-1 flex-col px-[1cm] py-5"
+      mainClassName="flex px-4 sm:px-6 lg:px-[1cm] flex-1 flex-col py-5"
       headerLeft={<BackToAccount />}
       headerRight={<AccountHeaderRight />}
     >

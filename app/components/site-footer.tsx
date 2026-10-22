@@ -102,7 +102,7 @@ function FooterNewsletter() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="relative w-full max-w-xs" noValidate>
+    <form onSubmit={handleSubmit} className="relative w-full min-w-0 max-w-xs" noValidate>
       <label className="sr-only" htmlFor="footer-newsletter-email">
         Email address
       </label>
@@ -167,9 +167,9 @@ export function SiteFooter() {
       className="w-full shrink-0 border-t border-[#e2e8f0] bg-white"
       role="contentinfo"
     >
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-6 lg:gap-8">
-          <div className="sm:col-span-2">
+      <div className="mx-auto min-w-0 max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="grid min-w-0 grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-6 lg:gap-8">
+          <div className="min-w-0 sm:col-span-2">
             <Link href="/" className="inline-flex items-center gap-2">
               <span className="relative size-8 overflow-hidden rounded-lg">
                 <Image

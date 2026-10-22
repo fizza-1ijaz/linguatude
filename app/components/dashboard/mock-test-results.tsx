@@ -89,7 +89,7 @@ export function MockTestResults() {
     <DashboardShell
       title="Test Results"
       contentBgClassName="bg-white"
-      mainClassName="flex flex-1 flex-col px-[1cm] py-5 sm:px-[1cm] lg:px-[1cm]"
+      mainClassName="flex px-4 sm:px-6 lg:px-[1cm] flex-1 flex-col py-5"
       headerRight={
         <div className="flex items-center gap-2">
           <button

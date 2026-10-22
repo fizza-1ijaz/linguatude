@@ -74,7 +74,7 @@ export function PrivacyPageContent() {
   return (
     <>
       <section
-        className="mkt-hero relative isolate flex min-h-[calc(100svh-3.75rem)] flex-col overflow-hidden lg:min-h-[calc(100svh-4.75rem)]"
+        className="mkt-hero relative isolate flex min-h-[calc(100svh-3.75rem)] flex-col overflow-x-clip lg:min-h-[calc(100svh-4.75rem)]"
         aria-labelledby="privacy-heading"
       >
         <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
@@ -99,7 +99,7 @@ export function PrivacyPageContent() {
             </div>
 
             <div
-              className="pointer-events-none relative mx-auto w-full max-w-[min(100%,44rem)] scale-110 lg:max-w-none lg:scale-[1.2]"
+              className="pointer-events-none relative mx-auto w-full max-w-[min(100%,44rem)] max-sm:scale-100 sm:scale-110 lg:max-w-none lg:scale-[1.2]"
               aria-hidden
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}

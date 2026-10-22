@@ -115,7 +115,7 @@ export function PteScoreGoals() {
                     ) : null}
                   </div>
 
-                  <div className="mt-6 grid grid-cols-4 gap-2">
+                  <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4">
                     {scores.map((skill) => (
                       <div
                         key={skill.label}

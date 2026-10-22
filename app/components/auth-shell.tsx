@@ -25,7 +25,7 @@ export function AuthShell({
     <div className="auth-shell grid h-dvh max-h-dvh w-full min-w-0 flex-1 overflow-hidden bg-[#f3f4f8] md:grid-cols-2">
       <AuthBrandPanel />
 
-      <main className="relative flex h-full min-h-0 w-full min-w-0 flex-col justify-center overflow-hidden px-4 py-3 sm:px-6 md:px-6 md:py-4 lg:px-10 lg:py-5">
+      <main className="relative flex h-full min-h-0 w-full min-w-0 flex-col justify-center overflow-x-hidden overflow-y-auto px-3 py-3 sm:px-6 md:overflow-hidden md:px-6 md:py-4 lg:px-10 lg:py-5">
         <div className="relative mb-3 shrink-0 overflow-hidden rounded-2xl bg-[linear-gradient(180deg,#2B5CE6_0%,#1A3DA8_100%)] px-5 py-4 md:hidden">
           <div className="pointer-events-none absolute inset-0" aria-hidden>
             {/* eslint-disable-next-line @next/next/no-img-element */}

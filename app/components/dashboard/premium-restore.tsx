@@ -8,7 +8,7 @@ export function PremiumRestore() {
     <DashboardShell
       title={<span className="sr-only">Restore Purchase</span>}
       contentBgClassName="bg-white"
-      mainClassName="flex flex-1 flex-col px-[1cm] py-8 sm:px-[1cm] lg:px-[1cm]"
+      mainClassName="flex px-4 sm:px-6 lg:px-[1cm] flex-1 flex-col py-8"
     >
       <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center pb-10 text-center">
         <div className="flex size-16 items-center justify-center rounded-full bg-[#DBEAFE] text-[#1D4ED8] shadow-sm">

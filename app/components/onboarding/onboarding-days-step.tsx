@@ -86,7 +86,7 @@ export function OnboardingDaysStep() {
         <div className="mt-4 flex min-h-0 flex-1 flex-col justify-center">
           <div className="rounded-2xl border border-[#E8ECF4] bg-white p-3 shadow-[0_4px_16px_rgba(43,92,230,0.06)] sm:p-4">
             <div className="mb-3 h-0.5 w-full rounded-full bg-[#2b5ce6]/80" aria-hidden />
-            <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+            <div className="grid grid-cols-7 gap-1 sm:gap-2">
               {DAYS.map((day) => {
                 const selected = days.includes(day.id);
                 return (
@@ -95,21 +95,22 @@ export function OnboardingDaysStep() {
                     type="button"
                     onClick={() => toggleDay(day.id)}
                     aria-pressed={selected}
-                    className={`flex flex-col items-center rounded-xl px-1 py-2.5 transition sm:py-3 ${
+                    aria-label={`${day.full}${selected ? ", selected" : ""}`}
+                    className={`flex min-h-11 min-w-0 flex-col items-center rounded-xl px-0.5 py-2 transition sm:px-1 sm:py-3 ${
                       selected
                         ? "bg-[#E8EEFF]"
                         : "bg-[#F3F4F6] hover:bg-[#EEF1F6]"
                     }`}
                   >
                     <span
-                      className={`text-base font-bold sm:text-lg ${
+                      className={`text-sm font-bold sm:text-lg ${
                         selected ? "text-[#2b5ce6]" : "text-[#9CA3AF]"
                       }`}
                     >
                       {day.initial}
                     </span>
                     <span
-                      className={`mt-0.5 text-[0.625rem] font-semibold sm:text-[0.6875rem] ${
+                      className={`mt-0.5 text-[0.5625rem] font-semibold sm:text-[0.6875rem] ${
                         selected ? "text-[#475569]" : "text-[#9CA3AF]"
                       }`}
                     >

@@ -375,23 +375,23 @@ function StatCell({
 }) {
   return (
     <div
-      className={`flex flex-col items-center px-2 py-4 text-center ${
+      className={`flex flex-col items-center px-1.5 py-3 text-center sm:px-2 sm:py-4 ${
         border ? "border-x border-[#E2E8F0]" : ""
       }`}
     >
       <span
-        className={`mb-2 flex size-8 items-center justify-center rounded-full ${iconBg}`}
+        className={`mb-1.5 flex size-7 items-center justify-center rounded-full sm:mb-2 sm:size-8 ${iconBg}`}
       >
         {icon}
       </span>
       <p
-        className={`font-bold tabular-nums text-[#0F172A] ${
-          compact ? "text-sm" : "text-xl"
+        className={`font-bold tabular-nums leading-tight text-[#0F172A] ${
+          compact ? "text-xs sm:text-sm" : "text-lg sm:text-xl"
         }`}
       >
         {value}
       </p>
-      <p className="mt-0.5 text-[0.625rem] font-semibold uppercase tracking-[0.06em] text-[#94A3B8]">
+      <p className="mt-0.5 text-[0.5625rem] font-semibold uppercase leading-tight tracking-[0.04em] text-[#94A3B8] sm:text-[0.625rem] sm:tracking-[0.06em]">
         {label}
       </p>
     </div>

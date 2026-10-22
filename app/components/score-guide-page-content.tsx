@@ -183,8 +183,8 @@ export function ScoreGuidePageContent() {
             </p>
           </div>
 
-          <div className="mt-10 overflow-hidden rounded-2xl border border-[#e5e7eb] bg-white shadow-[0_8px_24px_-14px_rgba(15,23,42,0.16)]">
-            <div className="grid grid-cols-4 gap-0 bg-[#2D5BFF] px-3 py-4 text-center text-white sm:px-6 sm:py-5">
+          <div className="mt-10 overflow-x-auto rounded-2xl border border-[#e5e7eb] bg-white shadow-[0_8px_24px_-14px_rgba(15,23,42,0.16)]">
+            <div className="grid min-w-0 grid-cols-1 gap-3 bg-[#2D5BFF] px-3 py-4 text-center text-white sm:grid-cols-2 sm:gap-0 lg:grid-cols-4 sm:px-6 sm:py-5">
               <p className="text-xs font-bold sm:text-sm">Proficiency Level</p>
               <div>
                 <p className="text-xs font-bold sm:text-sm">PTE Components</p>
@@ -208,7 +208,7 @@ export function ScoreGuidePageContent() {
               </div>
             </div>
 
-            <div className="grid grid-cols-4 gap-0 border-b border-[#eef0f4] bg-[#fafbfe] px-3 py-3 text-center text-[0.65rem] font-medium text-[#9aa3b2] sm:px-6 sm:text-xs">
+            <div className="grid min-w-0 grid-cols-1 gap-3 border-b border-[#eef0f4] bg-[#fafbfe] px-3 py-3 text-center text-[0.65rem] font-medium text-[#9aa3b2] sm:grid-cols-2 sm:gap-0 lg:grid-cols-4 sm:px-6 sm:text-xs">
               <p className="text-left">English level</p>
               <div>
                 <p>PTE Academic — minimum component scores</p>
@@ -234,7 +234,7 @@ export function ScoreGuidePageContent() {
                   return (
                     <li
                       key={pathway.id}
-                      className="grid grid-cols-4 items-center gap-0 px-3 py-5 sm:px-6 sm:py-6"
+                      className="grid min-w-0 grid-cols-1 gap-4 px-3 py-5 sm:grid-cols-2 sm:gap-3 lg:grid-cols-4 lg:gap-0 sm:px-6 sm:py-6"
                     >
                       <div className="flex items-center gap-3 text-left">
                         <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#2D5BFF] sm:size-11">

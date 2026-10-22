@@ -27,7 +27,7 @@ export function TermsPageContent() {
   return (
     <>
       <section
-        className="mkt-hero relative isolate overflow-hidden"
+        className="mkt-hero relative isolate overflow-x-clip"
         aria-labelledby="terms-heading"
       >
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-14 pt-12 sm:px-6 sm:pb-16 sm:pt-14 lg:px-8 lg:pb-20 lg:pt-16">
@@ -52,7 +52,7 @@ export function TermsPageContent() {
             </div>
 
             <div
-              className="pointer-events-none relative mx-auto w-full max-w-[48rem] scale-110 lg:max-w-none lg:origin-center lg:scale-[1.25]"
+              className="pointer-events-none relative mx-auto w-full max-w-[48rem] max-sm:scale-100 sm:scale-110 lg:max-w-none lg:origin-center lg:scale-[1.25]"
               aria-hidden
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}

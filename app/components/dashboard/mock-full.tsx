@@ -46,7 +46,7 @@ export function MockFull() {
     <DashboardShell
       title="Full Mock Test"
       contentBgClassName="bg-white"
-      mainClassName="flex flex-1 flex-col px-[1cm] py-4 sm:px-[1cm] lg:px-[1cm]"
+      mainClassName="flex px-4 sm:px-6 lg:px-[1cm] flex-1 flex-col py-4"
       headerLeft={
         <Link
           href="/dashboard/mock"
@@ -90,8 +90,8 @@ export function MockFull() {
               </span>
               Test overview
             </h2>
-            <div className="mt-4 overflow-hidden rounded-xl border border-[#E2E8F0]">
-              <table className="w-full text-sm">
+            <div className="mt-4 overflow-x-auto rounded-xl border border-[#E2E8F0]">
+              <table className="w-full min-w-[18rem] text-sm">
                 <thead>
                   <tr className="bg-[#EEF2FF] text-left text-[#64748B]">
                     <th className="px-3 py-2.5 font-semibold">Section</th>

@@ -209,7 +209,8 @@ export function CheckEmailContent() {
         minute to arrive — please also check your spam folder.
       </p>
 
-      <div className="mt-5 flex w-full items-center gap-3 rounded-xl bg-[#F1F5F9] px-3.5 py-3 text-left sm:px-4">
+      <div className="mt-5 flex w-full flex-col gap-2 rounded-xl bg-[#F1F5F9] px-3 py-3 text-left sm:flex-row sm:items-center sm:gap-3 sm:px-4">
+        <div className="flex min-w-0 flex-1 items-start gap-3 sm:items-center">
         <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[#DBEAFE]">
           <svg viewBox="0 0 20 20" className="size-4 text-[#2b5ce6]" fill="none" aria-hidden>
             <rect
@@ -230,13 +231,14 @@ export function CheckEmailContent() {
             />
           </svg>
         </span>
-        <p className="min-w-0 flex-1 text-sm leading-5 text-[#475569]">
+        <p className="min-w-0 flex-1 break-words text-sm leading-5 text-[#475569]">
           We&apos;ve sent a verification code to{" "}
-          <span className="font-bold text-[#141b2b]">{email}</span>
+          <span className="font-bold break-all text-[#141b2b]">{email}</span>
         </p>
+        </div>
         <Link
           href="/forgot-password"
-          className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-[#2b5ce6] transition hover:underline"
+          className="inline-flex shrink-0 items-center gap-1 self-end text-sm font-semibold text-[#2b5ce6] transition hover:underline sm:self-auto"
         >
           <svg viewBox="0 0 16 16" className="size-3.5" fill="none" aria-hidden>
             <path
@@ -252,7 +254,7 @@ export function CheckEmailContent() {
       </div>
 
       <form onSubmit={handleVerify} className="mt-6 w-full">
-        <div className="flex justify-center gap-2 sm:gap-2.5">
+        <div className="mx-auto flex w-full max-w-sm justify-between gap-1.5 sm:gap-2.5">
           {digits.map((digit, i) => (
             <input
               key={i}
@@ -269,7 +271,7 @@ export function CheckEmailContent() {
               onKeyDown={(e) => onKeyDown(i, e)}
               onPaste={onPaste}
               onFocus={() => setActiveIndex(i)}
-              className={`size-11 rounded-lg border bg-white text-center text-lg font-bold text-[#141b2b] outline-none transition sm:size-12 ${
+              className={`h-11 min-w-0 flex-1 rounded-lg border bg-white text-center text-base font-bold text-[#141b2b] outline-none transition sm:h-12 sm:max-w-12 sm:flex-none sm:text-lg ${
                 activeIndex === i
                   ? "border-[#2b5ce6] ring-2 ring-[#2b5ce6]/25"
                   : "border-[#E2E8F0]"

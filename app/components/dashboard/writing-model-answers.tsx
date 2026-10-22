@@ -86,7 +86,7 @@ export function WritingModelAnswers() {
     <DashboardShell
       title="Model Answers"
       contentBgClassName="bg-white"
-      mainClassName="flex min-h-0 flex-1 flex-col px-[1cm] py-5 sm:px-[1cm] lg:px-[1cm]"
+      mainClassName="flex px-4 sm:px-6 lg:px-[1cm] min-h-0 flex-1 flex-col py-5"
       headerLeft={
         <Link
           href="/dashboard/writing/task1/feedback"
@@ -225,8 +225,8 @@ export function WritingModelAnswers() {
             </button>
 
             {compareOpen ? (
-              <div className="mt-4 overflow-hidden rounded-xl border border-[#EAECF0]">
-                <table className="w-full text-sm">
+              <div className="mt-4 overflow-x-auto rounded-xl border border-[#EAECF0]">
+                <table className="w-full min-w-[20rem] text-sm">
                   <thead>
                     <tr className="border-b border-[#EAECF0] bg-[#F8FAFC]">
                       <th className="px-3 py-2.5 text-left font-semibold text-[#64748B]" />

@@ -37,7 +37,7 @@ export function PteHighlightSummary() {
     <DashboardShell
       title="Highlight Correct Summary"
       contentBgClassName="bg-[#F8FAFC]"
-      mainClassName="flex flex-1 flex-col px-[1cm] py-5"
+      mainClassName="flex px-4 sm:px-6 lg:px-[1cm] flex-1 flex-col py-5"
       headerRight={<PteTaskHeaderRight />}
     >
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-5 pb-10">

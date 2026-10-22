@@ -44,7 +44,7 @@ export function MockWriting() {
         </span>
       }
       contentBgClassName="bg-white"
-      mainClassName="flex flex-1 flex-col px-[1cm] py-4 sm:px-[1cm] lg:px-[1cm]"
+      mainClassName="flex px-4 sm:px-6 lg:px-[1cm] flex-1 flex-col py-4"
       headerRight={
         <div className="flex items-center gap-4 sm:gap-6">
           <span className="rounded-xl bg-[#2b5ce6] px-4 py-1.5 text-sm font-bold tabular-nums text-white">
@@ -84,12 +84,12 @@ export function MockWriting() {
           </button>
         </div>
 
-        <div className="inline-flex max-w-full items-center gap-2 rounded-xl bg-[#EFF6FF] px-4 py-3 text-sm">
+        <div className="flex max-w-full flex-wrap items-center gap-x-3 gap-y-1 rounded-xl bg-[#EFF6FF] px-4 py-3 text-sm">
           <InfoIcon />
-          <p>
+          <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <span className="font-semibold text-[#334155]">Task 1: 150+ words</span>
-            <span className="ml-3 text-[#94A3B8]">Task 2: 250+ words</span>
-            <span className="ml-3 font-medium text-[#64748B]">({words} written)</span>
+            <span className="text-[#94A3B8]">Task 2: 250+ words</span>
+            <span className="font-medium text-[#64748B]">({words} written)</span>
           </p>
         </div>
 
@@ -246,7 +246,7 @@ export function MockWriting() {
         </section>
       </div>
 
-      <div className="dashboard-panel-bottom border-t border-[#E2E8F0] bg-white px-[1cm] py-3 sm:px-[1cm] lg:px-[1cm]">
+      <div className="dashboard-panel-bottom border-t border-[#E2E8F0] bg-white px-4 py-3 sm:px-6 lg:px-[1cm]">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3">
           <div className="inline-flex items-center gap-2 rounded-xl border border-[#E2E8F0] px-3 py-2">
             <ClockTiny />

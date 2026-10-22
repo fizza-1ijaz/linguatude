@@ -48,7 +48,7 @@ export function SpeakSetup() {
   return (
     <DashboardShell
       title="Practice Setup"
-      mainClassName="flex-1 px-[1cm] py-5 sm:px-[1cm] lg:px-[1cm]"
+      mainClassName="flex-1 px-4 sm:px-6 lg:px-[1cm] py-5"
       headerLeft={
         <Link
           href="/dashboard/speak"

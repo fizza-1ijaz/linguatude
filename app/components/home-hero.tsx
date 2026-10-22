@@ -37,14 +37,14 @@ export function HomeHero() {
 
   return (
     <section
-      className="home-hero relative isolate overflow-hidden"
+      className="home-hero relative isolate overflow-x-clip"
       aria-labelledby="hero-heading"
     >
       <div className="mx-auto w-full max-w-6xl px-4 pb-8 pt-10 sm:px-6 sm:pb-10 sm:pt-14 lg:px-8 lg:pb-12 lg:pt-16">
         <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-8 xl:gap-12">
           <Stagger className="relative z-10 flex min-w-0 flex-col items-start">
             <StaggerItem>
-              <p className="inline-flex items-center gap-2 rounded-3xl bg-[#bed4fa] px-5 py-3 text-sm font-bold uppercase tracking-[0.7px] text-[#2D5BFF] shadow-[0_4px_8px_rgba(0,0,0,0.25)] sm:text-base">
+              <p className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 rounded-3xl bg-[#bed4fa] px-5 py-3 text-sm font-bold uppercase tracking-[0.7px] text-[#2D5BFF] shadow-[0_4px_8px_rgba(0,0,0,0.25)] sm:text-base">
                 <span>PTE ACADEMIC</span>
                 <span className="size-1 rounded-full bg-[#2D5BFF]" aria-hidden />
                 <span>FIRST-CLASS</span>
@@ -99,7 +99,7 @@ export function HomeHero() {
             </StaggerItem>
           </Stagger>
 
-          <Reveal className="relative mx-auto w-full max-w-[34rem] lg:max-w-none" delay={0.12}>
+          <Reveal className="relative mx-auto w-full min-w-0 max-w-[34rem] lg:max-w-none" delay={0.12}>
             <motion.div
               className="hero-visual relative mx-auto aspect-[690/550] w-full overflow-hidden rounded-[3rem] sm:rounded-[4rem] lg:rounded-[6.25rem]"
               whileHover={reduce ? undefined : { scale: 1.015 }}

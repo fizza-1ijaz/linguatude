@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import { usePathname } from "next/navigation";
 
 const EXAM_STORAGE_KEY = "linguatude_dashboard_exam";
@@ -72,6 +72,7 @@ export function DashboardShell({
   const pathname = usePathname();
   const [exam, setExam] = useState<ExamChoice>("ielts");
   const [examOpen, setExamOpen] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const examRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -100,6 +101,24 @@ export function DashboardShell({
     return () => document.removeEventListener("mousedown", onDocClick);
   }, []);
 
+  useEffect(() => {
+    setMobileNavOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!mobileNavOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setMobileNavOpen(false);
+    }
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [mobileNavOpen]);
+
   function selectExam(next: ExamChoice) {
     setExam(next);
     setExamOpen(false);
@@ -110,196 +129,266 @@ export function DashboardShell({
     }
   }
 
+  const sidebarProps = {
+    exam,
+    examOpen,
+    examRef,
+    pathname,
+    onExamToggle: () => setExamOpen((o) => !o),
+    onSelectExam: selectExam,
+  };
+
   return (
     <div className="dashboard-shell flex h-dvh w-full overflow-hidden bg-white text-[#1E293B]">
       <aside className="hidden h-full w-[16.5rem] shrink-0 flex-col overflow-hidden border-r border-[#E2E8F0] bg-white px-3 py-4 lg:flex">
-        <Link href="/dashboard" className="mb-4 flex shrink-0 items-center gap-2.5 px-3">
-          <Image
-            src="/linguatude.webp"
-            alt=""
-            width={32}
-            height={32}
-            className="size-8 shrink-0 overflow-hidden rounded-lg object-cover"
-            priority
-          />
-          <span className="text-lg font-bold leading-none tracking-tight text-[#2b5ce6]">
-            Linguatude
-          </span>
-        </Link>
-
-        <div ref={examRef} className="relative mb-3 shrink-0 px-1">
-          <button
-            type="button"
-            onClick={() => setExamOpen((o) => !o)}
-            className="flex w-full items-center gap-2 rounded-xl border border-[#E2E8F0] bg-white px-3 py-2 text-left transition hover:border-[#BFDBFE]"
-            aria-expanded={examOpen}
-          >
-            <span className="size-2 shrink-0 rounded-full bg-[#2b5ce6]" aria-hidden />
-            <span className="min-w-0 flex-1 text-[13px] font-bold text-[#111827]">
-              {exam === "ielts" ? "IELTS" : "PTE"}
-            </span>
-            <ChevronDownIcon />
-          </button>
-          {examOpen ? (
-            <div className="absolute left-1 right-1 top-full z-40 mt-1 overflow-hidden rounded-xl border border-[#E2E8F0] bg-white shadow-lg">
-              {(["ielts", "pte"] as const).map((opt) => (
-                <button
-                  key={opt}
-                  type="button"
-                  onClick={() => selectExam(opt)}
-                  className={`flex w-full items-center gap-2 px-3 py-2.5 text-left text-[13px] font-semibold transition hover:bg-[#F8FAFC] ${
-                    exam === opt ? "bg-[#EEF2FF] text-[#2b5ce6]" : "text-[#334155]"
-                  }`}
-                >
-                  <span
-                    className={`size-2 rounded-full ${
-                      exam === opt ? "bg-[#2b5ce6]" : "bg-[#CBD5E1]"
-                    }`}
-                    aria-hidden
-                  />
-                  {opt === "ielts" ? "IELTS" : "PTE"}
-                </button>
-              ))}
-            </div>
-          ) : null}
-        </div>
-
-        <nav className="hide-scrollbar mb-3 flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto overscroll-contain">
-          {NAV_BASE.map((item) => {
-            const href =
-              exam === "pte" && "pteHref" in item && item.pteHref
-                ? item.pteHref
-                : item.href;
-            const active =
-              item.match === "exact"
-                ? pathname === href
-                : pathname === href ||
-                  Boolean(pathname?.startsWith(`${href}/`)) ||
-                  (href === "/dashboard/pte" &&
-                    Boolean(pathname?.startsWith("/dashboard/pte")));
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.label}
-                href={href}
-                className={`relative flex shrink-0 items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] font-semibold transition ${
-                  active
-                    ? "bg-[#EEF2FF] text-[#2b5ce6]"
-                    : "text-[#64748B] hover:bg-[#F8FAFC] hover:text-[#1E293B]"
-                }`}
-              >
-                {active ? (
-                  <span
-                    className="absolute inset-y-1.5 right-0 w-[3px] rounded-full bg-[#2b5ce6]"
-                    aria-hidden
-                  />
-                ) : null}
-                <Icon active={active} />
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        <div className="mt-auto shrink-0 space-y-0.5 border-t border-[#E2E8F0] pt-3">
-          <Link
-            href="/dashboard/help"
-            className={`relative flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] font-semibold transition ${
-              pathname === "/dashboard/help" ||
-              Boolean(pathname?.startsWith("/dashboard/help/"))
-                ? "bg-[#EEF2FF] text-[#2b5ce6]"
-                : "text-[#64748B] hover:bg-[#F8FAFC] hover:text-[#1E293B]"
-            }`}
-          >
-            {pathname === "/dashboard/help" ||
-            Boolean(pathname?.startsWith("/dashboard/help/")) ? (
-              <span
-                className="absolute inset-y-1.5 right-0 w-[3px] rounded-full bg-[#2b5ce6]"
-                aria-hidden
-              />
-            ) : null}
-            <HelpIcon />
-            Help Center
-          </Link>
-          <Link
-            href="/signin"
-            className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] font-semibold text-[#64748B] transition hover:bg-[#F8FAFC] hover:text-[#1E293B]"
-          >
-            <LogoutIcon />
-            Logout
-          </Link>
-
-          <Link
-            href="/dashboard/premium"
-            className="mt-2 flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-[#2b5ce6] text-[13px] font-semibold text-white shadow-sm transition hover:bg-[#244FE6]"
-          >
-            <CrownIcon />
-            Upgrade to Pro
-          </Link>
-
-          <button
-            type="button"
-            className="mt-3 flex w-full items-center gap-2.5 rounded-xl px-2 py-2 text-left transition hover:bg-[#F8FAFC]"
-          >
-            <span className="relative flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#93C5FD] to-[#2b5ce6] text-[13px] font-bold text-white">
-              A
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block text-[13px] font-bold text-[#1E293B]">Alex</span>
-              <span className="block text-[11px] font-medium text-[#94A3B8]">
-                Free Plan
-              </span>
-            </span>
-            <ChevronDownIcon />
-          </button>
-        </div>
+        <DashboardSidebarContent {...sidebarProps} />
       </aside>
+
+      {mobileNavOpen ? (
+        <>
+          <button
+            type="button"
+            className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+            aria-label="Close menu"
+            onClick={() => setMobileNavOpen(false)}
+          />
+          <aside className="fixed inset-y-0 left-0 z-50 flex w-[16.5rem] max-w-[85vw] flex-col overflow-hidden border-r border-[#E2E8F0] bg-white px-3 py-4 shadow-xl lg:hidden">
+            <DashboardSidebarContent
+              {...sidebarProps}
+              onNavigate={() => setMobileNavOpen(false)}
+            />
+          </aside>
+        </>
+      ) : null}
 
       <div
         className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto ${contentBgClassName}`}
       >
-        {hideHeader ? null : (
-          <header className="sticky top-0 z-20 flex items-center justify-between gap-4 border-b border-[#E2E8F0]/80 bg-white/95 px-4 py-3.5 backdrop-blur sm:px-6 lg:px-8">
-            <div className="flex items-center gap-3">
-              {headerLeft}
-              <Link
-                href="/dashboard"
-                className="inline-flex size-9 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-[#E2E8F0] lg:hidden"
-                aria-label="Home"
+        {hideHeader ? (
+          <div className="sticky top-0 z-20 flex items-center border-b border-[#E2E8F0]/80 bg-white/95 px-4 py-2.5 backdrop-blur lg:hidden">
+            <button
+              type="button"
+              className="inline-flex size-10 items-center justify-center rounded-xl text-[#334155] transition hover:bg-[#F8FAFC]"
+              aria-label="Open menu"
+              aria-expanded={mobileNavOpen}
+              onClick={() => setMobileNavOpen(true)}
+            >
+              <MenuIcon />
+            </button>
+          </div>
+        ) : (
+          <header className="sticky top-0 z-20 flex min-w-0 items-center justify-between gap-3 border-b border-[#E2E8F0]/80 bg-white/95 px-4 py-3.5 backdrop-blur sm:gap-4 sm:px-6 lg:px-8">
+            <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+              <button
+                type="button"
+                className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl text-[#334155] transition hover:bg-[#F8FAFC] lg:hidden"
+                aria-label="Open menu"
+                aria-expanded={mobileNavOpen}
+                onClick={() => setMobileNavOpen(true)}
               >
-                <Image
-                  src="/linguatude.webp"
-                  alt=""
-                  width={20}
-                  height={20}
-                  className="size-5 overflow-hidden rounded object-cover"
-                />
-              </Link>
-              <div className="min-w-0">
-                <h1 className="text-lg font-bold tracking-tight text-[#111827] sm:text-xl">
+                <MenuIcon />
+              </button>
+              {headerLeft}
+              <div className="min-w-0 flex-1">
+                <h1 className="truncate text-lg font-bold tracking-tight text-[#111827] sm:text-xl">
                   {title}
                 </h1>
                 {subtitle ? (
-                  <p className="mt-0.5 max-w-xl text-[13px] leading-5 text-[#64748B]">
+                  <p className="mt-0.5 max-w-xl truncate text-[13px] leading-5 text-[#64748B] sm:whitespace-normal">
                     {subtitle}
                   </p>
                 ) : null}
               </div>
             </div>
-            {headerRight}
+            {headerRight ? (
+              <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 sm:gap-3">
+                {headerRight}
+              </div>
+            ) : null}
           </header>
         )}
 
         <main
           className={
             mainClassName ??
-            "flex-1 px-[1cm] py-4 sm:py-5 lg:py-6"
+            "flex-1 px-4 py-4 sm:px-6 sm:py-5 lg:px-[1cm] lg:py-6"
           }
         >
           {children}
         </main>
       </div>
     </div>
+  );
+}
+
+function DashboardSidebarContent({
+  exam,
+  examOpen,
+  examRef,
+  pathname,
+  onExamToggle,
+  onSelectExam,
+  onNavigate,
+}: {
+  exam: ExamChoice;
+  examOpen: boolean;
+  examRef: RefObject<HTMLDivElement | null>;
+  pathname: string | null;
+  onExamToggle: () => void;
+  onSelectExam: (next: ExamChoice) => void;
+  onNavigate?: () => void;
+}) {
+  return (
+    <>
+      <Link
+        href="/dashboard"
+        className="mb-4 flex shrink-0 items-center gap-2.5 px-3"
+        onClick={onNavigate}
+      >
+        <Image
+          src="/linguatude.webp"
+          alt=""
+          width={32}
+          height={32}
+          className="size-8 shrink-0 overflow-hidden rounded-lg object-cover"
+          priority
+        />
+        <span className="text-lg font-bold leading-none tracking-tight text-[#2b5ce6]">
+          Linguatude
+        </span>
+      </Link>
+
+      <div ref={examRef} className="relative mb-3 shrink-0 px-1">
+        <button
+          type="button"
+          onClick={onExamToggle}
+          className="flex w-full items-center gap-2 rounded-xl border border-[#E2E8F0] bg-white px-3 py-2 text-left transition hover:border-[#BFDBFE]"
+          aria-expanded={examOpen}
+        >
+          <span className="size-2 shrink-0 rounded-full bg-[#2b5ce6]" aria-hidden />
+          <span className="min-w-0 flex-1 text-[13px] font-bold text-[#111827]">
+            {exam === "ielts" ? "IELTS" : "PTE"}
+          </span>
+          <ChevronDownIcon />
+        </button>
+        {examOpen ? (
+          <div className="absolute left-1 right-1 top-full z-40 mt-1 overflow-hidden rounded-xl border border-[#E2E8F0] bg-white shadow-lg">
+            {(["ielts", "pte"] as const).map((opt) => (
+              <button
+                key={opt}
+                type="button"
+                onClick={() => onSelectExam(opt)}
+                className={`flex w-full items-center gap-2 px-3 py-2.5 text-left text-[13px] font-semibold transition hover:bg-[#F8FAFC] ${
+                  exam === opt ? "bg-[#EEF2FF] text-[#2b5ce6]" : "text-[#334155]"
+                }`}
+              >
+                <span
+                  className={`size-2 rounded-full ${
+                    exam === opt ? "bg-[#2b5ce6]" : "bg-[#CBD5E1]"
+                  }`}
+                  aria-hidden
+                />
+                {opt === "ielts" ? "IELTS" : "PTE"}
+              </button>
+            ))}
+          </div>
+        ) : null}
+      </div>
+
+      <nav className="hide-scrollbar mb-3 flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto overscroll-contain">
+        {NAV_BASE.map((item) => {
+          const href =
+            exam === "pte" && "pteHref" in item && item.pteHref
+              ? item.pteHref
+              : item.href;
+          const active =
+            item.match === "exact"
+              ? pathname === href
+              : pathname === href ||
+                Boolean(pathname?.startsWith(`${href}/`)) ||
+                (href === "/dashboard/pte" &&
+                  Boolean(pathname?.startsWith("/dashboard/pte")));
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.label}
+              href={href}
+              onClick={onNavigate}
+              className={`relative flex shrink-0 items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] font-semibold transition ${
+                active
+                  ? "bg-[#EEF2FF] text-[#2b5ce6]"
+                  : "text-[#64748B] hover:bg-[#F8FAFC] hover:text-[#1E293B]"
+              }`}
+            >
+              {active ? (
+                <span
+                  className="absolute inset-y-1.5 right-0 w-[3px] rounded-full bg-[#2b5ce6]"
+                  aria-hidden
+                />
+              ) : null}
+              <Icon active={active} />
+              {item.label}
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className="mt-auto shrink-0 space-y-0.5 border-t border-[#E2E8F0] pt-3">
+        <Link
+          href="/dashboard/help"
+          onClick={onNavigate}
+          className={`relative flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] font-semibold transition ${
+            pathname === "/dashboard/help" ||
+            Boolean(pathname?.startsWith("/dashboard/help/"))
+              ? "bg-[#EEF2FF] text-[#2b5ce6]"
+              : "text-[#64748B] hover:bg-[#F8FAFC] hover:text-[#1E293B]"
+          }`}
+        >
+          {pathname === "/dashboard/help" ||
+          Boolean(pathname?.startsWith("/dashboard/help/")) ? (
+            <span
+              className="absolute inset-y-1.5 right-0 w-[3px] rounded-full bg-[#2b5ce6]"
+              aria-hidden
+            />
+          ) : null}
+          <HelpIcon />
+          Help Center
+        </Link>
+        <Link
+          href="/signin"
+          onClick={onNavigate}
+          className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] font-semibold text-[#64748B] transition hover:bg-[#F8FAFC] hover:text-[#1E293B]"
+        >
+          <LogoutIcon />
+          Logout
+        </Link>
+
+        <Link
+          href="/dashboard/premium"
+          onClick={onNavigate}
+          className="mt-2 flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-[#2b5ce6] text-[13px] font-semibold text-white shadow-sm transition hover:bg-[#244FE6]"
+        >
+          <CrownIcon />
+          Upgrade to Pro
+        </Link>
+
+        <button
+          type="button"
+          className="mt-3 flex w-full items-center gap-2.5 rounded-xl px-2 py-2 text-left transition hover:bg-[#F8FAFC]"
+        >
+          <span className="relative flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#93C5FD] to-[#2b5ce6] text-[13px] font-bold text-white">
+            A
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-[13px] font-bold text-[#1E293B]">Alex</span>
+            <span className="block text-[11px] font-medium text-[#94A3B8]">
+              Free Plan
+            </span>
+          </span>
+          <ChevronDownIcon />
+        </button>
+      </div>
+    </>
   );
 }
 
@@ -511,6 +600,19 @@ function CrownIcon() {
   return (
     <svg viewBox="0 0 20 20" className="size-3.5" fill="#FBBF24" aria-hidden>
       <path d="M3 14.5 4.5 7l3 3.5L10 5.5l2.5 5 3-3.5 1.5 7.5H3Z" />
+    </svg>
+  );
+}
+
+function MenuIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-6" fill="none" aria-hidden>
+      <path
+        d="M4 7h16M4 12h16M4 17h16"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

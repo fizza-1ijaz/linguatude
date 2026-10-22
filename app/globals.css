@@ -73,6 +73,13 @@ html {
   overflow-x: clip;
 }
 
+/* Prevent raster media from forcing horizontal page scroll */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
 /* Scroll without visible scrollbars (diagnostic + dashboard sidebar) */
 .hide-scrollbar,
 html.hide-scrollbar,

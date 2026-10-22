@@ -52,7 +52,7 @@ export function ProgressScoreHistory() {
     <DashboardShell
       title="Score History"
       contentBgClassName="bg-white"
-      mainClassName="flex flex-1 flex-col px-[1cm] py-5"
+      mainClassName="flex px-4 sm:px-6 lg:px-[1cm] flex-1 flex-col py-5"
       headerLeft={<BackToProgress />}
       headerRight={
         <div className="flex items-center gap-2.5">
@@ -88,7 +88,8 @@ export function ProgressScoreHistory() {
               </div>
             </div>
 
-            <div className="mt-5 flex gap-2">
+            <div className="mt-5 overflow-x-auto">
+              <div className="flex min-w-[18rem] gap-2">
               <div className="flex w-8 shrink-0 flex-col justify-between py-1 text-right text-[0.625rem] text-[#94A3B8]">
                 {Y_TICKS.map((t) => (
                   <span key={t}>{t}</span>
@@ -149,6 +150,7 @@ export function ProgressScoreHistory() {
                 <p className="mt-2 text-center text-[0.625rem] text-[#94A3B8]">
                   PTE Score (10-90)
                 </p>
+              </div>
               </div>
             </div>
           </section>
