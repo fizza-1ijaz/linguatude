@@ -137,13 +137,20 @@ function CookieCrackGraphic({
   );
 }
 
-export function CookiePreferencesButton() {
+export function CookiePreferencesButton({
+  className,
+}: {
+  className?: string;
+} = {}) {
   const { openPreferences } = useCookieConsent();
   return (
     <button
       type="button"
       onClick={openPreferences}
-      className="text-left font-medium text-[var(--on-brand)]/85 underline decoration-current/35 underline-offset-2 transition hover:text-[var(--accent)] hover:decoration-[var(--accent)]"
+      className={
+        className ??
+        "text-left font-medium text-[var(--on-brand)]/85 underline decoration-current/35 underline-offset-2 transition hover:text-[var(--accent)] hover:decoration-[var(--accent)]"
+      }
     >
       Cookie settings
     </button>

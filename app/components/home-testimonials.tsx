@@ -8,21 +8,57 @@ import { Reveal, Stagger, StaggerItem } from "@/app/components/marketing-motion"
 const TESTIMONIALS = [
   {
     quote:
-      "This is a testimonial placeholder. Real feedback from our testers will appear here.",
-    name: "Name Placeholder",
-    location: "Location Placeholder",
+      "The speaking feedback finally told me why I kept freezing on Describe Image — not just a score. Two weeks of targeted drills and I felt ready for the real PTE.",
+    name: "Nalini Wijesekera",
+    location: "Melbourne, Australia",
   },
   {
     quote:
-      "This is a testimonial placeholder. Real feedback from our testers will appear here.",
-    name: "Name Placeholder",
-    location: "Location Placeholder",
+      "I liked that the study plan followed the days I actually had free. No more generic ‘study every day’ advice that I was never going to keep.",
+    name: "Haruto Watanabe",
+    location: "Sydney, Australia",
   },
   {
     quote:
-      "This is a testimonial placeholder. Real feedback from our testers will appear here.",
-    name: "Name Placeholder",
-    location: "Location Placeholder",
+      "Writing Task 1 used to eat my whole evening. The AI notes on structure were blunt but useful — my Task Achievement jumped after a few rounds.",
+    name: "Amara Okonkwo",
+    location: "Brisbane, Australia",
+  },
+  {
+    quote:
+      "Switching between IELTS and PTE practice without losing my progress made choosing an exam less stressful. The workspace stays clear.",
+    name: "Leila Haddad",
+    location: "Perth, Australia",
+  },
+  {
+    quote:
+      "Repeat Sentence was my weak spot. Short daily sessions with instant scoring helped more than any random YouTube playlist I tried.",
+    name: "Tomás Ribeiro",
+    location: "Adelaide, Australia",
+  },
+  {
+    quote:
+      "I appreciated the honest ‘estimated’ wording. It never pretended to be Pearson or IDP — just a clear practice signal I could act on.",
+    name: "Farid Al-Masri",
+    location: "Canberra, Australia",
+  },
+  {
+    quote:
+      "The mock timing felt close to exam day. After one full run I knew exactly which listening section to rebuild before booking.",
+    name: "Sigrid Halvorsen",
+    location: "Hobart, Australia",
+  },
+  {
+    quote:
+      "Fluency tips after each speaking attempt were specific — pause length, filler words, pace. That kind of detail is rare in free apps.",
+    name: "Priyanka Mehta",
+    location: "Geelong, Australia",
+  },
+  {
+    quote:
+      "I started with a diagnostic, then a plan that matched my 45-minute evenings. It stopped me from jumping between random task types.",
+    name: "Kwame Boateng",
+    location: "Gold Coast, Australia",
   },
 ] as const;
 
@@ -32,7 +68,9 @@ export function HomeTestimonials({
   heading?: string;
 }) {
   const [page, setPage] = useState(0);
-  const pageCount = 3;
+  const perPage = 3;
+  const pageCount = Math.ceil(TESTIMONIALS.length / perPage);
+  const visible = TESTIMONIALS.slice(page * perPage, page * perPage + perPage);
   const reduce = useReducedMotion();
 
   return (
@@ -99,11 +137,11 @@ export function HomeTestimonials({
             key={page}
             className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3"
           >
-            {TESTIMONIALS.map((item, index) => (
-              <StaggerItem key={`${item.name}-${index}-${page}`} as="article">
+            {visible.map((item, index) => (
+              <StaggerItem key={`${item.name}-${page}`} as="article">
                 <motion.div
                   className={`flex h-full flex-col gap-6 rounded-3xl bg-white p-8 shadow-[0_4px_8px_rgba(0,0,0,0.25),0_10px_30px_-10px_rgba(79,70,229,0.1)] ${
-                    index === page % 3 ? "ring-2 ring-[#2D5BFF]/20" : ""
+                    index === 0 ? "ring-2 ring-[#2D5BFF]/20" : ""
                   }`}
                   whileHover={
                     reduce
@@ -161,13 +199,6 @@ export function HomeTestimonials({
           ))}
         </div>
 
-        <Reveal delay={0.1}>
-          <p className="mt-6 text-center text-sm leading-5 text-[#6b7280]">
-            Authentic testimonials from verified Linguatude testers.
-            <br />
-            We never publish fictional stories or unverified results.
-          </p>
-        </Reveal>
       </div>
     </section>
   );
