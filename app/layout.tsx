@@ -13,11 +13,10 @@ const inter = Inter({
 const siteUrl = new URL("https://linguatude.com");
 
 const description =
-  "Linguatude is an AI-powered English test preparation platform. Get diagnosed, build a personalised study plan, and prepare for IELTS, TOEFL, PTE Academic. Coming soon.";
+  "Linguatude is an AI-powered English test preparation platform. Get diagnosed, build a personalised study plan, and prepare for IELTS and PTE Academic. Cambridge and TOEFL coming soon.";
 
 const keywords = [
   "IELTS preparation",
-  "TOEFL preparation",
   "PTE Academic preparation",
   "English test prep",
   "AI English test preparation",
@@ -25,11 +24,10 @@ const keywords = [
   "online IELTS preparation",
   "English proficiency test preparation",
   "Cambridge English preparation",
+  "TOEFL preparation",
   "AI language learning",
   "IELTS band score improvement",
   "English test coaching",
-  "affordable IELTS prep",
-  "TOEFL study plan",
   "PTE practice",
 ];
 
@@ -53,7 +51,7 @@ export const metadata: Metadata = {
     apple: [{ url: "/linguatude.webp", type: "image/webp" }],
   },
   title:
-    "Linguatude — AI English Test Preparation | IELTS, TOEFL, PTE & More | Coming Soon",
+    "Linguatude — AI English Test Preparation | IELTS & PTE Academic",
   description,
   keywords,
   alternates: {
@@ -64,15 +62,15 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: siteUrl,
     siteName: "Linguatude",
-    title: "Linguatude — AI English Test Preparation",
+    title: "Linguatude — AI English Test Preparation | IELTS & PTE Academic",
     description:
-      "Prepare for IELTS, TOEFL, PTE Academic, and Cambridge English tests with an AI coach that diagnoses your level and builds your plan. Coming soon to linguatude.com",
+      "Prepare for IELTS and PTE Academic with an AI coach that diagnoses your level and builds your plan. Cambridge and TOEFL coming soon.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Linguatude — AI English Test Preparation",
+    title: "Linguatude — AI English Test Preparation | IELTS & PTE Academic",
     description:
-      "Prepare for IELTS, TOEFL, PTE Academic, and Cambridge English tests with an AI coach that diagnoses your level and builds your plan. Coming soon to linguatude.com",
+      "Prepare for IELTS and PTE Academic with an AI coach that diagnoses your level and builds your plan. Cambridge and TOEFL coming soon.",
   },
 };
 
