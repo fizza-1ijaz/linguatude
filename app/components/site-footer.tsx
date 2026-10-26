@@ -234,11 +234,11 @@ export function SiteFooter() {
 function ComingSoonStoreButton({ store }: { store: "apple" | "google" }) {
   return (
     <div
-      className="inline-flex h-9 min-w-[9.75rem] items-center gap-2 rounded-lg border border-[#334155] bg-[#020617] px-2.5 text-left"
+      className="inline-flex h-9 min-w-[9.75rem] items-center justify-center gap-2 rounded-lg border border-[#334155] bg-[#020617] px-2.5 text-center"
       aria-label={`${store === "apple" ? "App Store" : "Google Play"} — Coming soon`}
     >
       {store === "apple" ? <AppleLogo /> : <PlayLogo />}
-      <span className="flex min-w-0 flex-col leading-tight">
+      <span className="flex min-w-0 flex-col leading-tight text-center">
         <span className="text-[0.5625rem] font-medium uppercase tracking-wide text-[#94A3B8]">
           Coming soon
         </span>
