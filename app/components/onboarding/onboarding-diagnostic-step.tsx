@@ -69,8 +69,7 @@ export function OnboardingDiagnosticStep() {
             Let&apos;s find your starting point
           </h1>
           <p className="mt-1.5 text-xs leading-5 text-[#64748B] sm:text-sm">
-            A quick 10-minute test tells us exactly where to focus your
-            preparation.
+            Takes about 10 minutes.
           </p>
         </header>
 

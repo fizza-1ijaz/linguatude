@@ -245,9 +245,12 @@ export function PteScoreReport() {
               <p className="text-sm text-[#334155]">
                 Continue targeted practice to close gap to your selected DHA levels.
               </p>
-              <p className="mt-1 text-xs text-[#94A3B8]">
-                Diagnostic retake once every 30 days per exam
-              </p>
+              <Link
+                href="/dashboard/diagnostic/retake-locked"
+                className="mt-1 inline-flex text-xs font-semibold text-[#2b5ce6] transition hover:underline"
+              >
+                Diagnostic retake once every 30 days per exam →
+              </Link>
             </div>
           </div>
         </section>

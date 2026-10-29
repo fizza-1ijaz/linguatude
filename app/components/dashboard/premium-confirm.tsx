@@ -20,7 +20,7 @@ function PremiumConfirmInner() {
 
   return (
     <DashboardShell
-      title={<span className="sr-only">Confirm Trial</span>}
+      title="Confirm Your Trial"
       contentBgClassName="bg-white"
       mainClassName="flex px-4 sm:px-6 lg:px-[1cm] flex-1 flex-col py-6"
       headerRight={
@@ -46,10 +46,6 @@ function PremiumConfirmInner() {
         <div className="flex size-[4.25rem] items-center justify-center rounded-full border-[2.5px] border-[#FB923C] bg-white text-[#F97316] shadow-[0_0_28px_rgba(249,115,22,0.28)]">
           <StarOutline />
         </div>
-
-        <h1 className="mt-5 text-center text-2xl font-bold text-[#141B2B] sm:text-[1.875rem]">
-          Confirm Your Trial
-        </h1>
 
         <div className="mt-6 flex w-full items-center justify-between gap-3 rounded-2xl border border-[#E2E8F0] px-4 py-4">
           <div className="flex min-w-0 items-center gap-3">

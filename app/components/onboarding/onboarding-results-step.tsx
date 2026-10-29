@@ -1,16 +1,18 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { OnboardingWideShell } from "@/app/components/onboarding/onboarding-wide-shell";
 import {
+  type ExamChoice,
   DIAGNOSTIC_ESTIMATED_BANDS,
+  DIAGNOSTIC_ESTIMATED_PTE_SCORES,
+  ESTIMATE_DISCLAIMER,
   ONBOARDING_ROUTES,
   readOnboardingState,
 } from "@/app/components/onboarding/onboarding-state";
 
-const SKILLS = [
+const IELTS_SKILLS = [
   {
     key: "reading" as const,
     label: "Reading",
@@ -45,8 +47,73 @@ const SKILLS = [
   },
 ];
 
+type PteRow = {
+  key: "overall" | "reading" | "writing" | "listening" | "speaking";
+  label: string;
+  score: number;
+  Icon: (props: { className?: string }) => React.ReactNode;
+  iconBg: string;
+  iconColor: string;
+  tone: "green" | "orange" | "red";
+};
+
+const PTE_ROWS: PteRow[] = [
+  {
+    key: "overall",
+    label: "Estimated Overall Score",
+    score: DIAGNOSTIC_ESTIMATED_PTE_SCORES.overall,
+    Icon: OverallDocIcon,
+    iconBg: "bg-[#EDE9FE]",
+    iconColor: "text-[#7C3AED]",
+    tone: "green",
+  },
+  {
+    key: "reading",
+    label: "Reading",
+    score: DIAGNOSTIC_ESTIMATED_PTE_SCORES.reading!,
+    Icon: BookIcon,
+    iconBg: "bg-[#DBEAFE]",
+    iconColor: "text-[#2b5ce6]",
+    tone: "green",
+  },
+  {
+    key: "writing",
+    label: "Writing",
+    score: DIAGNOSTIC_ESTIMATED_PTE_SCORES.writing!,
+    Icon: PencilIcon,
+    iconBg: "bg-[#FEF3C7]",
+    iconColor: "text-[#D97706]",
+    tone: "orange",
+  },
+  {
+    key: "listening",
+    label: "Listening",
+    score: DIAGNOSTIC_ESTIMATED_PTE_SCORES.listening!,
+    Icon: HeadphonesIcon,
+    iconBg: "bg-[#E0E9FF]",
+    iconColor: "text-[#6366F1]",
+    tone: "green",
+  },
+  {
+    key: "speaking",
+    label: "Speaking",
+    score: DIAGNOSTIC_ESTIMATED_PTE_SCORES.speaking!,
+    Icon: MicIcon,
+    iconBg: "bg-[#FFE4E6]",
+    iconColor: "text-[#E11D48]",
+    tone: "red",
+  },
+];
+
+const TONE_CLASS = {
+  green: { text: "text-[#16A34A]", bar: "bg-[#22C55E]" },
+  orange: { text: "text-[#EA580C]", bar: "bg-[#F97316]" },
+  red: { text: "text-[#DC2626]", bar: "bg-[#EF4444]" },
+} as const;
+
 export function OnboardingResultsStep() {
   const router = useRouter();
+  const [exam, setExam] = useState<ExamChoice>(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -62,6 +129,7 @@ export function OnboardingResultsStep() {
       router.replace(ONBOARDING_ROUTES.diagnostic);
       return;
     }
+    setExam(state.exam);
     setReady(true);
   }, [router]);
 
@@ -73,119 +141,206 @@ export function OnboardingResultsStep() {
     );
   }
 
+  const isPte = exam === "pte";
+
   return (
-    <OnboardingWideShell step={8} contentClassName="bg-[#E8EEF8]">
-      <div className="mx-auto max-w-4xl">
+    <OnboardingWideShell step={8} contentClassName="bg-[#F3F5F9]">
+      <div className="mx-auto max-w-lg">
         <header className="text-center">
-          <h1 className="text-balance text-[1.75rem] font-bold leading-tight text-[#111827] sm:text-[2rem]">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EEF2FF] px-3 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.06em] text-[#4F46E5]">
+            <CheckBadgeIcon />
+            Diagnostic complete • {isPte ? "PTE" : "IELTS"}
+          </span>
+          <h1 className="mt-4 text-balance text-[1.75rem] font-bold leading-tight text-[#111827] sm:text-[2rem]">
             Here&apos;s where you stand
           </h1>
-          <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-[#64748B] sm:text-base">
-            Based on your quick diagnostic, we&apos;ve estimated your current
-            proficiency levels. These insights will help tailor your perfect
-            study plan.
-          </p>
         </header>
 
-        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-          {SKILLS.map((skill) => {
-            const band = DIAGNOSTIC_ESTIMATED_BANDS[skill.key] ?? 0;
-            const fill = Math.min(100, Math.max(0, (band / 9) * 100));
-            return (
-              <article
-                key={skill.key}
-                className="rounded-2xl bg-white px-4 py-5 text-center shadow-[0_4px_20px_rgba(15,23,42,0.06)] sm:px-5 sm:py-6"
-              >
-                <span
-                  className={`mx-auto flex size-11 items-center justify-center rounded-full ${skill.iconBg}`}
-                >
-                  <skill.Icon className={`size-5 ${skill.iconColor}`} />
-                </span>
-                <p className="mt-3 text-sm font-semibold text-[#1E293B]">
-                  {skill.label}
-                </p>
-                <p className="mt-2 text-[1.75rem] font-bold leading-none text-[#111827]">
-                  {band.toFixed(1)}
-                </p>
-                <p className="mt-1.5 text-xs text-[#94A3B8]">(estimated)</p>
-                <div className="mx-auto mt-4 h-2 w-full max-w-[8.5rem] overflow-hidden rounded-full bg-[#E8ECF2]">
-                  <div
-                    className={`h-full rounded-full ${skill.bar}`}
-                    style={{ width: `${fill}%` }}
-                  />
-                </div>
-              </article>
-            );
-          })}
-        </div>
+        {isPte ? <PteResults /> : <IeltsResults />}
 
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 sm:gap-4">
-          <article className="flex items-start gap-3 rounded-2xl border border-[#15803D] bg-[#EEF2F6] px-4 py-4 sm:px-5">
-            <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-[#16A34A]">
-              <CheckIcon className="size-3.5 text-white" />
-            </span>
-            <div>
-              <p className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-[#15803D]">
-                Your strength
-              </p>
-              <p className="mt-1 text-sm leading-6 text-[#334155]">
-                Listening is currently your strongest skill.
-              </p>
-            </div>
-          </article>
-
-          <article className="flex items-start gap-3 rounded-2xl border border-[#C2410C] bg-[#EEF2F6] px-4 py-4 sm:px-5">
-            <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-[#EA580C]">
-              <FocusIcon className="size-3.5 text-white" />
-            </span>
-            <div>
-              <p className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-[#C2410C]">
-                Focus area
-              </p>
-              <p className="mt-1 text-sm leading-6 text-[#334155]">
-                Writing is the area where focused practice can make the biggest
-                difference.
-              </p>
-            </div>
-          </article>
-        </div>
-
-        <div className="mt-4 rounded-2xl border border-[#EEF0F5] bg-white p-5 shadow-[0_4px_16px_rgba(15,23,42,0.05)] sm:p-6">
-          <div className="flex items-start gap-3">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#EEF2FF]">
-              <Image
-                src="/onboarding/icon-star.svg"
-                alt=""
-                width={20}
-                height={20}
-                className="size-5"
-              />
-            </span>
-            <p className="pt-1.5 text-sm leading-6 text-[#334155] sm:text-[0.9375rem]">
-              You&apos;re building a solid foundation. Focusing on writing and
-              reading will give you the strongest next step.
-            </p>
-          </div>
-
+        <div className="mt-5 rounded-2xl border border-[#EEF0F5] bg-white p-5 shadow-[0_4px_16px_rgba(15,23,42,0.05)] sm:p-6">
           <button
             type="button"
             onClick={() => router.push(ONBOARDING_ROUTES.diagnosticPlan)}
-            className="mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#2b5ce6] px-5 text-base font-semibold text-white transition hover:bg-[#244fe6]"
+            className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#2b5ce6] px-5 text-base font-semibold text-white transition hover:bg-[#244fe6]"
           >
             See My Study Plan
             <span aria-hidden>→</span>
           </button>
 
-          <p className="mt-4 flex items-start justify-center gap-2 text-center text-xs leading-5 text-[#111827]">
+          <p className="mt-4 flex items-start justify-center gap-2 text-center text-xs leading-5 text-[#475569]">
             <InfoCircleIcon className="mt-0.5 size-3.5 shrink-0 text-[#2b5ce6]" />
-            <span>
-              These scores are AI estimated for self-assessment purposes only.
-              They are not official IELTS results.
-            </span>
+            <span>{ESTIMATE_DISCLAIMER}</span>
           </p>
         </div>
       </div>
     </OnboardingWideShell>
+  );
+}
+
+function PteResults() {
+  return (
+    <div className="mt-6 flex flex-col gap-3">
+      <div className="flex items-start gap-2.5 rounded-2xl bg-[#E8F0FE] px-4 py-3.5">
+        <InfoCircleIcon className="mt-0.5 size-4 shrink-0 text-[#2b5ce6]" />
+        <p className="text-sm leading-5 text-[#334155]">
+          Based on your diagnostic test, here are your estimated PTE scores.
+        </p>
+      </div>
+
+      {PTE_ROWS.map((row) => {
+        const tone = TONE_CLASS[row.tone];
+        const fill = Math.min(100, Math.max(0, (row.score / 90) * 100));
+        return (
+          <article
+            key={row.key}
+            className="rounded-2xl bg-white px-4 py-4 shadow-[0_4px_16px_rgba(15,23,42,0.06)]"
+          >
+            <div className="flex items-center gap-3">
+              <span
+                className={`flex size-11 shrink-0 items-center justify-center rounded-xl ${row.iconBg}`}
+              >
+                <row.Icon className={`size-5 ${row.iconColor}`} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-start justify-between gap-3">
+                  <p className="text-sm font-bold text-[#1E293B]">{row.label}</p>
+                  <div className="shrink-0 text-right">
+                    <p className={`text-xl font-bold leading-none ${tone.text}`}>
+                      {row.score}
+                    </p>
+                    <p className="mt-1 text-[0.65rem] text-[#94A3B8]">
+                      (Out of 90)
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-[#E8ECF2]">
+                  <div
+                    className={`h-full rounded-full ${tone.bar}`}
+                    style={{ width: `${fill}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  );
+}
+
+function IeltsResults() {
+  return (
+    <>
+      <p className="mx-auto mt-3 max-w-2xl text-center text-sm leading-6 text-[#64748B]">
+        Based on your diagnostic test, here are your estimated IELTS band
+        scores.
+      </p>
+
+      <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+        {IELTS_SKILLS.map((skill) => {
+          const band = DIAGNOSTIC_ESTIMATED_BANDS[skill.key] ?? 0;
+          const fill = Math.min(100, Math.max(0, (band / 9) * 100));
+          return (
+            <article
+              key={skill.key}
+              className="rounded-2xl bg-white px-4 py-5 text-center shadow-[0_4px_20px_rgba(15,23,42,0.06)] sm:px-5 sm:py-6"
+            >
+              <span
+                className={`mx-auto flex size-11 items-center justify-center rounded-full ${skill.iconBg}`}
+              >
+                <skill.Icon className={`size-5 ${skill.iconColor}`} />
+              </span>
+              <p className="mt-3 text-sm font-semibold text-[#1E293B]">
+                {skill.label}
+              </p>
+              <p className="mt-2 text-[1.75rem] font-bold leading-none text-[#111827]">
+                {band.toFixed(1)}
+              </p>
+              <p className="mt-1.5 text-xs text-[#94A3B8]">
+                Estimated band (0–9)
+              </p>
+              <div className="mx-auto mt-4 h-2 w-full max-w-[8.5rem] overflow-hidden rounded-full bg-[#E8ECF2]">
+                <div
+                  className={`h-full rounded-full ${skill.bar}`}
+                  style={{ width: `${fill}%` }}
+                />
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 sm:gap-4">
+        <article className="flex items-start gap-3 rounded-2xl border border-[#15803D] bg-[#EEF2F6] px-4 py-4 sm:px-5">
+          <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-[#16A34A]">
+            <CheckIcon className="size-3.5 text-white" />
+          </span>
+          <div>
+            <p className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-[#15803D]">
+              Your strength
+            </p>
+            <p className="mt-1 text-sm leading-6 text-[#334155]">
+              Listening is currently your strongest skill.
+            </p>
+          </div>
+        </article>
+
+        <article className="flex items-start gap-3 rounded-2xl border border-[#C2410C] bg-[#EEF2F6] px-4 py-4 sm:px-5">
+          <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-[#EA580C]">
+            <FocusIcon className="size-3.5 text-white" />
+          </span>
+          <div>
+            <p className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-[#C2410C]">
+              Focus area
+            </p>
+            <p className="mt-1 text-sm leading-6 text-[#334155]">
+              Writing is the area where focused practice can make the biggest
+              difference.
+            </p>
+          </div>
+        </article>
+      </div>
+    </>
+  );
+}
+
+function CheckBadgeIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <circle cx="8" cy="8" r="7" fill="#2B5CE6" />
+      <path
+        d="M5 8.1L7.1 10.2L11.2 5.8"
+        stroke="white"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function OverallDocIcon({ className = "size-5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M7 3.75h7.5L19 8.25v12A1.75 1.75 0 0 1 17.25 22h-10.5A1.75 1.75 0 0 1 5 20.25v-14.5A1.75 1.75 0 0 1 7 3.75Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      />
+      <path
+        d="M14.5 3.75V8H19"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8.5 12h7M8.5 15.5h5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+    </svg>
   );
 }
 

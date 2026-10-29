@@ -26,23 +26,21 @@ export function ProgressHeaderRight() {
   );
 }
 
+/** Page intro under the navbar title — subtitle + badge only (no duplicate h2). */
 export function ProgressPageHeader({
-  title,
   subtitle,
   badge = true,
 }: {
-  title: string;
+  /** @deprecated Title lives in DashboardShell navbar only */
+  title?: string;
   subtitle: string;
   badge?: boolean;
 }) {
   return (
     <div className="flex flex-wrap items-start justify-between gap-4">
-      <div className="min-w-0">
-        <h2 className="text-2xl font-bold tracking-tight text-[#141B2B] sm:text-3xl">
-          {title}
-        </h2>
-        <p className="mt-1.5 text-sm text-[#64748B] sm:text-base">{subtitle}</p>
-      </div>
+      <p className="min-w-0 max-w-2xl text-sm text-[#64748B] sm:text-base">
+        {subtitle}
+      </p>
       {badge ? <PteBadge /> : null}
     </div>
   );

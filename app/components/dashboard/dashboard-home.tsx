@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
 import { DailyGoalCompleteModal } from "@/app/components/dashboard/daily-goal-complete-modal";
+import { readOnboardingState } from "@/app/components/onboarding/onboarding-state";
+import { useDashboardExam } from "@/app/components/dashboard/use-dashboard-exam";
 
 const STORAGE_KEY = "linguatude_daily_goal_modal_dismissed";
 
@@ -41,8 +43,20 @@ const LESSONS = [
   },
 ] as const;
 
+function formatTestDate(iso: string) {
+  const date = new Date(`${iso}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return iso;
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 export function DashboardHome() {
+  const exam = useDashboardExam();
   const [goalModalOpen, setGoalModalOpen] = useState(false);
+  const [testDate, setTestDate] = useState<string | null>(null);
 
   useEffect(() => {
     try {
@@ -51,6 +65,11 @@ export function DashboardHome() {
     } catch {
       setGoalModalOpen(true);
     }
+  }, []);
+
+  useEffect(() => {
+    const state = readOnboardingState();
+    setTestDate(state.noTestDate ? null : state.testDate);
   }, []);
 
   useEffect(() => {
@@ -99,13 +118,15 @@ export function DashboardHome() {
                 <p className="mt-1.5 text-[13px] leading-5 text-[#6B7280] sm:text-sm">
                   You&apos;re on your way to achieving your goals.
                 </p>
-                <p className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#E8F5E9] px-3 py-1.5 text-[12px] font-medium text-[#2E7D32] sm:text-[13px]">
-                  <span
-                    className="size-1.5 shrink-0 rounded-full bg-[#2E7D32]"
-                    aria-hidden
-                  />
-                  No test date set yet • Keep going at your own pace
-                </p>
+                {!testDate ? (
+                  <p className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#E8F5E9] px-3 py-1.5 text-[12px] font-medium text-[#2E7D32] sm:text-[13px]">
+                    <span
+                      className="size-1.5 shrink-0 rounded-full bg-[#2E7D32]"
+                      aria-hidden
+                    />
+                    No test date set yet • Keep going at your own pace
+                  </p>
+                ) : null}
                 <div className="mt-4">
                   <Link
                     href="/onboarding/diagnostic/plan"
@@ -227,8 +248,9 @@ export function DashboardHome() {
                   </p>
                 </div>
                 <p className="relative mt-2.5 max-w-xl text-[13px] leading-5 text-[#44403C] sm:text-sm sm:leading-6">
-                  Your Writing improved 0.5 bands this week. Focus on coherence
-                  today.
+                  {exam === "pte"
+                    ? "Your Writing improved 5 points this week. Focus on coherence today."
+                    : "Your Writing improved 0.5 bands this week. Focus on coherence today."}
                 </p>
                 <Link
                   href="/dashboard/streak"
@@ -253,15 +275,23 @@ export function DashboardHome() {
                   </span>
                 </div>
                 <p className="mt-2.5 text-[13px] leading-5 text-[#6B7280]">
-                  Take a 10-minute diagnostic to get your starting point and
+                  Takes about 10 minutes. Get your starting point and
                   personalised feedback.
                 </p>
-                <Link
-                  href="/onboarding/diagnostic"
-                  className="mt-4 inline-flex text-[13px] font-semibold text-[#2b5ce6] transition hover:underline"
-                >
-                  Take diagnostic →
-                </Link>
+                <div className="mt-4 flex flex-col gap-1.5">
+                  <Link
+                    href="/onboarding/diagnostic"
+                    className="inline-flex text-[13px] font-semibold text-[#2b5ce6] transition hover:underline"
+                  >
+                    Take diagnostic →
+                  </Link>
+                  <Link
+                    href="/dashboard/diagnostic/retake-locked"
+                    className="inline-flex text-[12px] font-medium text-[#64748B] transition hover:text-[#2b5ce6] hover:underline"
+                  >
+                    Already taken? View locked retake state
+                  </Link>
+                </div>
               </section>
             </div>
 
@@ -281,13 +311,30 @@ export function DashboardHome() {
                   label="LEVEL"
                   border
                 />
-                <StatCell
-                  icon={<TimerIcon />}
-                  iconBg="bg-[#ECFDF5]"
-                  value="04:22:10"
-                  label="NEXT GOAL"
-                  compact
-                />
+                {testDate ? (
+                  <StatCell
+                    icon={<CalendarGoalIcon />}
+                    iconBg="bg-[#EEF2FF]"
+                    value={formatTestDate(testDate)}
+                    label="TEST DATE"
+                    compact
+                  />
+                ) : (
+                  <Link
+                    href="/onboarding/schedule"
+                    className="flex flex-col items-center px-1.5 py-3 text-center transition hover:bg-[#F8FAFC] sm:px-2 sm:py-4"
+                  >
+                    <span className="mb-1.5 flex size-7 items-center justify-center rounded-full bg-[#EEF2FF] sm:mb-2 sm:size-8">
+                      <CalendarGoalIcon />
+                    </span>
+                    <p className="text-xs font-bold leading-tight text-[#0F172A] sm:text-sm">
+                      Add test date
+                    </p>
+                    <p className="mt-0.5 text-[0.5625rem] font-semibold uppercase leading-tight tracking-[0.04em] text-[#94A3B8] sm:text-[0.625rem] sm:tracking-[0.06em]">
+                      Set your goal
+                    </p>
+                  </Link>
+                )}
               </div>
 
               <section>
@@ -305,7 +352,7 @@ export function DashboardHome() {
                   </h3>
                   <p className="mt-1.5 text-[13px] leading-5 text-[#57534E]">
                     Test your skills with a complete mock experience. Available
-                    with Premium
+                    with Trial and Premium only.
                   </p>
                   <Link
                     href="/dashboard/premium"
@@ -539,14 +586,28 @@ function StarMini() {
   );
 }
 
-function TimerIcon() {
+function CalendarGoalIcon() {
   return (
     <svg viewBox="0 0 16 16" className="size-4" fill="none" aria-hidden>
-      <circle cx="8" cy="9" r="5.25" stroke="#16A34A" strokeWidth="1.5" />
+      <rect
+        x="2.25"
+        y="3.25"
+        width="11.5"
+        height="10.5"
+        rx="1.5"
+        stroke="#2b5ce6"
+        strokeWidth="1.4"
+      />
       <path
-        d="M8 9V6.2M6 2.5h4"
-        stroke="#16A34A"
-        strokeWidth="1.5"
+        d="M2.25 6.5h11.5M5.25 2.25v2M10.75 2.25v2"
+        stroke="#2b5ce6"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+      <path
+        d="M5.5 10.25h5"
+        stroke="#2b5ce6"
+        strokeWidth="1.4"
         strokeLinecap="round"
       />
     </svg>

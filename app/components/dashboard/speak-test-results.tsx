@@ -2,6 +2,14 @@
 
 import Link from "next/link";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
+import {
+  demoScoreFromBand,
+  estimateDisclaimer,
+  formatEstimateValue,
+  scoreNoun,
+  scoreScaleMax,
+  useDashboardExam,
+} from "@/app/components/dashboard/use-dashboard-exam";
 
 const CRITERIA = [
   { label: "Fluency and Coherence", value: 6.5 },
@@ -11,12 +19,17 @@ const CRITERIA = [
 ] as const;
 
 const PARTS = [
-  { title: "Part 1: Introduction", band: "8.5", href: "/dashboard/speak/feedback?part=1" },
-  { title: "Part 2: Long Turn", band: "7.0", href: "/dashboard/speak/feedback?part=2" },
-  { title: "Part 3: Discussion", band: "6.0", href: "/dashboard/speak/feedback?part=3" },
+  { title: "Part 1: Introduction", band: 8.5, href: "/dashboard/speak/feedback?part=1" },
+  { title: "Part 2: Long Turn", band: 7.0, href: "/dashboard/speak/feedback?part=2" },
+  { title: "Part 3: Discussion", band: 6.0, href: "/dashboard/speak/feedback?part=3" },
 ] as const;
 
 export function SpeakTestResults() {
+  const exam = useDashboardExam();
+  const overall = demoScoreFromBand(7.0, exam);
+  const scaleMax = scoreScaleMax(exam);
+  const noun = scoreNoun(exam);
+
   return (
     <DashboardShell
       title="Test Results"
@@ -59,10 +72,10 @@ export function SpeakTestResults() {
                     OVERALL
                   </p>
                   <p className="text-3xl font-bold tabular-nums text-[#2b5ce6] sm:text-4xl">
-                    7.0
+                    {formatEstimateValue(overall, exam)}
                   </p>
                   <p className="text-[0.625rem] font-bold tracking-wide text-[#2b5ce6]">
-                    BAND
+                    {noun.toUpperCase()}
                   </p>
                 </div>
               </div>
@@ -73,7 +86,9 @@ export function SpeakTestResults() {
 
             <div className="min-w-0 flex-1">
               <h2 className="text-lg font-bold text-[#141B2B] sm:text-xl">
-                IELTS Academic Speaking Simulation
+                {exam === "pte"
+                  ? "PTE Academic Speaking Simulation"
+                  : "IELTS Academic Speaking Simulation"}
               </h2>
               <p className="mt-2 inline-flex items-center gap-2 text-sm text-[#64748B]">
                 <CalendarIcon />
@@ -97,8 +112,7 @@ export function SpeakTestResults() {
                   i
                 </span>
                 <p className="text-sm leading-6 text-[#475569]">
-                  This is an AI-estimated score for self-assessment only. Not an
-                  official IELTS result.
+                  {estimateDisclaimer(exam)}
                 </p>
               </div>
             </div>
@@ -118,13 +132,18 @@ export function SpeakTestResults() {
                     {item.label}
                   </p>
                   <p className="text-sm font-bold tabular-nums text-[#141B2B]">
-                    {item.value.toFixed(1)}
+                    {formatEstimateValue(
+                      demoScoreFromBand(item.value, exam),
+                      exam,
+                    )}
                   </p>
                 </div>
                 <div className="h-2.5 overflow-hidden rounded-full bg-[#E8EEF7]">
                   <div
                     className="h-full rounded-full bg-[#2b5ce6]"
-                    style={{ width: `${(item.value / 9) * 100}%` }}
+                    style={{
+                      width: `${(demoScoreFromBand(item.value, exam) / scaleMax) * 100}%`,
+                    }}
                   />
                 </div>
               </div>
@@ -213,7 +232,11 @@ export function SpeakTestResults() {
                       {part.title}
                     </p>
                     <p className="mt-0.5 text-sm italic text-[#94A3B8]">
-                      Average band: {part.band}
+                      Average {noun.toLowerCase()}:{" "}
+                      {formatEstimateValue(
+                        demoScoreFromBand(part.band, exam),
+                        exam,
+                      )}
                     </p>
                   </div>
                   <Link

@@ -3,6 +3,14 @@
 import Link from "next/link";
 import { useState } from "react";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
+import {
+  demoScoreFromBand,
+  estimateDisclaimer,
+  formatEstimateValue,
+  scoreNoun,
+  scoreScaleMax,
+  useDashboardExam,
+} from "@/app/components/dashboard/use-dashboard-exam";
 
 const CRITERIA = [
   {
@@ -93,6 +101,10 @@ export function WritingTask1Feedback() {
   const [sentenceIndex, setSentenceIndex] = useState(0);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const current = SENTENCE_IMPROVEMENTS[sentenceIndex];
+  const exam = useDashboardExam();
+  const overall = demoScoreFromBand(7.0, exam);
+  const scaleMax = scoreScaleMax(exam);
+  const noun = scoreNoun(exam);
 
   return (
     <DashboardShell
@@ -148,9 +160,11 @@ export function WritingTask1Feedback() {
                   />
                 </svg>
                 <div className="relative text-center">
-                  <p className="text-3xl font-bold tabular-nums text-[#141B2B]">7.0</p>
+                  <p className="text-3xl font-bold tabular-nums text-[#141B2B]">
+                    {formatEstimateValue(overall, exam)}
+                  </p>
                   <p className="text-[0.6875rem] font-medium text-[#64748B]">
-                    Estimated Band
+                    Estimated {noun}
                   </p>
                 </div>
               </div>
@@ -175,8 +189,7 @@ export function WritingTask1Feedback() {
                     i
                   </span>
                   <p className="text-[0.6875rem] leading-4 text-[#475569]">
-                    Estimated by Linguatude from your practice performance. Not an
-                    official IELTS result.
+                    {estimateDisclaimer(exam)}
                   </p>
                 </div>
               </div>
@@ -202,12 +215,20 @@ export function WritingTask1Feedback() {
                   <div className={`h-2 min-w-0 flex-1 overflow-hidden rounded-full ${c.track}`}>
                     <div
                       className={`h-full rounded-full ${c.color}`}
-                      style={{ width: `${(c.value / 9) * 100}%` }}
+                      style={{
+                        width: `${(demoScoreFromBand(c.value, exam) / scaleMax) * 100}%`,
+                      }}
                     />
                   </div>
-                  <p className="w-[3.25rem] shrink-0 text-right text-sm font-bold tabular-nums text-[#141B2B]">
-                    {c.value.toFixed(1)}
-                    <span className="font-medium text-[#94A3B8]"> / 9</span>
+                  <p className="w-[3.75rem] shrink-0 text-right text-sm font-bold tabular-nums text-[#141B2B]">
+                    {formatEstimateValue(
+                      demoScoreFromBand(c.value, exam),
+                      exam,
+                    )}
+                    <span className="font-medium text-[#94A3B8]">
+                      {" "}
+                      / {scaleMax}
+                    </span>
                   </p>
                   <span className="shrink-0 text-[#CBD5E1]" aria-hidden>
                     ›
@@ -234,8 +255,8 @@ export function WritingTask1Feedback() {
                 between the two cities. Your data selection is appropriate, and
                 your vocabulary is varied.
               </strong>{" "}
-              To reach a higher band, focus on improving complex sentence
-              accuracy and ensuring smoother transitions between ideas.
+              To reach a higher {noun.toLowerCase()}, focus on improving complex
+              sentence accuracy and ensuring smoother transitions between ideas.
             </p>
           </section>
 

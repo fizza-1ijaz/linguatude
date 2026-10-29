@@ -4,6 +4,11 @@ import { NotificationBellButton } from "@/app/components/dashboard/notification-
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
+import {
+  estimateDisclaimer,
+  scoreNoun,
+  useDashboardExam,
+} from "@/app/components/dashboard/use-dashboard-exam";
 
 const SECTIONS = [
   { name: "1. Listening", duration: "10 minutes", questions: "10 questions" },
@@ -28,6 +33,8 @@ const PREP = [
 ] as const;
 
 export function MockFull() {
+  const exam = useDashboardExam();
+  const noun = scoreNoun(exam);
   const [pct, setPct] = useState(12);
   const ready = pct >= 100;
 
@@ -144,8 +151,8 @@ export function MockFull() {
                 About your scores
               </h3>
               <p className="mt-2 text-sm leading-6 text-[#64748B]">
-                All band scores from this test are AI-estimated for self-assessment
-                purposes only. They are not official IELTS results and should not be
+                All {noun.toLowerCase()} estimates from this test are AI-based for
+                self-assessment only. {estimateDisclaimer(exam)} They should not be
                 used as proof of English proficiency.
               </p>
             </section>

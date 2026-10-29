@@ -94,7 +94,7 @@ export function MockHome() {
                   <h2 className="text-lg font-bold text-[#141B2B]">Full Mock Tests</h2>
                 </div>
                 <div className="mt-3 flex flex-wrap gap-2">
-                  {["30 minutes", "All 4 skills", "Free (1 per month)"].map((t) => (
+                  {["30 minutes", "All 4 skills", "Trial & Premium"].map((t) => (
                     <span
                       key={t}
                       className="rounded-full bg-[#FFEDD5] px-3 py-1 text-xs font-semibold text-[#EA580C]"
@@ -104,7 +104,8 @@ export function MockHome() {
                   ))}
                 </div>
                 <p className="mt-3 text-sm text-[#64748B]">
-                  Test your skills with a complete mock experience. Available with Premium
+                  Test your skills with a complete mock experience. Full mocks are
+                  available with Trial and Premium only — Free includes 0 full mocks.
                 </p>
                 <Link
                   href="/dashboard/premium"
@@ -131,7 +132,7 @@ export function MockHome() {
                   </span>
                 </div>
                 <div className="mt-3 flex flex-wrap gap-2">
-                  {["30 minutes", "Full exam format", "Premium"].map((t) => (
+                  {["30 minutes", "Full exam format", "Trial & Premium"].map((t) => (
                     <span
                       key={t}
                       className="rounded-full bg-[#EFF6FF] px-3 py-1 text-xs font-semibold text-[#2563EB]"
@@ -143,12 +144,12 @@ export function MockHome() {
                 <p className="mt-3 text-sm leading-6 text-[#64748B]">
                   Full-length simulation matching real exam timing exactly.
                   <br />
-                  The most accurate band estimate available on the platform.
+                  The most accurate estimate available on the platform.
                 </p>
                 <div className="mt-4 flex flex-col gap-3 rounded-xl bg-[#F1F5F9] px-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-4">
                   <p className="inline-flex items-center gap-2 text-sm text-[#64748B]">
                     <LockIcon />
-                    Full Mock Tests are available with a Premium subscription.
+                    Full Mock Tests require Trial or Premium access.
                   </p>
                   <Link
                     href="/dashboard/mock/full"

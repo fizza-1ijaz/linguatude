@@ -1,6 +1,14 @@
+"use client";
+
 import { NotificationBellButton } from "@/app/components/dashboard/notification-bell-button";
 import Link from "next/link";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
+import {
+  demoScoreFromBand,
+  formatEstimateValue,
+  overallEstimatedLabel,
+  useDashboardExam,
+} from "@/app/components/dashboard/use-dashboard-exam";
 
 const TASKS = [
   {
@@ -52,7 +60,7 @@ const RECENT = [
     title: "Task 2 — Essay",
     preview: "Discuss both views and...",
     date: "18 May 2026 09:45 PM",
-    band: "6.5",
+    bandValue: 6.5,
     bandColor: "text-[#7C3AED]",
     tip: "Improve coherence by using clearer paragraph structure and linking.",
     iconBg: "bg-[#F3E8FF]",
@@ -63,7 +71,7 @@ const RECENT = [
     title: "Task 1 — Academic",
     preview: "The chart below shows...",
     date: "17 May 2026 02:10 PM",
-    band: "6.0",
+    bandValue: 6.0,
     bandColor: "text-[#2b5ce6]",
     tip: "Compare the two cities more clearly when describing trends.",
     iconBg: "bg-[#DBEAFE]",
@@ -74,7 +82,7 @@ const RECENT = [
     title: "Task 1 — Letter",
     preview: "Write a letter to your...",
     date: "15 May 2026 08:20 AM",
-    band: "7.0",
+    bandValue: 7.0,
     bandColor: "text-[#16A34A]",
     tip: "Keep the tone consistent throughout formal letters.",
     iconBg: "bg-[#DCFCE7]",
@@ -84,6 +92,9 @@ const RECENT = [
 ] as const;
 
 export function WritingHome() {
+  const exam = useDashboardExam();
+  const estimate = demoScoreFromBand(6.5, exam);
+
   return (
     <DashboardShell
       title="Writing"
@@ -166,10 +177,11 @@ export function WritingHome() {
                   </p>
                   <div className="mt-0.5 flex items-baseline gap-2">
                     <p className="text-2xl font-bold tabular-nums text-[#2b5ce6]">
-                      6.5
+                      {formatEstimateValue(estimate, exam)}
                     </p>
                     <p className="text-[0.6875rem] text-[#94A3B8]">
                       Estimated by Linguatude
+                      {exam === "pte" ? " · Score" : " · Band"}
                     </p>
                   </div>
                 </div>
@@ -253,12 +265,15 @@ export function WritingHome() {
                       </p>
                       <div className="sm:w-28">
                         <p className="text-[0.6875rem] text-[#94A3B8]">
-                          Overall band (estimated)
+                          {overallEstimatedLabel(exam)}
                         </p>
                         <p
                           className={`mt-0.5 text-xl font-bold tabular-nums ${row.bandColor}`}
                         >
-                          {row.band}
+                          {formatEstimateValue(
+                            demoScoreFromBand(row.bandValue, exam),
+                            exam,
+                          )}
                         </p>
                       </div>
                       <div className="min-w-0 flex-1">

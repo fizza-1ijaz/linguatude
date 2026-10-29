@@ -11,6 +11,7 @@ const AUTH_PREFIXES = [
   "/reset-password",
   "/onboarding",
   "/dashboard",
+  "/waitlist",
 ] as const;
 
 export function SiteChrome({ children }: { children: React.ReactNode }) {

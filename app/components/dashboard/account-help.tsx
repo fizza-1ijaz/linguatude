@@ -172,12 +172,12 @@ export function AccountHelp() {
                   or feedback.
                 </p>
               </div>
-              <a
-                href="#report"
+              <Link
+                href="/dashboard/account/scoring-concern"
                 className="inline-flex h-10 items-center justify-center rounded-xl border border-[#5D5CDE] bg-white px-4 text-sm font-semibold text-[#5D5CDE] transition hover:bg-white/80"
               >
                 Report a scoring concern
-              </a>
+              </Link>
             </div>
           </div>
 

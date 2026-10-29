@@ -156,7 +156,7 @@ export function PtePracticeHub() {
 
   return (
     <DashboardShell
-      title="PTE Practice"
+      title="PTE Practice Hub"
       contentBgClassName="bg-white"
       mainClassName="flex px-4 sm:px-6 lg:px-[1cm] flex-1 flex-col py-5"
       headerRight={<PteHeaderRight />}
@@ -164,10 +164,7 @@ export function PtePracticeHub() {
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-5 pb-10">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-2xl">
-            <h2 className="text-2xl font-bold tracking-tight text-[#141B2B] sm:text-3xl">
-              PTE Practice Hub
-            </h2>
-            <p className="mt-2 text-sm leading-6 text-[#64748B] sm:text-base">
+            <p className="text-sm leading-6 text-[#64748B] sm:text-base">
               Master all 20 PTE Academic task types across Speaking, Writing,
               Reading and Listening. Practice by type, build skills, and track
               your progress.

@@ -49,8 +49,7 @@ export function PteDescribeImage() {
                 <ImageIcon />
               </span>
               <div>
-                <h2 className="text-xl font-bold text-[#141B2B]">Describe Image</h2>
-                <p className="mt-1 text-sm leading-6 text-[#64748B]">
+                <p className="text-sm leading-6 text-[#64748B]">
                   Look at the image below.
                   <br />
                   You will have 25 seconds to prepare.

@@ -35,12 +35,8 @@ export function SwitchExam() {
     currentExam === "ielts" ? "IELTS" : "PTE Academic";
 
   function confirmSwitch() {
-    try {
-      window.localStorage.setItem(EXAM_STORAGE_KEY, selected);
-    } catch {
-      /* ignore */
-    }
-    router.push("/dashboard");
+    // First visit to the other exam → exam-specific setup (previous/target/date/diagnostic)
+    router.push("/dashboard/switch-exam/setup");
   }
 
   return (
@@ -218,6 +214,12 @@ export function SwitchExam() {
                   Join the waitlist and we&apos;ll let you know when these exams
                   are ready.
                 </p>
+                <Link
+                  href="/waitlist"
+                  className="mt-3 inline-flex text-sm font-semibold text-[#2b5ce6] transition hover:underline"
+                >
+                  Join the waitlist →
+                </Link>
               </div>
             </div>
           </div>

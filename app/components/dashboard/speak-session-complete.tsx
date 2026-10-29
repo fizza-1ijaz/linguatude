@@ -2,6 +2,13 @@
 
 import Link from "next/link";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
+import {
+  demoScoreFromBand,
+  formatEstimateValue,
+  scoreNoun,
+  scoreScaleMax,
+  useDashboardExam,
+} from "@/app/components/dashboard/use-dashboard-exam";
 
 const SKILLS = [
   { label: "Fluency", value: 6.2 },
@@ -11,6 +18,12 @@ const SKILLS = [
 ] as const;
 
 export function SpeakSessionComplete() {
+  const exam = useDashboardExam();
+  const scaleMax = scoreScaleMax(exam);
+  const noun = scoreNoun(exam);
+  const sessionAvg = demoScoreFromBand(6.2, exam);
+  const change = exam === "pte" ? 5 : 0.5;
+
   return (
     <DashboardShell
       title={
@@ -32,12 +45,17 @@ export function SpeakSessionComplete() {
           </h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
             <StatCell label="Questions answered" value="4" />
-            <StatCell label="Session average" value="6.2" />
+            <StatCell
+              label="Session average"
+              value={formatEstimateValue(sessionAvg, exam)}
+            />
             <div className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-4 text-center">
-              <p className="text-sm font-medium text-[#64748B]">Band change</p>
+              <p className="text-sm font-medium text-[#64748B]">
+                {noun} change
+              </p>
               <p className="mt-2 flex items-baseline justify-center gap-1.5">
                 <span className="text-2xl font-bold text-[#16A34A] sm:text-3xl">
-                  ⬆ 0.5
+                  ⬆ {exam === "pte" ? change : change.toFixed(1)}
                 </span>
                 <span className="text-xs font-medium text-[#94A3B8]">
                   from last session
@@ -61,11 +79,16 @@ export function SpeakSessionComplete() {
                 <div className="h-2.5 min-w-0 flex-1 overflow-hidden rounded-full bg-[#E8EEF7]">
                   <div
                     className="h-full rounded-full bg-[#2b5ce6]"
-                    style={{ width: `${(skill.value / 9) * 100}%` }}
+                    style={{
+                      width: `${(demoScoreFromBand(skill.value, exam) / scaleMax) * 100}%`,
+                    }}
                   />
                 </div>
-                <p className="w-8 shrink-0 text-right text-sm font-bold tabular-nums text-[#141B2B]">
-                  {skill.value.toFixed(1)}
+                <p className="w-10 shrink-0 text-right text-sm font-bold tabular-nums text-[#141B2B]">
+                  {formatEstimateValue(
+                    demoScoreFromBand(skill.value, exam),
+                    exam,
+                  )}
                 </p>
               </div>
             ))}

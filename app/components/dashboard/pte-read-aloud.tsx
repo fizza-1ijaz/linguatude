@@ -32,8 +32,7 @@ export function PteReadAloud() {
                 <BookIcon />
               </span>
               <div>
-                <h2 className="text-xl font-bold text-[#2b5ce6]">Read Aloud</h2>
-                <p className="mt-1 text-sm leading-6 text-[#64748B]">
+                <p className="text-sm leading-6 text-[#64748B]">
                   You will read a text aloud as naturally and clearly as possible.
                   You will have 30 to 40 seconds to read the text.
                 </p>

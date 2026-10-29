@@ -2,13 +2,22 @@
 
 import Link from "next/link";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
+import {
+  demoScoreFromBand,
+  estimateDisclaimer,
+  formatEstimateValue,
+  scoreNoun,
+  scoreScaleMax,
+  useDashboardExam,
+} from "@/app/components/dashboard/use-dashboard-exam";
 
 const SKILLS = [
   {
     title: "Listening",
-    score: "8.0",
+    bandValue: 8.0,
     tone: "green" as const,
-    detail: "32 / 40 correct",
+    detailIelts: "32 / 40 correct",
+    detailPte: "Strong listening performance",
     meta: "40 questions",
     iconBg: "bg-[#DBEAFE]",
     iconColor: "text-[#2563EB]",
@@ -16,9 +25,10 @@ const SKILLS = [
   },
   {
     title: "Reading",
-    score: "7.0",
+    bandValue: 7.0,
     tone: "green" as const,
-    detail: "32 / 40 correct",
+    detailIelts: "32 / 40 correct",
+    detailPte: "Solid reading accuracy",
     meta: "40 questions",
     iconBg: "bg-[#DCFCE7]",
     iconColor: "text-[#16A34A]",
@@ -26,9 +36,10 @@ const SKILLS = [
   },
   {
     title: "Writing",
-    score: "6.5",
+    bandValue: 6.5,
     tone: "orange" as const,
-    detail: "Task 1: 6.5 | Task 2: 6.5",
+    detailIelts: "Task 1: 6.5 | Task 2: 6.5",
+    detailPte: "Focus on written discourse",
     meta: "2 tasks",
     iconBg: "bg-[#FFEDD5]",
     iconColor: "text-[#EA580C]",
@@ -36,9 +47,10 @@ const SKILLS = [
   },
   {
     title: "Speaking",
-    score: "7.0",
+    bandValue: 7.0,
     tone: "green" as const,
-    detail: "Completed",
+    detailIelts: "Completed",
+    detailPte: "Completed",
     meta: "3 parts",
     iconBg: "bg-[#F3E8FF]",
     iconColor: "text-[#7C3AED]",
@@ -85,6 +97,11 @@ const BAR_COLORS = ["#2563EB", "#16A34A", "#F97316", "#7C3AED"] as const;
 const Y_TICKS = [9, 8, 7, 6, 5, 4] as const;
 
 export function MockTestResults() {
+  const exam = useDashboardExam();
+  const overall = demoScoreFromBand(7.5, exam);
+  const scaleMax = scoreScaleMax(exam);
+  const noun = scoreNoun(exam);
+
   return (
     <DashboardShell
       title="Test Results"
@@ -130,12 +147,16 @@ export function MockTestResults() {
                     stroke="#16A34A"
                     strokeWidth="10"
                     strokeLinecap="round"
-                    strokeDasharray={`${(7.5 / 9) * 2 * Math.PI * 50} ${2 * Math.PI * 50}`}
+                    strokeDasharray={`${(overall / scaleMax) * 2 * Math.PI * 50} ${2 * Math.PI * 50}`}
                   />
                 </svg>
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-[#141B2B]">7.5</p>
-                  <p className="text-xs font-semibold text-[#16A34A]">Estimated</p>
+                  <p className="text-3xl font-bold text-[#141B2B]">
+                    {formatEstimateValue(overall, exam)}
+                  </p>
+                  <p className="text-xs font-semibold text-[#16A34A]">
+                    Estimated {noun}
+                  </p>
                 </div>
               </div>
               <div>
@@ -151,7 +172,7 @@ export function MockTestResults() {
             <div className="mt-5 space-y-2">
               <div className="flex items-start gap-2 rounded-xl bg-[#EFF6FF] px-3 py-2.5 text-xs leading-5 text-[#1E40AF]">
                 <ClockTiny className="mt-0.5 text-[#2b5ce6]" />
-                This is an AI-estimated score for self-assessment only. Not an official IELTS result.
+                {estimateDisclaimer(exam)}
               </div>
               <div className="flex items-start gap-2 rounded-xl bg-[#FFF7ED] px-3 py-2.5 text-xs leading-5 text-[#9A3412]">
                 <WarnTiny />
@@ -172,9 +193,14 @@ export function MockTestResults() {
                     s.tone === "green" ? "text-[#16A34A]" : "text-[#EA580C]"
                   }`}
                 >
-                  {s.score}
+                  {formatEstimateValue(
+                    demoScoreFromBand(s.bandValue, exam),
+                    exam,
+                  )}
                 </p>
-                <p className="mt-0.5 text-[0.6875rem] text-[#64748B]">{s.detail}</p>
+                <p className="mt-0.5 text-[0.6875rem] text-[#64748B]">
+                  {exam === "pte" ? s.detailPte : s.detailIelts}
+                </p>
               </div>
             ))}
           </div>
@@ -186,7 +212,7 @@ export function MockTestResults() {
               <span className="flex size-6 items-center justify-center rounded-full bg-[#2b5ce6] text-xs text-white">
                 2
               </span>
-              Your Progress (Band History)
+              Your Progress ({noun} History)
             </p>
             <div className="mt-3 flex flex-wrap gap-3 text-xs font-medium">
               {["Listening", "Reading", "Writing", "Speaking"].map((l, i) => (
@@ -300,7 +326,9 @@ export function MockTestResults() {
                       <p className="text-sm font-bold text-[#141B2B]">{s.title}</p>
                       <p className="text-xs text-[#94A3B8]">{s.meta}</p>
                     </div>
-                    <p className="hidden text-xs text-[#64748B] sm:block">{s.detail}</p>
+                    <p className="hidden text-xs text-[#64748B] sm:block">
+                      {exam === "pte" ? s.detailPte : s.detailIelts}
+                    </p>
                     <span
                       className={`inline-flex size-10 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
                         s.tone === "green"
@@ -308,7 +336,10 @@ export function MockTestResults() {
                           : "bg-[#FFEDD5] text-[#EA580C]"
                       }`}
                     >
-                      {s.score}
+                      {formatEstimateValue(
+                        demoScoreFromBand(s.bandValue, exam),
+                        exam,
+                      )}
                     </span>
                     <span className="text-[#CBD5E1]" aria-hidden>
                       ›

@@ -6,7 +6,7 @@ import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
 export function PremiumRestore() {
   return (
     <DashboardShell
-      title={<span className="sr-only">Restore Purchase</span>}
+      title="Restore Purchase"
       contentBgClassName="bg-white"
       mainClassName="flex px-4 sm:px-6 lg:px-[1cm] flex-1 flex-col py-8"
     >
@@ -15,10 +15,7 @@ export function PremiumRestore() {
           <RestoreIcon />
         </div>
 
-        <h1 className="mt-5 text-2xl font-bold text-[#141B2B] sm:text-3xl">
-          Restore Purchase
-        </h1>
-        <p className="mt-3 max-w-sm text-sm leading-6 text-[#64748B]">
+        <p className="mt-5 max-w-sm text-sm leading-6 text-[#64748B]">
           If you&apos;ve previously subscribed on this or another device, tap below to
           restore your Premium access.
         </p>

@@ -29,6 +29,10 @@ export type OnboardingState = {
   /** True when the learner has never taken the exam before */
   isFirstIelts: boolean;
   previousScores: SkillBands;
+  /** Optional overall previous result for PTE (10–90) */
+  previousPteOverall: number | null;
+  /** Optional overall previous IELTS band (0–9) */
+  previousIeltsOverall: BandScore;
   /** Whether step 3 (prior experience) was completed */
   experienceDone: boolean;
   /** Per-skill target bands (step 4) */
@@ -60,6 +64,8 @@ export const emptySkillBands: SkillBands = {
 
 /** Default overall when user skips selecting targets */
 export const DEFAULT_TARGET_BAND = 7.0;
+/** Default PTE overall when user skips selecting targets */
+export const DEFAULT_TARGET_PTE_SCORE = 65;
 
 export const defaultOnboardingState: OnboardingState = {
   exam: null,
@@ -67,6 +73,8 @@ export const defaultOnboardingState: OnboardingState = {
   dailyMinutes: null,
   isFirstIelts: true,
   previousScores: emptySkillBands,
+  previousPteOverall: null,
+  previousIeltsOverall: null,
   experienceDone: false,
   targetScores: emptySkillBands,
   sameTargetAll: false,
@@ -149,13 +157,27 @@ export const ONBOARDING_ROUTES = {
   diagnosticPlan: "/onboarding/diagnostic/plan",
 } as const;
 
-/** Demo estimated bands shown after the quick diagnostic (Figma). */
+/** Demo estimated IELTS bands shown after the quick diagnostic (Figma). */
 export const DIAGNOSTIC_ESTIMATED_BANDS: SkillBands = {
   reading: 6.0,
   writing: 5.5,
   listening: 6.5,
   speaking: 6.0,
 };
+
+/** Demo estimated PTE scores (out of 90) after the quick diagnostic (Figma). */
+export const DIAGNOSTIC_ESTIMATED_PTE_SCORES: SkillBands & {
+  overall: number;
+} = {
+  overall: 64,
+  reading: 68,
+  writing: 62,
+  listening: 60,
+  speaking: 58,
+};
+
+export const ESTIMATE_DISCLAIMER =
+  "Estimated by Linguatude from your practice performance. Not an official test result.";
 
 /** IELTS overall = mean of 4 skills, rounded to nearest 0.5 */
 export function calculateIeltsOverall(scores: SkillBands): number | null {
@@ -171,20 +193,48 @@ export function calculateIeltsOverall(scores: SkillBands): number | null {
   return Math.round(avg * 2) / 2;
 }
 
-export function withDefaultTargets(scores: SkillBands): SkillBands {
-  const overall = calculateIeltsOverall(scores);
+/** PTE overall = mean of 4 skills, rounded to nearest whole score */
+export function calculatePteOverall(scores: SkillBands): number | null {
+  const values = [
+    scores.reading,
+    scores.writing,
+    scores.listening,
+    scores.speaking,
+  ];
+  if (values.some((v) => v == null)) return null;
+  const avg =
+    (values as number[]).reduce((sum, n) => sum + n, 0) / values.length;
+  return Math.round(avg);
+}
+
+export function withDefaultTargets(
+  scores: SkillBands,
+  exam: ExamChoice = "academic",
+): SkillBands {
+  const overall =
+    exam === "pte"
+      ? calculatePteOverall(scores)
+      : calculateIeltsOverall(scores);
   if (overall != null) return scores;
+  const fallback =
+    exam === "pte" ? DEFAULT_TARGET_PTE_SCORE : DEFAULT_TARGET_BAND;
   return {
-    reading: DEFAULT_TARGET_BAND,
-    writing: DEFAULT_TARGET_BAND,
-    listening: DEFAULT_TARGET_BAND,
-    speaking: DEFAULT_TARGET_BAND,
+    reading: fallback,
+    writing: fallback,
+    listening: fallback,
+    speaking: fallback,
   };
 }
 
 export const IELTS_BAND_OPTIONS: number[] = Array.from(
   { length: 19 },
   (_, i) => i * 0.5,
+);
+
+/** PTE Academic overall score options (10–90) */
+export const PTE_SCORE_OPTIONS: number[] = Array.from(
+  { length: 81 },
+  (_, i) => i + 10,
 );
 
 /** @deprecated Use SkillBands — kept for older localStorage reads */

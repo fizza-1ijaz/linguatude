@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   OnboardingContinueButton,
   OnboardingShell,
@@ -12,8 +12,12 @@ import {
   type ExamChoice,
   type SkillBands,
   DEFAULT_TARGET_BAND,
+  DEFAULT_TARGET_PTE_SCORE,
   IELTS_BAND_OPTIONS,
   ONBOARDING_ROUTES,
+  PTE_SCORE_OPTIONS,
+  calculateIeltsOverall,
+  calculatePteOverall,
   emptySkillBands,
   readOnboardingState,
   withDefaultTargets,
@@ -31,6 +35,37 @@ function formatBand(value: number) {
   return value.toFixed(1);
 }
 
+function formatScore(value: number) {
+  return String(Math.round(value));
+}
+
+function isPteScore(value: number | null): value is number {
+  return value != null && Number.isInteger(value) && value >= 10 && value <= 90;
+}
+
+function isIeltsBand(value: number | null): value is number {
+  return (
+    value != null &&
+    value >= 0 &&
+    value <= 9 &&
+    Math.abs(value * 2 - Math.round(value * 2)) < 1e-9
+  );
+}
+
+function sanitizeTargetsForExam(
+  scores: SkillBands,
+  exam: ExamChoice,
+): SkillBands {
+  const valid = (v: BandScore) =>
+    exam === "pte" ? isPteScore(v) : isIeltsBand(v);
+  return {
+    reading: valid(scores.reading) ? scores.reading : null,
+    writing: valid(scores.writing) ? scores.writing : null,
+    listening: valid(scores.listening) ? scores.listening : null,
+    speaking: valid(scores.speaking) ? scores.speaking : null,
+  };
+}
+
 export function OnboardingScheduleStep() {
   const router = useRouter();
   const [exam, setExam] = useState<ExamChoice>(null);
@@ -41,6 +76,7 @@ export function OnboardingScheduleStep() {
   const [noTestDate, setNoTestDate] = useState(false);
   const [ready, setReady] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const isPte = exam === "pte";
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -72,22 +108,54 @@ export function OnboardingScheduleStep() {
       router.replace(ONBOARDING_ROUTES.goal);
       return;
     }
-    setExam(state.exam);
-    setTargets(state.targetScores);
+    const nextExam = state.exam;
+    const nextTargets = sanitizeTargetsForExam(state.targetScores, nextExam);
+    setExam(nextExam);
+    setTargets(nextTargets);
     setNotSure(state.notSureTarget);
     setTestDate(state.testDate ?? "");
     setNoTestDate(state.noTestDate);
+    const savedOverall =
+      nextExam === "pte"
+        ? calculatePteOverall(nextTargets)
+        : calculateIeltsOverall(nextTargets);
+    const fallbackDefault =
+      nextExam === "pte" ? DEFAULT_TARGET_PTE_SCORE : DEFAULT_TARGET_BAND;
     setOverallTarget(
-      state.sameTargetAll
-        ? state.targetScores.reading ?? DEFAULT_TARGET_BAND
-        : null,
+      savedOverall ??
+        (state.sameTargetAll
+          ? (nextTargets.reading ?? fallbackDefault)
+          : null),
     );
     setReady(true);
   }, [router]);
 
+  const calculatedOverall = useMemo(
+    () =>
+      isPte ? calculatePteOverall(targets) : calculateIeltsOverall(targets),
+    [isPte, targets],
+  );
+  const allTargetsFilled = SKILLS.every((s) => targets[s.key] != null);
+  const scoreOptions = isPte ? PTE_SCORE_OPTIONS : IELTS_BAND_OPTIONS;
+  const formatOption = isPte ? formatScore : formatBand;
+  const selectPlaceholder = isPte ? "Select score" : "Select band";
+
+  useEffect(() => {
+    if (calculatedOverall == null) return;
+    setOverallTarget(calculatedOverall);
+  }, [calculatedOverall]);
+
   const canContinue = noTestDate || Boolean(testDate);
 
-  function setBand(key: keyof SkillBands, value: BandScore) {
+  function switchExam(next: NonNullable<ExamChoice>) {
+    if (next === exam || next === "ukvi") return;
+    setExam(next);
+    setNotSure(false);
+    setTargets(emptySkillBands);
+    setOverallTarget(null);
+  }
+
+  function setSkill(key: keyof SkillBands, value: BandScore) {
     setNotSure(false);
     setTargets((prev) => ({ ...prev, [key]: value }));
   }
@@ -108,22 +176,37 @@ export function OnboardingScheduleStep() {
     const next = !notSure;
     setNotSure(next);
     if (next) {
-      setOverallTarget(DEFAULT_TARGET_BAND);
+      const fallback = isPte ? DEFAULT_TARGET_PTE_SCORE : DEFAULT_TARGET_BAND;
+      setOverallTarget(fallback);
       setTargets({
-        reading: DEFAULT_TARGET_BAND,
-        writing: DEFAULT_TARGET_BAND,
-        listening: DEFAULT_TARGET_BAND,
-        speaking: DEFAULT_TARGET_BAND,
+        reading: fallback,
+        writing: fallback,
+        listening: fallback,
+        speaking: fallback,
       });
     }
   }
 
   function continueNext() {
     if (!canContinue) return;
+    const resolvedExam = exam === "pte" ? "pte" : "academic";
+    const resolvedTargets =
+      allTargetsFilled || overallTarget == null
+        ? targets
+        : {
+            reading: overallTarget,
+            writing: overallTarget,
+            listening: overallTarget,
+            speaking: overallTarget,
+          };
     writeOnboardingState({
-      exam: exam === "pte" ? "pte" : "academic",
-      targetScores: withDefaultTargets(targets),
-      sameTargetAll: overallTarget != null || notSure,
+      exam: resolvedExam,
+      targetScores: withDefaultTargets(resolvedTargets, resolvedExam),
+      sameTargetAll:
+        notSure ||
+        (overallTarget != null &&
+          (!allTargetsFilled ||
+            SKILLS.every((s) => targets[s.key] === overallTarget))),
       notSureTarget: notSure,
       testDate: noTestDate ? null : testDate || null,
       noTestDate,
@@ -163,7 +246,7 @@ export function OnboardingScheduleStep() {
             <div className="inline-flex rounded-full bg-[#E8ECF4] p-0.5 text-xs font-semibold">
               <button
                 type="button"
-                onClick={() => setExam("academic")}
+                onClick={() => switchExam("academic")}
                 className={`rounded-full px-2.5 py-1 transition ${
                   exam === "academic"
                     ? "bg-white text-[#2b5ce6] shadow-sm"
@@ -174,7 +257,7 @@ export function OnboardingScheduleStep() {
               </button>
               <button
                 type="button"
-                onClick={() => setExam("pte")}
+                onClick={() => switchExam("pte")}
                 className={`rounded-full px-2.5 py-1 transition ${
                   exam === "pte"
                     ? "bg-white text-[#2b5ce6] shadow-sm"
@@ -188,7 +271,7 @@ export function OnboardingScheduleStep() {
 
           <section className="shrink-0">
             <h2 className="text-sm font-bold text-[#141b2b]">
-              Your target band scores
+              {isPte ? "Your target scores" : "Your target band scores"}
             </h2>
             <div className="mt-2 grid grid-cols-2 gap-2">
               {SKILLS.map((skill) => (
@@ -196,9 +279,12 @@ export function OnboardingScheduleStep() {
                   <span className="text-xs font-medium text-[#141b2b]">
                     {skill.label}
                   </span>
-                  <BandSelect
+                  <ScoreSelect
                     value={targets[skill.key]}
-                    onChange={(v) => setBand(skill.key, v)}
+                    onChange={(v) => setSkill(skill.key, v)}
+                    options={scoreOptions}
+                    formatOption={formatOption}
+                    placeholder={selectPlaceholder}
                   />
                 </label>
               ))}
@@ -216,14 +302,28 @@ export function OnboardingScheduleStep() {
               </span>
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-bold text-[#141B2B]">
-                  Overall Target Band
+                  {isPte ? "Overall Target Score" : "Overall Target Band"}
                 </p>
                 <p className="text-[0.625rem] leading-snug text-[#64748B]">
-                  Recommended minimum target across all institutions.
+                  {allTargetsFilled
+                    ? isPte
+                      ? "Calculated from your four skill targets."
+                      : "Calculated from your four skill targets (nearest 0.5)."
+                    : isPte
+                      ? "Select an overall score, or fill all four skills above."
+                      : "Select an overall target, or fill all four skills above."}
                 </p>
               </div>
               <div className="w-[7.5rem] shrink-0">
-                <BandSelect value={overallTarget} onChange={setOverall} />
+                <ScoreSelect
+                  value={
+                    allTargetsFilled ? calculatedOverall : overallTarget
+                  }
+                  onChange={setOverall}
+                  options={scoreOptions}
+                  formatOption={formatOption}
+                  placeholder={selectPlaceholder}
+                />
               </div>
             </div>
 
@@ -303,12 +403,18 @@ export function OnboardingScheduleStep() {
   );
 }
 
-function BandSelect({
+function ScoreSelect({
   value,
   onChange,
+  options,
+  formatOption,
+  placeholder,
 }: {
   value: BandScore;
   onChange: (v: BandScore) => void;
+  options: number[];
+  formatOption: (n: number) => string;
+  placeholder: string;
 }) {
   return (
     <span className="relative block">
@@ -320,10 +426,10 @@ function BandSelect({
         }}
         className="h-9 w-full appearance-none rounded-xl border border-[#e2e8f0] bg-white px-2.5 pr-7 text-xs text-[#141b2b] outline-none transition focus:border-[#2b5ce6] focus:ring-2 focus:ring-[#2b5ce6]/20"
       >
-        <option value="">Select band</option>
-        {IELTS_BAND_OPTIONS.map((band) => (
-          <option key={band} value={band}>
-            {formatBand(band)}
+        <option value="">{placeholder}</option>
+        {options.map((opt) => (
+          <option key={opt} value={opt}>
+            {formatOption(opt)}
           </option>
         ))}
       </select>

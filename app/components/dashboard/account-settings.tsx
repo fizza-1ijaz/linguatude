@@ -9,6 +9,7 @@ const LINKS = [
   { href: "/dashboard/account/notifications", label: "Notifications", Icon: BellIcon },
   { href: "/dashboard/account/speaking", label: "Speaking prefs", Icon: MicIcon },
   { href: "/dashboard/account/subscription", label: "Subscription", Icon: CardIcon },
+  { href: "/dashboard/account/devices", label: "Devices", Icon: DevicesIcon },
   { href: "/dashboard/account/privacy", label: "Privacy & data", Icon: ShieldIcon },
   { href: "/dashboard/account/help", label: "Help & support", Icon: HeadsetIcon },
 ] as const;
@@ -118,6 +119,15 @@ function CardIcon() {
     <svg viewBox="0 0 18 18" className="size-5" fill="none" aria-hidden>
       <rect x="2.5" y="4.5" width="13" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
       <path d="M2.5 7.5h13M5 11h3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function DevicesIcon() {
+  return (
+    <svg viewBox="0 0 18 18" className="size-5" fill="none" aria-hidden>
+      <rect x="5" y="2.5" width="8" height="13" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M7.5 13.5h3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
     </svg>
   );
 }

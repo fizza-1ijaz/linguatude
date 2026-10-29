@@ -6,19 +6,27 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
+import {
+  demoScoreFromBand,
+  estimateDisclaimer,
+  formatEstimateValue,
+  scoreNoun,
+  scoreScaleMax,
+  useDashboardExam,
+} from "@/app/components/dashboard/use-dashboard-exam";
 
 const BAND_METRICS = [
-  { label: "F&C", value: "6.0", color: "text-[#F97316]" },
-  { label: "Lex", value: "7.0", color: "text-[#16A34A]" },
-  { label: "Gram", value: "6.0", color: "text-[#F97316]" },
-  { label: "Pron", value: "6.5", color: "text-[#F97316]" },
+  { label: "F&C", value: 6.0, color: "text-[#F97316]" },
+  { label: "Lex", value: 7.0, color: "text-[#16A34A]" },
+  { label: "Gram", value: 6.0, color: "text-[#F97316]" },
+  { label: "Pron", value: 6.5, color: "text-[#F97316]" },
 ] as const;
 
 const PART2_BAND_METRICS = [
-  { label: "F&C", value: "6.0", color: "text-[#3B82F6]" },
-  { label: "Lex", value: "6.5", color: "text-[#16A34A]" },
-  { label: "Gram", value: "6.0", color: "text-[#F97316]" },
-  { label: "Pron", value: "7.0", color: "text-[#8B5CF6]" },
+  { label: "F&C", value: 6.0, color: "text-[#3B82F6]" },
+  { label: "Lex", value: 6.5, color: "text-[#16A34A]" },
+  { label: "Gram", value: 6.0, color: "text-[#F97316]" },
+  { label: "Pron", value: 7.0, color: "text-[#8B5CF6]" },
 ] as const;
 
 const PART2_IMPROVEMENTS = [
@@ -66,6 +74,11 @@ export function SpeakFeedback() {
 }
 
 function Part2Detail() {
+  const exam = useDashboardExam();
+  const overall = demoScoreFromBand(6.5, exam);
+  const scaleMax = scoreScaleMax(exam);
+  const noun = scoreNoun(exam);
+
   return (
     <DashboardShell
       title="Part 2 Detail"
@@ -101,7 +114,7 @@ function Part2Detail() {
 
           <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.16)] sm:p-6">
             <h2 className="text-center text-base font-bold text-[#141B2B]">
-              Part 2 estimated band
+              Part 2 estimated {noun.toLowerCase()}
             </h2>
             <div className="mt-5 flex flex-col items-center">
               <div className="relative flex size-[8.75rem] items-center justify-center">
@@ -122,12 +135,12 @@ function Part2Detail() {
                     stroke="#F97316"
                     strokeWidth="10"
                     strokeLinecap="round"
-                    strokeDasharray={`${(6.5 / 9) * 2 * Math.PI * 52} ${2 * Math.PI * 52}`}
+                    strokeDasharray={`${(overall / scaleMax) * 2 * Math.PI * 52} ${2 * Math.PI * 52}`}
                     transform="rotate(-90 60 60)"
                   />
                 </svg>
                 <p className="relative text-[2.25rem] font-bold tabular-nums leading-none text-[#F97316]">
-                  6.5
+                  {formatEstimateValue(overall, exam)}
                 </p>
               </div>
               <p className="mt-3 text-center text-xs text-[#94A3B8]">
@@ -143,7 +156,10 @@ function Part2Detail() {
                       {m.label}
                     </p>
                     <p className={`mt-1 text-sm font-bold tabular-nums sm:text-base ${m.color}`}>
-                      {m.value}
+                      {formatEstimateValue(
+                        demoScoreFromBand(m.value, exam),
+                        exam,
+                      )}
                     </p>
                   </div>
                 ))}
@@ -277,6 +293,10 @@ function SpeakFeedbackDefault({
   part: string | null;
 }) {
   const [showFull, setShowFull] = useState(false);
+  const exam = useDashboardExam();
+  const overall = demoScoreFromBand(6.5, exam);
+  const scaleMax = scoreScaleMax(exam);
+  const noun = scoreNoun(exam);
 
   return (
     <DashboardShell
@@ -338,7 +358,9 @@ function SpeakFeedbackDefault({
           </section>
 
           <section className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-16px_rgba(15,23,42,0.22)] sm:p-6">
-            <h2 className="text-base font-bold text-[#141B2B]">Estimated Band</h2>
+            <h2 className="text-base font-bold text-[#141B2B]">
+              Estimated {noun}
+            </h2>
             <div className="mt-4 flex flex-col items-center gap-5 sm:flex-row sm:items-start sm:gap-6">
               <div className="flex flex-col items-center">
                 <div className="relative flex size-[8.5rem] items-center justify-center sm:size-[9.5rem]">
@@ -359,13 +381,13 @@ function SpeakFeedbackDefault({
                       stroke="#F97316"
                       strokeWidth="10"
                       strokeLinecap="round"
-                      strokeDasharray={`${(6.5 / 9) * 2 * Math.PI * 52} ${2 * Math.PI * 52}`}
+                      strokeDasharray={`${(overall / scaleMax) * 2 * Math.PI * 52} ${2 * Math.PI * 52}`}
                       transform="rotate(-90 60 60)"
                     />
                   </svg>
                   <div className="relative text-center">
                     <p className="text-3xl font-bold tabular-nums text-[#141B2B] sm:text-4xl">
-                      6.5
+                      {formatEstimateValue(overall, exam)}
                     </p>
                     <p className="mt-0.5 text-[0.625rem] font-semibold tracking-wide text-[#94A3B8]">
                       ESTIMATED
@@ -373,7 +395,7 @@ function SpeakFeedbackDefault({
                   </div>
                 </div>
                 <p className="mt-3 max-w-[11rem] rounded-lg bg-[#F1F5F9] px-2.5 py-2 text-center text-[0.6875rem] leading-4 text-[#64748B]">
-                  An estimated score, not an official IELTS result.
+                  {estimateDisclaimer(exam)}
                 </p>
               </div>
 
@@ -388,7 +410,10 @@ function SpeakFeedbackDefault({
                     </span>
                     <p className="text-xs font-semibold text-[#64748B]">{m.label}</p>
                     <p className={`mt-1 text-xl font-bold tabular-nums ${m.color}`}>
-                      {m.value}
+                      {formatEstimateValue(
+                        demoScoreFromBand(m.value, exam),
+                        exam,
+                      )}
                     </p>
                   </div>
                 ))}

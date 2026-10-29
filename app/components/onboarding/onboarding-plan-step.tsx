@@ -6,9 +6,12 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { OnboardingWideShell } from "@/app/components/onboarding/onboarding-wide-shell";
 import {
+  type ExamChoice,
   DEFAULT_TARGET_BAND,
+  DEFAULT_TARGET_PTE_SCORE,
   ONBOARDING_ROUTES,
   calculateIeltsOverall,
+  calculatePteOverall,
   readOnboardingState,
   writeOnboardingState,
 } from "@/app/components/onboarding/onboarding-state";
@@ -65,10 +68,27 @@ function formatBand(value: number) {
   return value.toFixed(1);
 }
 
+function formatPteScore(value: number) {
+  return `${Math.round(value)}+`;
+}
+
+function formatTargetDate(iso: string) {
+  const date = new Date(`${iso}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return iso;
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 export function OnboardingPlanStep() {
   const router = useRouter();
   const [ready, setReady] = useState(false);
-  const [targetBand, setTargetBand] = useState(DEFAULT_TARGET_BAND);
+  const [exam, setExam] = useState<ExamChoice>(null);
+  const [targetScore, setTargetScore] = useState(DEFAULT_TARGET_BAND);
+  const [testDate, setTestDate] = useState<string | null>(null);
+  const [startingFocus, setStartingFocus] = useState("Writing");
   const [dailyMinutes, setDailyMinutes] =
     useState<(typeof STUDY_OPTIONS)[number]>(30);
 
@@ -85,9 +105,22 @@ export function OnboardingPlanStep() {
       router.replace(ONBOARDING_ROUTES.diagnostic);
       return;
     }
-    const overall =
-      calculateIeltsOverall(state.targetScores) ?? DEFAULT_TARGET_BAND;
-    setTargetBand(overall);
+    const isPte = state.exam === "pte";
+    const overall = isPte
+      ? (calculatePteOverall(state.targetScores) ?? DEFAULT_TARGET_PTE_SCORE)
+      : (calculateIeltsOverall(state.targetScores) ?? DEFAULT_TARGET_BAND);
+    setExam(state.exam);
+    setTargetScore(overall);
+    setTestDate(state.noTestDate ? null : state.testDate);
+    if (
+      state.focus &&
+      state.focus !== "auto" &&
+      ["speaking", "writing", "reading", "listening"].includes(state.focus)
+    ) {
+      setStartingFocus(
+        state.focus.charAt(0).toUpperCase() + state.focus.slice(1),
+      );
+    }
     const mapped =
       ([15, 30, 45, 60] as const).find((n) => n === state.dailyMinutes) ??
       (state.dailyMinutes <= 20
@@ -105,6 +138,12 @@ export function OnboardingPlanStep() {
     () => weeksForDailyMinutes(dailyMinutes),
     [dailyMinutes],
   );
+
+  const isPte = exam === "pte";
+  const hasTargetDate = Boolean(testDate);
+  const targetLabel = isPte
+    ? `Score ${formatPteScore(targetScore)}`
+    : `Band ${formatBand(targetScore)}`;
 
   function finish() {
     writeOnboardingState({ completed: true });
@@ -141,12 +180,23 @@ export function OnboardingPlanStep() {
           </p>
         </header>
 
-        <div className="mt-8 grid grid-cols-1 divide-y divide-[#D6DEFF] rounded-2xl bg-white shadow-[0_8px_28px_rgba(43,92,230,0.08)] sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+        {isPte && hasTargetDate && testDate ? (
+          <PteGoalCard
+            score={formatPteScore(targetScore)}
+            dateLabel={formatTargetDate(testDate)}
+          />
+        ) : null}
+
+        <div
+          className={`grid grid-cols-1 divide-y divide-[#D6DEFF] rounded-2xl bg-white shadow-[0_8px_28px_rgba(43,92,230,0.08)] sm:grid-cols-3 sm:divide-x sm:divide-y-0 ${
+            isPte && hasTargetDate ? "mt-4" : "mt-8"
+          }`}
+        >
           <SummaryCol
             icon={<TargetIcon className="size-4 text-[#2b5ce6]" />}
             iconBg="bg-[#EEF2FF]"
             label="Target"
-            value={`Band ${formatBand(targetBand)}`}
+            value={targetLabel}
             valueClass="text-[#2b5ce6]"
             hint="Your goal score"
           />
@@ -161,7 +211,7 @@ export function OnboardingPlanStep() {
             icon={<GreyPencilIcon className="size-4 text-[#94A3B8]" />}
             iconBg="bg-[#F1F5F9]"
             label="Starting focus"
-            value="Writing"
+            value={startingFocus}
             hint="Primary focus area"
           />
         </div>
@@ -249,21 +299,13 @@ export function OnboardingPlanStep() {
                   );
                 })}
               </div>
-              <p className="mt-4 text-sm leading-6">
-                <span className="font-semibold text-[#2b5ce6]">
-                  At{" "}
-                  <span className="font-bold">{dailyMinutes} minutes a day</span>
-                  ,
-                </span>{" "}
-                <span className="text-[#111827]">
-                  you could reach{" "}
-                  <span className="font-bold">
-                    Band {formatBand(targetBand)}
-                  </span>{" "}
-                  in approximately <span className="font-bold">{weeks} weeks.</span>
+              <p className="mt-4 flex items-start gap-2 text-sm font-semibold leading-6 text-[#16A34A]">
+                <GreenStarIcon className="mt-0.5 size-4 shrink-0" />
+                <span>
+                  Consistent practice will build your skills across all areas.
                 </span>
               </p>
-              <p className="mt-2 text-xs leading-5 text-[#111827]">
+              <p className="mt-2 text-xs leading-5 text-[#64748B]">
                 This is an estimate based on average learner progress. Individual
                 results vary.
               </p>
@@ -290,6 +332,68 @@ export function OnboardingPlanStep() {
         </div>
       </div>
     </OnboardingWideShell>
+  );
+}
+
+function PteGoalCard({
+  score,
+  dateLabel,
+}: {
+  score: string;
+  dateLabel: string;
+}) {
+  return (
+    <section className="mt-8 rounded-2xl border border-[#D6DEFF] bg-[#EEF4FF] p-4 sm:p-5">
+      <div className="flex items-center gap-2">
+        <span className="flex size-7 items-center justify-center rounded-full bg-[#2b5ce6] text-white">
+          <TargetIcon className="size-3.5" />
+        </span>
+        <h2 className="text-sm font-bold text-[#1A237E]">Your Goal</h2>
+      </div>
+
+      <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-0">
+        <div className="flex items-start gap-3 sm:pr-4">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-white shadow-sm">
+            <TargetIcon className="size-4 text-[#2b5ce6]" />
+          </span>
+          <div>
+            <p className="text-xs text-[#64748B]">Target score</p>
+            <p className="mt-0.5 text-lg font-bold text-[#111827]">{score}</p>
+            <p className="text-xs text-[#94A3B8]">(PTE)</p>
+          </div>
+        </div>
+
+        <div className="flex items-start gap-3 border-t border-[#D6DEFF] pt-3 sm:border-l sm:border-t-0 sm:pl-4 sm:pt-0">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-white shadow-sm">
+            <CalendarIcon className="size-4 text-[#2b5ce6]" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-xs text-[#64748B]">Target date</p>
+            <div className="mt-0.5 flex items-center justify-between gap-2">
+              <p className="text-lg font-bold text-[#111827]">{dateLabel}</p>
+              <Link
+                href={ONBOARDING_ROUTES.schedule}
+                className="text-[#2b5ce6]"
+                aria-label="Edit target date"
+              >
+                <ChevronRightIcon />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 flex items-start gap-2 border-t border-[#D6DEFF] pt-3">
+        <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-[#2b5ce6] text-[0.65rem] font-bold text-white">
+          i
+        </span>
+        <p className="text-xs leading-5 text-[#475569]">
+          Your plan is designed to help you reach your{" "}
+          <span className="font-semibold text-[#2b5ce6]">target score</span> by
+          your selected date.
+        </p>
+      </div>
+    </section>
   );
 }
 
@@ -325,6 +429,31 @@ function SummaryCol({
         <p className="mt-0.5 text-xs text-[#94A3B8]">{hint}</p>
       </div>
     </div>
+  );
+}
+
+function GreenStarIcon({ className = "size-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" aria-hidden>
+      <path
+        d="M8 1.5 9.2 6.8 14.5 8 9.2 9.2 8 14.5 6.8 9.2 1.5 8l5.3-1.2L8 1.5Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+function ChevronRightIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <path
+        d="M6 4l4 4-4 4"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
 

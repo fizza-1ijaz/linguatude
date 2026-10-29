@@ -146,9 +146,9 @@ export function OnboardingShell({
 
         <div className="relative flex max-h-full w-full max-w-[36rem] flex-col">
           {showAiBadge ? (
-            <div className="pointer-events-none absolute -left-1 -top-3 z-20 sm:-left-3 sm:-top-4 lg:-left-5 lg:-top-5">
+            <div className="pointer-events-none absolute -left-1 top-3 z-20 sm:-left-3 sm:top-4 lg:-left-5 lg:top-5">
               <div className="pointer-events-auto flex max-w-[11.5rem] items-center gap-2 rounded-full bg-[#2b5ce6] px-2.5 py-2 shadow-[0_8px_24px_rgba(43,92,230,0.28)]">
-                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-white/15">
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-white">
                   <Image
                     src="/onboarding/icon-ai-chart.svg"
                     alt=""

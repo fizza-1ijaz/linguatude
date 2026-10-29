@@ -38,8 +38,7 @@ export function LessonExitComplete() {
           <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-[#DCFCE7] ui-soft-pulse">
             <CheckBig />
           </div>
-          <h2 className="mt-5 text-2xl font-bold text-[#141B2B]">Lesson Completed</h2>
-          <p className="mt-1 text-sm font-medium text-[#64748B]">Exit Assessment</p>
+          <p className="mt-5 text-sm font-medium text-[#64748B]">Exit Assessment</p>
 
           <div className="my-6 border-t border-[#E2E8F0]" />
 

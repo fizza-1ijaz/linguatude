@@ -4,6 +4,7 @@ import { NotificationBellButton } from "@/app/components/dashboard/notification-
 import Link from "next/link";
 import { useState } from "react";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
+import { useDashboardExam } from "@/app/components/dashboard/use-dashboard-exam";
 
 const PARTS = [
   { id: "full", label: "Full Test (Parts 1, 2 & 3)", duration: "~11–14 minutes" },
@@ -12,39 +13,46 @@ const PARTS = [
   { id: "part3", label: "Part 3 only", duration: "~4–5 minutes" },
 ] as const;
 
-const EXPECT = [
-  {
-    id: "feedback",
-    tone: "blue" as const,
-    text: "Feedback is given only after all parts are complete — not between questions.",
-    Icon: ChatExpectIcon,
-  },
-  {
-    id: "strict",
-    tone: "blue" as const,
-    text: "This is a strict assessment. Scoring follows official IELTS band descriptors.",
-    Icon: CapExpectIcon,
-  },
-  {
-    id: "ai",
-    tone: "orange" as const,
-    text: "Scores are AI-estimated and not official IELTS results.",
-    Icon: ClockAlertIcon,
-    highlight: true,
-  },
-  {
-    id: "timed",
-    tone: "blue" as const,
-    text: "Each part is timed. Responses auto-submit when time expires.",
-    Icon: TimerExpectIcon,
-  },
-] as const;
-
 export function SpeakExamSetup() {
   const [part, setPart] = useState<(typeof PARTS)[number]["id"]>("full");
   const [expectOpen, setExpectOpen] = useState(true);
+  const exam = useDashboardExam();
   const duration =
     PARTS.find((p) => p.id === part)?.duration ?? "~11–14 minutes";
+
+  const expect = [
+    {
+      id: "feedback",
+      tone: "blue" as const,
+      text: "Feedback is given only after all parts are complete — not between questions.",
+      Icon: ChatExpectIcon,
+    },
+    {
+      id: "strict",
+      tone: "blue" as const,
+      text:
+        exam === "pte"
+          ? "This is a strict assessment. Scoring follows official PTE score guidelines."
+          : "This is a strict assessment. Scoring follows official IELTS band descriptors.",
+      Icon: CapExpectIcon,
+    },
+    {
+      id: "ai",
+      tone: "orange" as const,
+      text:
+        exam === "pte"
+          ? "Scores are AI-estimated and not official PTE results."
+          : "Scores are AI-estimated and not official IELTS results.",
+      Icon: ClockAlertIcon,
+      highlight: true,
+    },
+    {
+      id: "timed",
+      tone: "blue" as const,
+      text: "Each part is timed. Responses auto-submit when time expires.",
+      Icon: TimerExpectIcon,
+    },
+  ] as const;
 
   return (
     <DashboardShell
@@ -77,7 +85,10 @@ export function SpeakExamSetup() {
         <section className="rounded-2xl border border-[#E2E8F0] bg-white px-5 py-4 shadow-[0_4px_14px_-10px_rgba(15,23,42,0.12)] sm:px-6 sm:py-5">
           <div className="flex flex-wrap items-center gap-3">
             <span className="inline-flex items-center rounded-full bg-[#F1F5F9] px-3.5 py-1.5 text-sm font-semibold text-[#334155]">
-              Exam: <span className="ml-1 font-bold">IELTS Academic</span>
+              Exam:{" "}
+              <span className="ml-1 font-bold">
+                {exam === "pte" ? "PTE Academic" : "IELTS Academic"}
+              </span>
             </span>
             <Link
               href="/dashboard/switch-exam"
@@ -134,7 +145,7 @@ export function SpeakExamSetup() {
           </button>
           {expectOpen ? (
             <ul className="border-t border-[#E2E8F0]">
-              {EXPECT.map((row) => {
+              {expect.map((row) => {
                 const Icon = row.Icon;
                 return (
                   <li

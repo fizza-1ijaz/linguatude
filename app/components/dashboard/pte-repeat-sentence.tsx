@@ -43,10 +43,7 @@ export function PteRepeatSentence() {
                 <ChatIcon />
               </span>
               <div>
-                <h2 className="text-xl font-bold text-[#141B2B]">
-                  Repeat Sentence
-                </h2>
-                <p className="mt-1 text-sm leading-6 text-[#64748B]">
+                <p className="text-sm leading-6 text-[#64748B]">
                   You will hear a sentence.
                   <br />
                   Please repeat the sentence exactly as you hear it.

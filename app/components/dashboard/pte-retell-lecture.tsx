@@ -37,8 +37,7 @@ export function PteRetellLecture() {
                 <SpeakerIcon />
               </span>
               <div>
-                <h2 className="text-xl font-bold text-[#2b5ce6]">Re-tell Lecture</h2>
-                <p className="mt-1 text-sm leading-6 text-[#64748B]">
+                <p className="text-sm leading-6 text-[#64748B]">
                   Listen to a short lecture. You may take notes while you listen. You
                   will have 10 seconds to prepare. Then speak for up to 40 seconds and
                   re-tell the lecture in as much detail as you can. You will be scored

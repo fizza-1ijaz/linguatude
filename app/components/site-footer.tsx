@@ -38,6 +38,7 @@ const SITEMAP = [
 const LEGAL_LINKS = [
   { href: "/privacy-policy", label: "Privacy Policy" },
   { href: "/terms-of-service", label: "Terms of Service" },
+  { href: "/refund-policy", label: "Refund Policy" },
   { href: "/cookie-policy", label: "Cookie Policy" },
   { href: "/privacy-policy", label: "Account & Data Deletion" },
 ] as const;

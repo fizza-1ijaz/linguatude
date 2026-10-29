@@ -1,14 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
 import {
   AccountHeaderRight,
   BackToAccount,
 } from "@/app/components/dashboard/account-shared";
 
-type SubState =
+export type SubscriptionVariant =
   | "manage"
   | "free"
   | "trial"
@@ -16,20 +15,13 @@ type SubState =
   | "cancelled"
   | "payment";
 
-const STATES: { id: SubState; label: string }[] = [
-  { id: "manage", label: "Manage" },
-  { id: "free", label: "Free" },
-  { id: "trial", label: "Trial" },
-  { id: "active", label: "Active" },
-  { id: "cancelled", label: "Cancelled" },
-  { id: "payment", label: "Payment issue" },
-];
-
-export function AccountSubscription() {
-  const [state, setState] = useState<SubState>("manage");
-
-  const body = useMemo(() => {
-    switch (state) {
+export function AccountSubscription({
+  variant = "manage",
+}: {
+  variant?: SubscriptionVariant;
+}) {
+  const body = (() => {
+    switch (variant) {
       case "free":
         return <FreeView />;
       case "trial":
@@ -43,7 +35,7 @@ export function AccountSubscription() {
       default:
         return <ManageView />;
     }
-  }, [state]);
+  })();
 
   return (
     <DashboardShell
@@ -53,26 +45,7 @@ export function AccountSubscription() {
       headerLeft={<BackToAccount />}
       headerRight={<AccountHeaderRight />}
     >
-      <div className="flex w-full flex-col gap-5 pb-10">
-        <div className="flex flex-wrap gap-2">
-          {STATES.map((s) => (
-            <button
-              key={s.id}
-              type="button"
-              onClick={() => setState(s.id)}
-              className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-                state === s.id
-                  ? "bg-[#2b5ce6] text-white"
-                  : "bg-[#F1F5F9] text-[#64748B] hover:bg-[#E2E8F0]"
-              }`}
-            >
-              {s.label}
-            </button>
-          ))}
-        </div>
-
-        {body}
-      </div>
+      <div className="flex w-full flex-col gap-5 pb-6">{body}</div>
     </DashboardShell>
   );
 }

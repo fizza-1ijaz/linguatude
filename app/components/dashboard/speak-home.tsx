@@ -1,11 +1,19 @@
+"use client";
+
 import { NotificationBellButton } from "@/app/components/dashboard/notification-bell-button";
 import Link from "next/link";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
+import {
+  demoScoreFromBand,
+  formatEstimateValue,
+  scoreNoun,
+  useDashboardExam,
+} from "@/app/components/dashboard/use-dashboard-exam";
 
 const RECENT = [
   {
     title: "Practice Mode, Aug 21",
-    band: "Band 6.5",
+    bandValue: 6.5,
     tag: "Fluency",
     border: "border-l-[#2b5ce6]",
     cardBg: "bg-[#F5F8FF]",
@@ -15,7 +23,7 @@ const RECENT = [
   },
   {
     title: "Exam Simulation, Aug 18",
-    band: "Band 6.0",
+    bandValue: 6.0,
     tag: "Vocabulary",
     border: "border-l-[#7C3AED]",
     cardBg: "bg-[#F9F5FF]",
@@ -25,7 +33,7 @@ const RECENT = [
   },
   {
     title: "Practice Mode, Aug 15",
-    band: "Band 6.5",
+    bandValue: 6.5,
     tag: "Grammar",
     border: "border-l-[#16A34A]",
     cardBg: "bg-[#F3FCF6]",
@@ -36,6 +44,10 @@ const RECENT = [
 ] as const;
 
 export function SpeakHome() {
+  const exam = useDashboardExam();
+  const noun = scoreNoun(exam);
+  const estimate = demoScoreFromBand(6.5, exam);
+
   return (
     <DashboardShell
       title="Speaking"
@@ -82,7 +94,9 @@ export function SpeakHome() {
               Exam Simulation
             </h2>
             <p className="mt-1.5 text-sm leading-6 text-[#64748B]">
-              Full IELTS-style assessment with strict band scoring.
+              {exam === "pte"
+                ? "Full PTE-style assessment with strict score evaluation."
+                : "Full IELTS-style assessment with strict band scoring."}
             </p>
             <Link
               href="/dashboard/speak/exam"
@@ -105,10 +119,10 @@ export function SpeakHome() {
                 Speaking estimate
               </p>
               <p className="mt-2 text-3xl font-bold tabular-nums text-[#2b5ce6]">
-                6.5
+                {formatEstimateValue(estimate, exam)}
               </p>
               <p className="mt-0.5 text-xs font-medium text-[#94A3B8]">
-                (estimated)
+                (estimated {noun.toLowerCase()})
               </p>
             </div>
             <div className="rounded-2xl bg-[#EFF6FF] px-5 py-4 text-center sm:py-5">
@@ -159,7 +173,11 @@ export function SpeakHome() {
                         <p className="text-sm font-bold text-[#141B2B] sm:text-base">
                           {row.title}{" "}
                           <span className="font-semibold text-[#64748B]">
-                            • {row.band}
+                            • {noun}{" "}
+                            {formatEstimateValue(
+                              demoScoreFromBand(row.bandValue, exam),
+                              exam,
+                            )}
                           </span>
                         </p>
                       </div>

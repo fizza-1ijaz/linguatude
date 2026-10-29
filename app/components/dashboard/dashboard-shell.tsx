@@ -5,7 +5,10 @@ import Link from "next/link";
 import { useEffect, useRef, useState, type RefObject } from "react";
 import { usePathname } from "next/navigation";
 
-const EXAM_STORAGE_KEY = "linguatude_dashboard_exam";
+import {
+  EXAM_STORAGE_KEY,
+  type DashboardExam,
+} from "@/app/components/dashboard/use-dashboard-exam";
 
 const NAV_BASE = [
   { href: "/dashboard", label: "Home", icon: HomeIcon, match: "exact" as const },
@@ -48,8 +51,6 @@ const NAV_BASE = [
   },
 ] as const;
 
-type ExamChoice = "ielts" | "pte";
-
 export function DashboardShell({
   children,
   title,
@@ -70,7 +71,7 @@ export function DashboardShell({
   hideHeader?: boolean;
 }) {
   const pathname = usePathname();
-  const [exam, setExam] = useState<ExamChoice>("ielts");
+  const [exam, setExam] = useState<DashboardExam>("ielts");
   const [examOpen, setExamOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const examRef = useRef<HTMLDivElement>(null);
@@ -119,14 +120,19 @@ export function DashboardShell({
     };
   }, [mobileNavOpen]);
 
-  function selectExam(next: ExamChoice) {
-    setExam(next);
+  function selectExam(next: DashboardExam) {
+    if (next === exam) {
+      setExamOpen(false);
+      return;
+    }
     setExamOpen(false);
     try {
       window.localStorage.setItem(EXAM_STORAGE_KEY, next);
     } catch {
       /* ignore */
     }
+    // Reload so the current tab re-renders IELTS/PTE copy, scores, and practice links.
+    window.location.reload();
   }
 
   const sidebarProps = {
@@ -230,12 +236,12 @@ function DashboardSidebarContent({
   onSelectExam,
   onNavigate,
 }: {
-  exam: ExamChoice;
+  exam: DashboardExam;
   examOpen: boolean;
   examRef: RefObject<HTMLDivElement | null>;
   pathname: string | null;
   onExamToggle: () => void;
-  onSelectExam: (next: ExamChoice) => void;
+  onSelectExam: (next: DashboardExam) => void;
   onNavigate?: () => void;
 }) {
   return (

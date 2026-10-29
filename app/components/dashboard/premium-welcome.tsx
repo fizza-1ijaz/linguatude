@@ -23,7 +23,7 @@ const BENEFITS = [
 export function PremiumWelcome() {
   return (
     <DashboardShell
-      title={<span className="sr-only">Welcome to Premium</span>}
+      title="Welcome to Premium"
       contentBgClassName="bg-white"
       mainClassName="flex px-4 sm:px-6 lg:px-[1cm] flex-1 flex-col py-8"
     >
@@ -35,9 +35,9 @@ export function PremiumWelcome() {
           </span>
         </div>
 
-        <h1 className="mt-6 text-balance text-2xl font-bold text-[#141B2B] sm:text-3xl">
-          Welcome to Premium, John!
-        </h1>
+        <p className="mt-6 text-balance text-base font-semibold text-[#141B2B] sm:text-lg">
+          Welcome, John!
+        </p>
 
         <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-[#A7F3D0] bg-[#F0FFF4] px-3 py-1.5 text-sm font-semibold text-[#34C759]">
           <CrownTiny />

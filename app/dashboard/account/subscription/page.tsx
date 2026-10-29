@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function AccountSubscriptionPage() {
-  return <AccountSubscription />;
+  return <AccountSubscription variant="manage" />;
 }

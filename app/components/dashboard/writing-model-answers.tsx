@@ -3,6 +3,10 @@
 import Link from "next/link";
 import { useMemo, useState, type ReactNode } from "react";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
+import {
+  scoreNoun,
+  useDashboardExam,
+} from "@/app/components/dashboard/use-dashboard-exam";
 
 const NOTES = [
   {
@@ -42,12 +46,16 @@ const BAND8_PARAS = [
 ] as const;
 
 export function WritingModelAnswers() {
+  const exam = useDashboardExam();
+  const noun = scoreNoun(exam);
   const [band, setBand] = useState<7 | 8>(7);
   const [activeNote, setActiveNote] = useState<number | null>(1);
   const [compareOpen, setCompareOpen] = useState(true);
   const [showFull, setShowFull] = useState(true);
 
   const paragraphs = band === 7 ? BAND7_PARAS : BAND8_PARAS;
+  const levelLabel = (n: 7 | 8) =>
+    exam === "pte" ? `Score ${n * 10}` : `Band ${n}`;
 
   const essayNodes = useMemo(() => {
     return paragraphs.map((para, pi) => {
@@ -109,7 +117,7 @@ export function WritingModelAnswers() {
                   : "text-[#64748B] hover:text-[#141B2B]"
               }`}
             >
-              Band 7
+              {levelLabel(7)}
             </button>
             <button
               type="button"
@@ -120,7 +128,7 @@ export function WritingModelAnswers() {
                   : "text-[#64748B] hover:text-[#141B2B]"
               }`}
             >
-              Band 8
+              {levelLabel(8)}
             </button>
           </div>
 
@@ -252,13 +260,13 @@ export function WritingModelAnswers() {
                     </tr>
                     <tr className="border-b border-[#EAECF0]">
                       <td className="px-3 py-3 font-medium text-[#141B2B]">
-                        Overall band
+                        Overall {noun.toLowerCase()}
                       </td>
                       <td className="px-3 py-3 text-center font-semibold text-[#D97706]">
-                        6.0
+                        {exam === "pte" ? "60" : "6.0"}
                       </td>
                       <td className="px-3 py-3 text-center font-semibold text-[#059669]">
-                        7.0
+                        {exam === "pte" ? "70" : "7.0"}
                       </td>
                     </tr>
                     <tr>
