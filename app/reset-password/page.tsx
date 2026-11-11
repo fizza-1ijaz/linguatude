@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { AuthCard, AuthShell } from "@/app/components/auth-shell";
 import { ResetPasswordForm } from "@/app/components/reset-password-form";
 
@@ -23,7 +24,13 @@ export default function ResetPasswordPage() {
         </header>
 
         <div className="mt-7">
-          <ResetPasswordForm />
+          <Suspense
+            fallback={
+              <p className="text-center text-sm text-[#64748B]">Loading…</p>
+            }
+          >
+            <ResetPasswordForm />
+          </Suspense>
         </div>
       </AuthCard>
     </AuthShell>

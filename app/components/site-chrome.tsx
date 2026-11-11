@@ -9,6 +9,7 @@ const AUTH_PREFIXES = [
   "/login",
   "/forgot-password",
   "/reset-password",
+  "/verify-email",
   "/onboarding",
   "/dashboard",
   "/waitlist",

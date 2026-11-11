@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { CookieConsent } from "@/components/CookieConsent";
+import { AuthProvider } from "@/app/components/auth-provider";
 import { SiteChrome } from "@/app/components/site-chrome";
 import "./globals.css";
 
@@ -90,7 +91,9 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <CookieConsent>
-          <SiteChrome>{children}</SiteChrome>
+          <AuthProvider>
+            <SiteChrome>{children}</SiteChrome>
+          </AuthProvider>
         </CookieConsent>
       </body>
     </html>

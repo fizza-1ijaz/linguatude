@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { isSupabaseConfigured, supabase } from "@/lib/supabaseClient";
+import { mapAuthError, postAuthPath, signInEmail } from "@/lib/auth";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -13,6 +14,7 @@ const fieldClass =
 type Status = "idle" | "loading" | "error";
 
 export function SigninForm() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -38,25 +40,12 @@ export function SigninForm() {
     setErrorMessage(null);
     setStatus("loading");
 
-    if (!isSupabaseConfigured) {
-      window.location.href = "/onboarding";
-      return;
-    }
-
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) throw error;
-      window.location.href = "/onboarding";
+      await signInEmail(email, password);
+      router.push(await postAuthPath());
     } catch (err) {
       setStatus("error");
-      setErrorMessage(
-        err instanceof Error
-          ? err.message
-          : "Something went wrong. Please try again.",
-      );
+      setErrorMessage(mapAuthError(err));
     }
   }
 

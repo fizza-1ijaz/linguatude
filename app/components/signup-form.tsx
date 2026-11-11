@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { isSupabaseConfigured, supabase } from "@/lib/supabaseClient";
+import { mapAuthError, signUpEmail } from "@/lib/auth";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PASSWORD_RE = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
@@ -14,6 +15,7 @@ const fieldClass =
 type Status = "idle" | "loading" | "error";
 
 export function SignupForm() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showPasswordHint, setShowPasswordHint] = useState(false);
@@ -59,28 +61,12 @@ export function SignupForm() {
     setErrorMessage(null);
     setStatus("loading");
 
-    if (!isSupabaseConfigured) {
-      window.location.href = "/onboarding";
-      return;
-    }
-
     try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: { full_name: fullName },
-        },
-      });
-      if (error) throw error;
-      window.location.href = "/onboarding";
+      await signUpEmail(email, password, fullName);
+      router.push("/verify-email");
     } catch (err) {
       setStatus("error");
-      setErrorMessage(
-        err instanceof Error
-          ? err.message
-          : "Something went wrong. Please try again.",
-      );
+      setErrorMessage(mapAuthError(err));
     }
   }
 

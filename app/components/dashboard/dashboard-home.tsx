@@ -3,10 +3,12 @@
 import { NotificationBellButton } from "@/app/components/dashboard/notification-bell-button";
 import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
+import { useAuth } from "@/app/components/auth-provider";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
 import { DailyGoalCompleteModal } from "@/app/components/dashboard/daily-goal-complete-modal";
 import { readOnboardingState } from "@/app/components/onboarding/onboarding-state";
 import { useDashboardExam } from "@/app/components/dashboard/use-dashboard-exam";
+import { getUserDisplayName } from "@/lib/auth";
 
 const STORAGE_KEY = "linguatude_daily_goal_modal_dismissed";
 
@@ -53,10 +55,19 @@ function formatTestDate(iso: string) {
   });
 }
 
+function greetingPrefix(date = new Date()): string {
+  const hour = date.getHours();
+  if (hour < 12) return "Good morning";
+  if (hour < 18) return "Good afternoon";
+  return "Good evening";
+}
+
 export function DashboardHome() {
+  const { user } = useAuth();
   const exam = useDashboardExam();
   const [goalModalOpen, setGoalModalOpen] = useState(false);
   const [testDate, setTestDate] = useState<string | null>(null);
+  const firstName = getUserDisplayName(user).split(/\s+/)[0] || "there";
 
   useEffect(() => {
     try {
@@ -113,7 +124,7 @@ export function DashboardHome() {
             <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0">
                 <h2 className="text-xl font-bold tracking-tight text-[#0F172A] sm:text-[1.625rem]">
-                  Good morning, Alex
+                  {greetingPrefix()}, {firstName}
                 </h2>
                 <p className="mt-1.5 text-[13px] leading-5 text-[#6B7280] sm:text-sm">
                   You&apos;re on your way to achieving your goals.

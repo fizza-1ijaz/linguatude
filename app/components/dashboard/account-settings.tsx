@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/components/auth-provider";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
 import { AccountHeaderRight } from "@/app/components/dashboard/account-shared";
+import { getUserDisplayName } from "@/lib/auth";
 
 const LINKS = [
   { href: "/dashboard/account/profile", label: "Profile", Icon: UserIcon },
@@ -15,6 +18,18 @@ const LINKS = [
 ] as const;
 
 export function AccountSettings() {
+  const router = useRouter();
+  const { user, signOut } = useAuth();
+  const displayName =
+    user ? getUserDisplayName(user) : "Your account";
+  const email = user?.email ?? "";
+  const initial = displayName.charAt(0).toUpperCase();
+
+  async function handleSignOut() {
+    await signOut();
+    router.replace("/login");
+  }
+
   return (
     <DashboardShell
       title="Account & Settings"
@@ -24,12 +39,23 @@ export function AccountSettings() {
     >
       <div className="flex w-full flex-col gap-5 pb-10">
         <section className="flex items-center gap-4 rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_8px_24px_-18px_rgba(15,23,42,0.14)]">
-          <span className="flex size-14 shrink-0 items-center justify-center rounded-full bg-[#DBEAFE] text-[#1D4ED8]">
-            <UserBig />
-          </span>
+          {user?.photoURL ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={user.photoURL}
+              alt=""
+              className="size-14 shrink-0 rounded-full object-cover ring-2 ring-[#DBEAFE]"
+            />
+          ) : (
+            <span className="flex size-14 shrink-0 items-center justify-center rounded-full bg-[#DBEAFE] text-lg font-bold text-[#1D4ED8]">
+              {initial}
+            </span>
+          )}
           <div className="min-w-0">
-            <p className="text-lg font-bold text-[#141B2B]">Sarah Ahmed</p>
-            <p className="text-sm text-[#64748B]">sarah@example.com</p>
+            <p className="text-lg font-bold text-[#141B2B]">{displayName}</p>
+            {email ? (
+              <p className="truncate text-sm text-[#64748B]">{email}</p>
+            ) : null}
             <p className="mt-1.5 inline-flex items-center gap-1.5 text-sm font-semibold text-[#2b5ce6]">
               <CrownTiny />
               IELTS Premium · Annual
@@ -65,17 +91,16 @@ export function AccountSettings() {
         >
           Switch exam (IELTS / PTE)
         </Link>
+
+        <button
+          type="button"
+          onClick={() => void handleSignOut()}
+          className="mt-1 inline-flex h-12 w-full items-center justify-center rounded-xl border border-[#FECACA] bg-[#FEF2F2] text-sm font-semibold text-[#B91C1C] transition hover:bg-[#FEE2E2]"
+        >
+          Sign out
+        </button>
       </div>
     </DashboardShell>
-  );
-}
-
-function UserBig() {
-  return (
-    <svg viewBox="0 0 24 24" className="size-8" fill="none" aria-hidden>
-      <circle cx="12" cy="9" r="3.5" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M5.5 19.5c1.4-3 3.8-4.5 6.5-4.5s5.1 1.5 6.5 4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-    </svg>
   );
 }
 

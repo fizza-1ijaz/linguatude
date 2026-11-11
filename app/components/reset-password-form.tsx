@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { isSupabaseConfigured, supabase } from "@/lib/supabaseClient";
+import { confirmPasswordReset, mapAuthError } from "@/lib/auth";
 
 const PASSWORD_RE = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
 
@@ -13,6 +14,9 @@ const fieldClass =
 type Status = "idle" | "loading" | "success" | "error";
 
 export function ResetPasswordForm() {
+  const searchParams = useSearchParams();
+  const oobCode = (searchParams.get("oobCode") ?? "").trim();
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [password, setPassword] = useState("");
@@ -39,28 +43,22 @@ export function ResetPasswordForm() {
       setErrorMessage("Passwords do not match.");
       return;
     }
+    if (!oobCode) {
+      setErrorMessage(
+        "This reset link is missing or invalid. Open the link from your email, or request a new one.",
+      );
+      return;
+    }
 
     setErrorMessage(null);
     setStatus("loading");
 
-    if (!isSupabaseConfigured) {
-      setStatus("success");
-      return;
-    }
-
     try {
-      const { error } = await supabase.auth.updateUser({
-        password: nextPassword,
-      });
-      if (error) throw error;
+      await confirmPasswordReset(oobCode, nextPassword);
       setStatus("success");
     } catch (err) {
       setStatus("error");
-      setErrorMessage(
-        err instanceof Error
-          ? err.message
-          : "Something went wrong. Please try again.",
-      );
+      setErrorMessage(mapAuthError(err));
     }
   }
 
@@ -87,6 +85,18 @@ export function ResetPasswordForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex w-full flex-col gap-5" noValidate>
+      {!oobCode ? (
+        <p
+          className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900"
+          role="status"
+        >
+          Open the reset link from your email to set a new password.{" "}
+          <Link href="/forgot-password" className="font-semibold underline">
+            Request a new link
+          </Link>
+        </p>
+      ) : null}
+
       {errorMessage ? (
         <p
           className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
@@ -203,7 +213,7 @@ export function ResetPasswordForm() {
 
       <button
         type="submit"
-        disabled={status === "loading"}
+        disabled={status === "loading" || !oobCode}
         className="mt-1 inline-flex h-[3.25rem] w-full items-center justify-center rounded-lg bg-[#2b5ce6] text-sm font-semibold tracking-[0.01em] text-white transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/60 disabled:opacity-60"
       >
         {status === "loading" ? "Saving…" : "Set New Password"}

@@ -145,8 +145,14 @@ export function OnboardingPlanStep() {
     ? `Score ${formatPteScore(targetScore)}`
     : `Band ${formatBand(targetScore)}`;
 
-  function finish() {
+  async function finish() {
     writeOnboardingState({ completed: true });
+    try {
+      const { updateUserProfileFields } = await import("@/lib/user-profile");
+      await updateUserProfileFields({ onboardingComplete: true });
+    } catch {
+      /* local flag still set; Firestore may still be seeding */
+    }
     router.push("/dashboard");
   }
 
@@ -316,7 +322,7 @@ export function OnboardingPlanStep() {
         <div className="mt-8 flex flex-col items-center">
           <button
             type="button"
-            onClick={finish}
+            onClick={() => void finish()}
             className="inline-flex h-12 w-full max-w-md items-center justify-center gap-2 rounded-xl bg-[#2b5ce6] px-6 text-base font-semibold text-white transition hover:bg-[#244fe6]"
           >
             Start Learning
@@ -324,7 +330,7 @@ export function OnboardingPlanStep() {
           </button>
           <button
             type="button"
-            onClick={finish}
+            onClick={() => void finish()}
             className="mt-3 text-sm font-medium text-[#64748B] transition hover:text-[#334155]"
           >
             I&apos;ll explore on my own

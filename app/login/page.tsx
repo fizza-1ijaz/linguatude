@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { AuthCard, AuthShell } from "@/app/components/auth-shell";
 import { SigninForm } from "@/app/components/signin-form";
+import { SocialAuthButtons } from "@/app/components/social-auth-buttons";
 
 export const metadata: Metadata = {
   title: "Login | Linguatude",
@@ -10,26 +10,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/login" },
   robots: { index: false, follow: false },
 };
-
-function SocialButton({
-  icon,
-  label,
-}: {
-  icon: string;
-  label: string;
-}) {
-  return (
-    <button
-      type="button"
-      disabled
-      title="Coming soon"
-      className="inline-flex h-11 w-full items-center justify-center gap-2.5 rounded-xl border border-[#e5e7eb] bg-white text-sm font-semibold text-[#1e1b4b] opacity-75"
-    >
-      <Image src={icon} alt="" width={18} height={18} className="size-[18px]" />
-      {label}
-    </button>
-  );
-}
 
 export default function LoginPage() {
   return (
@@ -56,9 +36,8 @@ export default function LoginPage() {
           <span className="h-px flex-1 bg-[#e5e7eb]" aria-hidden />
         </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-2.5">
-          <SocialButton icon="/auth/google.svg" label="Google" />
-          <SocialButton icon="/auth/apple.svg" label="Apple" />
+        <div className="mt-4">
+          <SocialAuthButtons mode="login" />
         </div>
 
         <p className="mt-5 text-center text-sm text-[#6b7280]">

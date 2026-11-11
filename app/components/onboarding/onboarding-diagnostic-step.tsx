@@ -56,8 +56,14 @@ export function OnboardingDiagnosticStep() {
     router.push(ONBOARDING_ROUTES.diagnosticTest);
   }
 
-  function skip() {
+  async function skip() {
     writeOnboardingState({ completed: true });
+    try {
+      const { updateUserProfileFields } = await import("@/lib/user-profile");
+      await updateUserProfileFields({ onboardingComplete: true });
+    } catch {
+      /* local flag still set */
+    }
     router.push("/dashboard");
   }
 
@@ -127,7 +133,7 @@ export function OnboardingDiagnosticStep() {
           </button>
           <button
             type="button"
-            onClick={skip}
+            onClick={() => void skip()}
             className="px-3 py-1.5 text-xs text-[#6B7280] transition hover:text-[#141B2B] sm:text-sm"
           >
             Skip — I&apos;ll set up my plan manually

@@ -3,7 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type RefObject } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/app/components/auth-provider";
+import { getUserDisplayName } from "@/lib/auth";
 
 import {
   EXAM_STORAGE_KEY,
@@ -244,6 +246,17 @@ function DashboardSidebarContent({
   onSelectExam: (next: DashboardExam) => void;
   onNavigate?: () => void;
 }) {
+  const router = useRouter();
+  const { user, signOut } = useAuth();
+  const displayName = user ? getUserDisplayName(user) : "Account";
+  const initial = displayName.charAt(0).toUpperCase();
+
+  async function handleLogout() {
+    onNavigate?.();
+    await signOut();
+    router.replace("/login");
+  }
+
   return (
     <>
       <Link
@@ -360,14 +373,14 @@ function DashboardSidebarContent({
           <HelpIcon />
           Help Center
         </Link>
-        <Link
-          href="/signin"
-          onClick={onNavigate}
-          className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] font-semibold text-[#64748B] transition hover:bg-[#F8FAFC] hover:text-[#1E293B]"
+        <button
+          type="button"
+          onClick={() => void handleLogout()}
+          className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-[13px] font-semibold text-[#64748B] transition hover:bg-[#F8FAFC] hover:text-[#1E293B]"
         >
           <LogoutIcon />
           Logout
-        </Link>
+        </button>
 
         <Link
           href="/dashboard/premium"
@@ -378,21 +391,33 @@ function DashboardSidebarContent({
           Upgrade to Pro
         </Link>
 
-        <button
-          type="button"
+        <Link
+          href="/dashboard/account"
+          onClick={onNavigate}
           className="mt-3 flex w-full items-center gap-2.5 rounded-xl px-2 py-2 text-left transition hover:bg-[#F8FAFC]"
         >
           <span className="relative flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#93C5FD] to-[#2b5ce6] text-[13px] font-bold text-white">
-            A
+            {user?.photoURL ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={user.photoURL}
+                alt=""
+                className="size-full object-cover"
+              />
+            ) : (
+              initial
+            )}
           </span>
           <span className="min-w-0 flex-1">
-            <span className="block text-[13px] font-bold text-[#1E293B]">Alex</span>
+            <span className="block truncate text-[13px] font-bold text-[#1E293B]">
+              {displayName}
+            </span>
             <span className="block text-[11px] font-medium text-[#94A3B8]">
               Free Plan
             </span>
           </span>
           <ChevronDownIcon />
-        </button>
+        </Link>
       </div>
     </>
   );

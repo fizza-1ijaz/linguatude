@@ -8,10 +8,21 @@ import {
   BackToAccount,
   Toggle,
 } from "@/app/components/dashboard/account-shared";
+import { updateUserProfileFields } from "@/lib/user-profile";
 
 export function AccountPrivacy() {
   const [personalised, setPersonalised] = useState(true);
-  const [exportRequested, setExportRequested] = useState(false);
+
+  async function handlePersonalised(next: boolean) {
+    setPersonalised(next);
+    try {
+      await updateUserProfileFields({
+        privacy: { personalisedDrills: next },
+      });
+    } catch {
+      /* local toggle still updates UX */
+    }
+  }
 
   return (
     <DashboardShell
@@ -44,7 +55,7 @@ export function AccountPrivacy() {
                   </span>
                   <Toggle
                     on={personalised}
-                    onChange={setPersonalised}
+                    onChange={(next) => void handlePersonalised(next)}
                     label="Personalised practice"
                   />
                 </div>
@@ -71,58 +82,6 @@ export function AccountPrivacy() {
           </div>
         </section>
 
-        <h3 className="text-base font-bold text-[#141B2B]">Your data</h3>
-
-        <section className="overflow-hidden rounded-2xl border border-[#BFDBFE] bg-white shadow-sm">
-          <div className="flex flex-wrap items-center gap-4 p-4 sm:p-5">
-            <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#DBEAFE] text-[#2563EB]">
-              <DownloadIcon />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-bold text-[#141B2B]">Download my data</p>
-              <p className="mt-0.5 text-sm text-[#64748B]">
-                Request a copy of the data we hold about your account and activity.
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => setExportRequested(true)}
-              className="inline-flex h-10 items-center justify-center gap-1 rounded-xl border border-[#2b5ce6] bg-white px-4 text-sm font-semibold text-[#2b5ce6] transition hover:bg-[#EEF2FF]"
-            >
-              Download my data ›
-            </button>
-          </div>
-          {exportRequested ? (
-            <div className="flex items-center gap-2 border-t border-[#BFDBFE] bg-[#EFF6FF] px-4 py-3 text-sm font-medium text-[#1D4ED8] sm:px-5">
-              <CheckCircle />
-              Your data export has been requested.
-            </div>
-          ) : null}
-        </section>
-
-        <section className="rounded-2xl border border-[#E2E8F0] bg-white p-4 shadow-sm sm:p-5">
-          <div className="flex flex-wrap items-start gap-4">
-            <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#FEE2E2] text-[#DC2626]">
-              <TrashIcon />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-bold text-[#141B2B]">Delete my account</p>
-              <p className="mt-0.5 text-sm text-[#64748B]">
-                Permanently delete your account and all associated data.
-              </p>
-              <p className="mt-1.5 text-sm font-bold text-[#DC2626]">
-                This action cannot be undone.
-              </p>
-            </div>
-            <button
-              type="button"
-              className="inline-flex h-10 items-center justify-center gap-1 rounded-xl border border-[#DC2626] bg-white px-4 text-sm font-semibold text-[#DC2626] transition hover:bg-[#FEF2F2]"
-            >
-              Delete my account ›
-            </button>
-          </div>
-        </section>
-
         <section className="flex items-start gap-3 rounded-2xl bg-[#EEF2FF] px-4 py-4 sm:px-5">
           <span className="mt-0.5 text-[#2b5ce6]">
             <LockIcon />
@@ -134,7 +93,8 @@ export function AccountPrivacy() {
               <Link href="/privacy" className="font-semibold text-[#2b5ce6] hover:underline">
                 Privacy Policy
               </Link>{" "}
-              and applicable laws.
+              and applicable laws. Account export/deletion callables are not
+              deployed yet.
             </p>
           </div>
         </section>
@@ -170,36 +130,11 @@ function ClockTiny() {
   );
 }
 
-function DownloadIcon() {
-  return (
-    <svg viewBox="0 0 20 20" className="size-5" fill="none" aria-hidden>
-      <path d="M10 3.5v8M6.5 8.5 10 12l3.5-3.5M4 15.5h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function CheckCircle() {
-  return (
-    <svg viewBox="0 0 16 16" className="size-4 shrink-0" fill="none" aria-hidden>
-      <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.3" />
-      <path d="m5.5 8 1.7 1.7 3.3-3.4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function TrashIcon() {
-  return (
-    <svg viewBox="0 0 20 20" className="size-5" fill="none" aria-hidden>
-      <path d="M4.5 6h11M8 6V4.5h4V6M6.5 6l.7 9.5h5.6L13.5 6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
 function LockIcon() {
   return (
-    <svg viewBox="0 0 18 18" className="size-4.5" fill="none" aria-hidden>
-      <rect x="4" y="8" width="10" height="7.5" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
-      <path d="M6.5 8V5.5a2.5 2.5 0 0 1 5 0V8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    <svg viewBox="0 0 20 20" className="size-5" fill="none" aria-hidden>
+      <rect x="4.5" y="8.5" width="11" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M7 8.5V6.5a3 3 0 0 1 6 0v2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
     </svg>
   );
 }

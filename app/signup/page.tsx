@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { AuthCard, AuthShell } from "@/app/components/auth-shell";
 import { SignupForm } from "@/app/components/signup-form";
+import { SocialAuthButtons } from "@/app/components/social-auth-buttons";
 
 export const metadata: Metadata = {
   title: "Create account | Linguatude",
@@ -37,37 +37,8 @@ export default function SignupPage() {
           <span className="h-px flex-1 bg-[#e5e7eb]" aria-hidden />
         </div>
 
-        <div className="mt-3.5 grid grid-cols-2 gap-2.5">
-          <button
-            type="button"
-            disabled
-            title="Coming soon"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-[#e5e7eb] bg-white text-sm font-semibold text-[#1e1b4b] opacity-75"
-          >
-            <Image
-              src="/auth/google.svg"
-              alt=""
-              width={18}
-              height={18}
-              className="size-[18px]"
-            />
-            Google
-          </button>
-          <button
-            type="button"
-            disabled
-            title="Coming soon"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-[#e5e7eb] bg-white text-sm font-semibold text-[#1e1b4b] opacity-75"
-          >
-            <Image
-              src="/auth/apple.svg"
-              alt=""
-              width={18}
-              height={18}
-              className="size-[18px]"
-            />
-            Apple
-          </button>
+        <div className="mt-3.5">
+          <SocialAuthButtons mode="signup" />
         </div>
 
         <p className="mt-4 text-center text-sm text-[#6b7280]">

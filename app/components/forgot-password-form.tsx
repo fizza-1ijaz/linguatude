@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { isSupabaseConfigured, supabase } from "@/lib/supabaseClient";
+import { mapAuthError, sendPasswordReset } from "@/lib/auth";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -28,28 +28,14 @@ export function ForgotPasswordForm() {
     setErrorMessage(null);
     setStatus("loading");
 
-    if (!isSupabaseConfigured) {
-      router.push(
-        `/forgot-password/check-email?email=${encodeURIComponent(email)}`,
-      );
-      return;
-    }
-
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
-      });
-      if (error) throw error;
+      await sendPasswordReset(email);
       router.push(
         `/forgot-password/check-email?email=${encodeURIComponent(email)}`,
       );
     } catch (err) {
       setStatus("error");
-      setErrorMessage(
-        err instanceof Error
-          ? err.message
-          : "Something went wrong. Please try again.",
-      );
+      setErrorMessage(mapAuthError(err));
     }
   }
 
