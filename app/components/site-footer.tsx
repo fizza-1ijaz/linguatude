@@ -40,7 +40,10 @@ const LEGAL_LINKS = [
   { href: "/terms-of-service", label: "Terms of Service" },
   { href: "/refund-policy", label: "Refund Policy" },
   { href: "/cookie-policy", label: "Cookie Policy" },
-  { href: "/privacy-policy", label: "Account & Data Deletion" },
+  {
+    href: "/data-account-deletion-policy",
+    label: "Data & Account Deletion",
+  },
 ] as const;
 
 export function SiteFooter() {

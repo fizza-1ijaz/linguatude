@@ -90,11 +90,20 @@ export function AccountPrivacy() {
             <p className="font-bold">We take your privacy seriously.</p>
             <p className="mt-1">
               Your data is handled in accordance with our{" "}
-              <Link href="/privacy" className="font-semibold text-[#2b5ce6] hover:underline">
+              <Link
+                href="/privacy-policy"
+                className="font-semibold text-[#2b5ce6] hover:underline"
+              >
                 Privacy Policy
               </Link>{" "}
-              and applicable laws. Account export/deletion callables are not
-              deployed yet.
+              and{" "}
+              <Link
+                href="/data-account-deletion-policy"
+                className="font-semibold text-[#2b5ce6] hover:underline"
+              >
+                Data &amp; Account Deletion Policy
+              </Link>
+              .
             </p>
           </div>
         </section>

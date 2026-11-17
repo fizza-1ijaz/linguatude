@@ -4,7 +4,7 @@ import { PrivacyPolicyPageShell } from "@/app/components/privacy-page-content";
 export const metadata: Metadata = {
   title: "Privacy Policy | Linguatude",
   description:
-    "Interim Privacy Policy for the Linguatude Coming Soon website. Governing law: Bahrain PDPL No. 30 of 2018.",
+    "Interim Privacy Policy for the Linguatude Coming Soon website. Operated by Skyen Systems Pty Ltd. Version 17 November 2026.",
   alternates: { canonical: "/privacy-policy" },
 };
 
