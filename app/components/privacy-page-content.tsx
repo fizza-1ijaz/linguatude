@@ -35,11 +35,9 @@ export function PrivacyPageContent() {
             <LegalLink href="https://linguatude.com">linguatude.com</LegalLink>.
           </p>
           <p>
-            This policy replaces the earlier pre-launch wording identifying
-            Skyen Solutions / Qismat Ventures W.L.L. as the operator. The legal
-            entity and its applicable privacy obligations should be verified
-            against official registrations and actual operating arrangements
-            before publication.
+            The legal entity and its applicable privacy obligations should be
+            verified against official registrations and actual operating
+            arrangements before publication.
           </p>
         </LegalSection>
 
