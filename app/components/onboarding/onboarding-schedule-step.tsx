@@ -199,9 +199,10 @@ export function OnboardingScheduleStep() {
             listening: overallTarget,
             speaking: overallTarget,
           };
+    const nextTargets = withDefaultTargets(resolvedTargets, resolvedExam);
     writeOnboardingState({
       exam: resolvedExam,
-      targetScores: withDefaultTargets(resolvedTargets, resolvedExam),
+      targetScores: nextTargets,
       sameTargetAll:
         notSure ||
         (overallTarget != null &&
@@ -211,6 +212,18 @@ export function OnboardingScheduleStep() {
       testDate: noTestDate ? null : testDate || null,
       noTestDate,
       goalsDone: true,
+    });
+    const targetMap: Record<string, number> = {};
+    if (!notSure) {
+      for (const [k, v] of Object.entries(nextTargets)) {
+        if (typeof v === "number") targetMap[k] = v;
+      }
+    }
+    void import("@/lib/onboarding-answers").then(({ saveTarget }) => {
+      saveTarget(resolvedExam, {
+        target: notSure || !Object.keys(targetMap).length ? null : targetMap,
+        testDate: noTestDate ? null : testDate || null,
+      });
     });
     router.push(ONBOARDING_ROUTES.days);
   }

@@ -53,6 +53,12 @@ export function OnboardingLevelStep() {
   function continueNext() {
     if (!minutes) return;
     writeOnboardingState({ dailyMinutes: minutes });
+    const exam = readOnboardingState().exam;
+    if (exam) {
+      void import("@/lib/onboarding-answers").then(({ saveDailyMinutes }) => {
+        saveDailyMinutes(exam, minutes);
+      });
+    }
     router.push(ONBOARDING_ROUTES.goal);
   }
 

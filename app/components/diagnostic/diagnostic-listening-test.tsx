@@ -13,6 +13,7 @@ import {
   ONBOARDING_ROUTES,
   readOnboardingState,
 } from "@/app/components/onboarding/onboarding-state";
+import { useDiagnosticSession } from "@/app/components/diagnostic/diagnostic-session-context";
 
 const SECTION_SECONDS = 3 * 60;
 const AUDIO_SECONDS = 3 * 60;
@@ -71,13 +72,17 @@ function formatTime(totalSeconds: number) {
 
 export function DiagnosticListeningTest() {
   const router = useRouter();
+  const session = useDiagnosticSession();
   const [ready, setReady] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [sectionLeft, setSectionLeft] = useState(SECTION_SECONDS);
   const [audioPos, setAudioPos] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [audioDone, setAudioDone] = useState(false);
   const [speed, setSpeed] = useState(1);
   const [volume, setVolume] = useState(0.7);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [answers, setAnswers] = useState<Answers>({
     q1: null,
     q2: null,
@@ -85,10 +90,24 @@ export function DiagnosticListeningTest() {
   });
   const endedRef = useRef(false);
 
+  const liveQuestions = session.listeningQuestions;
+  const questionList = liveQuestions?.length
+    ? liveQuestions.map((q) => ({
+        id: q.id,
+        prompt: q.text,
+        hint: "Choose ONE answer",
+        options: q.options,
+        optionIds: q.optionIds,
+      }))
+    : QUESTIONS.map((q) => ({
+        ...q,
+        optionIds: q.options.map((_, i) => String(i)),
+      }));
+
   const questionsLocked = !audioDone;
-  const answeredCount = QUESTIONS.filter((q) => answers[q.id] != null).length;
-  const allAnswered = answeredCount === QUESTIONS.length;
-  const canSubmit = !questionsLocked && allAnswered;
+  const answeredCount = questionList.filter((q) => answers[q.id] != null).length;
+  const allAnswered = answeredCount === questionList.length;
+  const canSubmit = !questionsLocked && allAnswered && !submitting;
 
   useEffect(() => {
     const state = readOnboardingState();
@@ -106,6 +125,35 @@ export function DiagnosticListeningTest() {
     setReady(true);
   }, [router]);
 
+  useEffect(() => {
+    if (!ready || !session.isLive) return;
+    let revoked: string | null = null;
+    void (async () => {
+      try {
+        const bytes = await session.getListeningAudio();
+        const blob = new Blob([bytes.buffer as ArrayBuffer], {
+          type: "audio/mpeg",
+        });
+        const url = URL.createObjectURL(blob);
+        revoked = url;
+        setAudioUrl(url);
+      } catch (err) {
+        console.warn("listening audio:", err);
+      }
+    })();
+    return () => {
+      if (revoked) URL.revokeObjectURL(revoked);
+    };
+  }, [ready, session.isLive, session]);
+
+  useEffect(() => {
+    setAnswers(
+      Object.fromEntries(questionList.map((q) => [q.id, null])) as Answers,
+    );
+    // Only when live question ids change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [liveQuestions?.map((q) => q.id).join("|")]);
+
   // Hide page scrollbars while this screen is mounted
   useEffect(() => {
     const root = document.documentElement;
@@ -122,9 +170,9 @@ export function DiagnosticListeningTest() {
     return () => window.clearInterval(id);
   }, [ready]);
 
-  // Simulated audio progress
+  // Simulated audio progress (sample mode) or real audio element
   useEffect(() => {
-    if (!ready || !playing || audioDone) return;
+    if (!ready || !playing || audioDone || audioUrl) return;
     const tickMs = 1000 / speed;
     const id = window.setInterval(() => {
       setAudioPos((p) => {
@@ -137,7 +185,14 @@ export function DiagnosticListeningTest() {
       });
     }, tickMs);
     return () => window.clearInterval(id);
-  }, [ready, playing, audioDone, speed]);
+  }, [ready, playing, audioDone, speed, audioUrl]);
+
+  useEffect(() => {
+    const el = audioRef.current;
+    if (!el || !audioUrl) return;
+    el.playbackRate = speed;
+    el.volume = volume;
+  }, [audioUrl, speed, volume]);
 
   const waveform = useMemo(
     () =>
@@ -151,9 +206,19 @@ export function DiagnosticListeningTest() {
     [audioPos],
   );
 
-  function submitSection() {
+  async function submitSection() {
     if (!canSubmit) return;
+    setSubmitting(true);
     endedRef.current = true;
+    if (session.isLive) {
+      const mapped: Record<string, string> = {};
+      for (const q of questionList) {
+        const idx = answers[q.id];
+        if (idx == null) continue;
+        mapped[q.id] = q.optionIds[idx] ?? String(idx);
+      }
+      await session.submitListening(mapped);
+    }
     router.push(ONBOARDING_ROUTES.diagnosticReading);
   }
 
@@ -267,10 +332,40 @@ export function DiagnosticListeningTest() {
               </span>
             </div>
 
+            {audioUrl ? (
+              <audio
+                ref={audioRef}
+                src={audioUrl}
+                preload="auto"
+                onTimeUpdate={(e) =>
+                  setAudioPos(Math.floor(e.currentTarget.currentTime))
+                }
+                onEnded={() => {
+                  setPlaying(false);
+                  setAudioDone(true);
+                }}
+                onPlay={() => setPlaying(true)}
+                onPause={() => setPlaying(false)}
+                className="hidden"
+              />
+            ) : null}
+
             <div className="mt-4 flex items-center gap-3 sm:gap-4">
               <button
                 type="button"
                 onClick={() => {
+                  const el = audioRef.current;
+                  if (el && audioUrl) {
+                    if (audioDone) {
+                      el.currentTime = 0;
+                      setAudioDone(false);
+                      void el.play();
+                      return;
+                    }
+                    if (el.paused) void el.play();
+                    else el.pause();
+                    return;
+                  }
                   if (audioDone) {
                     setAudioPos(0);
                     setAudioDone(false);
@@ -366,7 +461,7 @@ export function DiagnosticListeningTest() {
             <h3 className="text-base font-bold text-[#111827]">
               Questions{" "}
               <span className="font-medium text-[#9CA3AF]">
-                ({answeredCount} / {QUESTIONS.length} answered)
+                ({answeredCount} / {questionList.length} answered)
               </span>
             </h3>
 
@@ -375,7 +470,7 @@ export function DiagnosticListeningTest() {
                 questionsLocked ? "select-none blur-[2.5px]" : ""
               }`}
             >
-              {QUESTIONS.map((q, index) => {
+              {questionList.map((q, index) => {
                 const selected = answers[q.id];
                 return (
                   <li key={q.id} className="py-3.5 first:pt-3 last:pb-2">

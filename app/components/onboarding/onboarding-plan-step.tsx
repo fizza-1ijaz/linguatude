@@ -149,7 +149,14 @@ export function OnboardingPlanStep() {
     writeOnboardingState({ completed: true });
     try {
       const { updateUserProfileFields } = await import("@/lib/user-profile");
-      await updateUserProfileFields({ onboardingComplete: true });
+      const { markWorkspaceOnboardingComplete } = await import(
+        "@/lib/onboarding-answers"
+      );
+      if (exam) markWorkspaceOnboardingComplete(exam);
+      await updateUserProfileFields({
+        onboardingComplete: true,
+        activeExam: exam === "pte" ? "pte" : "ielts_ac",
+      });
     } catch {
       /* local flag still set; Firestore may still be seeding */
     }

@@ -1,11 +1,22 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
 import {
   AccountHeaderRight,
   BackToAccount,
 } from "@/app/components/dashboard/account-shared";
+import { useDashboardExam } from "@/app/components/dashboard/use-dashboard-exam";
+import {
+  ensureEntitlement,
+  entitlementLabel,
+  remainingAi,
+  remainingMocks,
+  watchEntitlement,
+  type EntitlementDoc,
+} from "@/lib/entitlements";
+import { toExamId } from "@/lib/exam-ids";
 
 export type SubscriptionVariant =
   | "manage"
@@ -51,6 +62,21 @@ export function AccountSubscription({
 }
 
 function ManageView() {
+  const exam = useDashboardExam();
+  const examId = toExamId(exam === "pte" ? "pte" : "academic") ?? "ielts_ac";
+  const [ent, setEnt] = useState<EntitlementDoc | null>(null);
+
+  useEffect(() => {
+    void ensureEntitlement(examId);
+    const unsub = watchEntitlement(examId, setEnt);
+    return () => unsub?.();
+  }, [examId]);
+
+  const label = entitlementLabel(ent);
+  const aiLeft = remainingAi(ent);
+  const mocksLeft = remainingMocks(ent);
+  const examName = exam === "pte" ? "PTE" : "IELTS";
+
   return (
     <>
       <section className="overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-sm">
@@ -62,17 +88,22 @@ function ManageView() {
             </span>
             <div>
               <p className="text-base font-bold text-[#141B2B]">
-                IELTS Premium — Annual
+                {examName} · {label}
               </p>
               <p className="text-sm text-[#64748B]">
-                A$89.99/yr · renews 14 Mar 2027
+                {aiLeft == null
+                  ? "Loading allowances…"
+                  : `${aiLeft} AI attempts left · ${mocksLeft ?? 0} full mocks left`}
               </p>
             </div>
           </div>
         </div>
         <div className="mx-4 mb-4 flex items-start gap-2 rounded-xl bg-[#EFF6FF] px-3.5 py-3 text-sm text-[#1D4ED8]">
           <InfoIcon />
-          <span>Your subscription will automatically renew on 14 Mar 2027.</span>
+          <span>
+            Allowances are per exam and refresh each entitlement month. Unused
+            amounts do not roll over.
+          </span>
         </div>
       </section>
 

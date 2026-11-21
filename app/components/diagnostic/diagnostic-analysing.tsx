@@ -10,6 +10,7 @@ import {
   ONBOARDING_ROUTES,
   readOnboardingState,
 } from "@/app/components/onboarding/onboarding-state";
+import { useDiagnosticSession } from "@/app/components/diagnostic/diagnostic-session-context";
 
 const ANALYSIS_MS = 5000;
 const REDIRECT_SECONDS = 3;
@@ -48,10 +49,12 @@ const BUBBLES = [
 
 export function DiagnosticAnalysing() {
   const router = useRouter();
+  const session = useDiagnosticSession();
   const [ready, setReady] = useState(false);
   const [progress, setProgress] = useState(0);
   const [redirectLeft, setRedirectLeft] = useState<number | null>(null);
   const redirected = useRef(false);
+  const finalizeStarted = useRef(false);
 
   useHideScrollbar();
 
@@ -72,13 +75,24 @@ export function DiagnosticAnalysing() {
   }, [router]);
 
   useEffect(() => {
+    if (!ready || finalizeStarted.current) return;
+    finalizeStarted.current = true;
+    if (session.isLive || session.run?.id) {
+      void session.finalize();
+    }
+  }, [ready, session]);
+
+  useEffect(() => {
     if (!ready) return;
     const start = performance.now();
     let frame = 0;
 
     const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / ANALYSIS_MS);
-      // Ease-out so the bar feels intentional
+      const liveDone =
+        session.finalizePhase === "done" || session.finalizePhase === "failed";
+      const t = liveDone
+        ? 1
+        : Math.min(1, (now - start) / ANALYSIS_MS);
       const eased = 1 - Math.pow(1 - t, 2.2);
       setProgress(Math.round(eased * 100));
       if (t < 1) {
@@ -91,7 +105,7 @@ export function DiagnosticAnalysing() {
 
     frame = window.requestAnimationFrame(tick);
     return () => window.cancelAnimationFrame(frame);
-  }, [ready]);
+  }, [ready, session.finalizePhase]);
 
   useEffect(() => {
     if (redirectLeft == null) return;

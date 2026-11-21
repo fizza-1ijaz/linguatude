@@ -2,13 +2,17 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { DiagnosticPreparing } from "@/app/components/diagnostic/diagnostic-preparing";
+import { useDiagnosticSession } from "@/app/components/diagnostic/diagnostic-session-context";
 import { OnboardingShell } from "@/app/components/onboarding/onboarding-shell";
 import {
   ONBOARDING_ROUTES,
   readOnboardingState,
   writeOnboardingState,
 } from "@/app/components/onboarding/onboarding-state";
+import { markWorkspaceOnboardingComplete } from "@/lib/onboarding-answers";
+import { updateUserProfileFields } from "@/lib/user-profile";
 
 const EXPECTATIONS = [
   "Short questions in Reading, Listening, and Writing",
@@ -36,6 +40,8 @@ const STATS = [
 
 export function OnboardingDiagnosticStep() {
   const router = useRouter();
+  const session = useDiagnosticSession();
+  const [starting, setStarting] = useState(false);
 
   useEffect(() => {
     const state = readOnboardingState();
@@ -52,19 +58,57 @@ export function OnboardingDiagnosticStep() {
     }
   }, [router]);
 
-  function startTest() {
-    router.push(ONBOARDING_ROUTES.diagnosticTest);
+  useEffect(() => {
+    if (!starting) return;
+    if (session.phase === "ready" || session.phase === "unavailable") {
+      router.push(ONBOARDING_ROUTES.diagnosticTest);
+    }
+    if (session.phase === "locked") {
+      router.push("/dashboard/diagnostic/retake-locked");
+    }
+  }, [starting, session.phase, router]);
+
+  async function startTest() {
+    const state = readOnboardingState();
+    if (!state.exam || state.exam === "ukvi") return;
+    setStarting(true);
+    await session.prepare(state.exam);
   }
 
   async function skip() {
+    const state = readOnboardingState();
+    if (state.exam && state.exam !== "ukvi") {
+      await session.skip(state.exam);
+      markWorkspaceOnboardingComplete(state.exam);
+    }
     writeOnboardingState({ completed: true });
     try {
-      const { updateUserProfileFields } = await import("@/lib/user-profile");
       await updateUserProfileFields({ onboardingComplete: true });
     } catch {
       /* local flag still set */
     }
     router.push("/dashboard");
+  }
+
+  if (
+    starting &&
+    (session.phase === "starting" ||
+      session.phase === "preparing" ||
+      session.phase === "failed")
+  ) {
+    return (
+      <DiagnosticPreparing
+        failed={session.phase === "failed"}
+        message={session.message}
+        onRetry={() => {
+          const state = readOnboardingState();
+          if (state.exam && state.exam !== "ukvi") {
+            void session.retry(state.exam);
+          }
+        }}
+        onSkip={() => void skip()}
+      />
+    );
   }
 
   return (
@@ -125,7 +169,7 @@ export function OnboardingDiagnosticStep() {
         <div className="mt-3.5 flex shrink-0 flex-col items-center gap-1.5">
           <button
             type="button"
-            onClick={startTest}
+            onClick={() => void startTest()}
             className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-[#2b5ce6] px-5 text-[0.9375rem] font-semibold text-white shadow-sm transition hover:bg-[#244FE6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5BFF]/50 sm:h-12"
           >
             Start Diagnostic Test

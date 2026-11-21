@@ -14,6 +14,7 @@ import {
   ONBOARDING_ROUTES,
   readOnboardingState,
 } from "@/app/components/onboarding/onboarding-state";
+import { useDiagnosticSession } from "@/app/components/diagnostic/diagnostic-session-context";
 
 const SECTION_SECONDS = 2 * 60;
 
@@ -22,7 +23,9 @@ const PROMPT =
 
 export function DiagnosticWritingTest() {
   const router = useRouter();
+  const session = useDiagnosticSession();
   const [ready, setReady] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [sectionLeft, setSectionLeft] = useState(SECTION_SECONDS);
   const [response, setResponse] = useState("");
 
@@ -65,12 +68,26 @@ export function DiagnosticWritingTest() {
     );
   }
 
+  const promptText =
+    session.writingContent?.prompt ||
+    session.writingContent?.passage ||
+    PROMPT;
+
+  async function submitSection() {
+    if (submitting) return;
+    setSubmitting(true);
+    if (session.isLive) {
+      await session.submitWriting(response.trim());
+    }
+    router.push(ONBOARDING_ROUTES.diagnosticSpeaking);
+  }
+
   return (
     <DiagnosticTestShell
       activeSkill="writing"
       sectionLeft={sectionLeft}
-      canSubmit
-      onSubmit={() => router.push(ONBOARDING_ROUTES.diagnosticSpeaking)}
+      canSubmit={!submitting}
+      onSubmit={() => void submitSection()}
     >
       <DiagnosticSectionHeading skill="Writing" section="Section 3 of 4" />
 
@@ -86,7 +103,7 @@ export function DiagnosticWritingTest() {
               Prompt
             </p>
             <p className="mt-3 text-sm leading-6 text-[#374151] sm:text-[0.9375rem]">
-              {PROMPT}
+              {promptText}
             </p>
           </section>
 

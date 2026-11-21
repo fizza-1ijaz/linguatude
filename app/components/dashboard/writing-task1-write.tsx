@@ -77,20 +77,58 @@ export function WritingTask1Write() {
     setShowPasteBanner(true);
   }
 
-  function attemptSubmit() {
-    if (underMin) {
+  const [submitting, setSubmitting] = useState(false);
+
+  async function attemptSubmit(force = false) {
+    if (underMin && !force) {
       setShowUnderWordFooter(true);
       return;
     }
-    goToScoring();
-  }
-
-  function goToScoring() {
+    if (submitting) return;
+    setSubmitting(true);
     try {
       window.localStorage.setItem(DRAFT_KEY, text);
     } catch {
       /* ignore */
     }
+
+    try {
+      const exam = (await import("@/app/components/dashboard/use-dashboard-exam"))
+        .readDashboardExam();
+      const examId = exam === "pte" ? "pte" : "ielts_ac";
+      const { loadPracticeItems } = await import("@/lib/items");
+      // Prefer Task 1 pool; fall back to Task 2 if the catalog only has essays.
+      const types =
+        exam === "pte"
+          ? ["essay", "summarize_written_text"]
+          : ["writing_task1", "writing_task_1", "writing_task2"];
+      let item = null as Awaited<
+        ReturnType<typeof loadPracticeItems>
+      >[number] | null;
+      for (const type of types) {
+        const items = await loadPracticeItems({ examId, type, count: 1 });
+        if (items[0]) {
+          item = items[0];
+          break;
+        }
+      }
+      if (item) {
+        const { submitAndScoreWriting } = await import("@/lib/attempts");
+        const attemptId = await submitAndScoreWriting({
+          examId,
+          itemId: item.id,
+          mode: "practice",
+          response: { text, pasteDetected },
+        });
+        window.sessionStorage.setItem(
+          "linguatude_writing_attempt_id",
+          attemptId,
+        );
+      }
+    } catch (err) {
+      console.warn("writing live score:", err);
+    }
+
     router.push("/dashboard/writing/task1/scoring");
   }
 
@@ -268,7 +306,7 @@ export function WritingTask1Write() {
           <div className="flex justify-end">
             <button
               type="button"
-              onClick={attemptSubmit}
+              onClick={() => void attemptSubmit()}
               className="inline-flex h-11 items-center justify-center rounded-xl bg-[#2b5ce6] px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-[#244FE6]"
             >
               Submit
@@ -297,7 +335,7 @@ export function WritingTask1Write() {
               </button>
               <button
                 type="button"
-                onClick={goToScoring}
+                onClick={() => void attemptSubmit(true)}
                 className="inline-flex h-10 items-center justify-center rounded-xl bg-[#2b5ce6] px-4 text-sm font-semibold text-white transition hover:bg-[#244FE6]"
               >
                 Submit Anyway

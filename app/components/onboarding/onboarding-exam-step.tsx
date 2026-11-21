@@ -55,6 +55,9 @@ export function OnboardingExamStep() {
       exam,
       ukviLevel: null,
     });
+    void import("@/lib/onboarding-answers").then(({ examChosen }) => {
+      examChosen(exam);
+    });
     router.push(ONBOARDING_ROUTES.routine);
   }
 

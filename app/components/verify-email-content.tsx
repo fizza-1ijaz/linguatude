@@ -13,6 +13,7 @@ import {
 } from "react";
 import { useAuth } from "@/app/components/auth-provider";
 import { postAuthPath } from "@/lib/auth";
+import { resendVerificationEmail } from "@/lib/auth";
 import {
   callSendVerificationEmail,
   callVerifyEmailCode,
@@ -136,12 +137,7 @@ export function VerifyEmailContent() {
     setMessage(null);
     setError(null);
     try {
-      const result = await callSendVerificationEmail();
-      if (result.alreadyVerified) {
-        await refreshUser();
-        router.replace(await postAuthPath());
-        return;
-      }
+      await resendVerificationEmail();
       setMessage("Verification code sent again.");
       setDigits(Array.from({ length: OTP_LENGTH }, () => ""));
       focusAt(0);

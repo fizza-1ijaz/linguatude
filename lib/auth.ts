@@ -3,10 +3,14 @@ import {
   OAuthProvider,
   confirmPasswordReset as firebaseConfirmPasswordReset,
   createUserWithEmailAndPassword,
+  deleteUser,
+  sendEmailVerification,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut as firebaseSignOut,
   updateProfile,
+  verifyBeforeUpdateEmail,
   type User,
   type UserCredential,
 } from "firebase/auth";
@@ -25,14 +29,39 @@ const appleProvider = new OAuthProvider("apple.com");
 appleProvider.addScope("email");
 appleProvider.addScope("name");
 
-export function mapAuthError(err: unknown): string {
-  const code =
+const DELIVERY_FAILURE_CODES = new Set([
+  "functions/internal",
+  "functions/unavailable",
+  "functions/not-found",
+  "functions/permission-denied",
+  "functions/unknown",
+  "functions/deadline-exceeded",
+  "internal",
+  "unavailable",
+  "not-found",
+  "permission-denied",
+  "unknown",
+  "deadline-exceeded",
+]);
+
+function errorCode(err: unknown): string {
+  if (
     typeof err === "object" &&
     err !== null &&
     "code" in err &&
     typeof (err as { code: unknown }).code === "string"
-      ? (err as { code: string }).code
-      : "";
+  ) {
+    return (err as { code: string }).code;
+  }
+  return "";
+}
+
+function isDeliveryFailure(err: unknown): boolean {
+  return DELIVERY_FAILURE_CODES.has(errorCode(err));
+}
+
+export function mapAuthError(err: unknown): string {
+  const code = errorCode(err);
 
   switch (code) {
     case "auth/email-already-in-use":
@@ -57,13 +86,14 @@ export function mapAuthError(err: unknown): string {
       return "This reset link has expired. Request a new one.";
     case "auth/invalid-action-code":
       return "This reset link is invalid. Request a new one.";
+    case "auth/requires-recent-login":
+      return "Sign out and sign in again, then retry.";
+    case "auth/operation-not-allowed":
+      return "Email for this account cannot be changed here.";
+    case "auth/user-disabled":
+      return "This account has been disabled.";
     default:
-      if (
-        typeof err === "object" &&
-        err !== null &&
-        "code" in err &&
-        String((err as { code: string }).code).startsWith("functions/")
-      ) {
+      if (code.startsWith("functions/")) {
         return mapFunctionsAuthError(err);
       }
       return err instanceof Error
@@ -81,6 +111,19 @@ async function afterAuthSession(user: User): Promise<void> {
   }
 }
 
+async function sendVerificationWithFallback(user: User): Promise<void> {
+  try {
+    await callSendVerificationEmail();
+  } catch (err) {
+    if (!isDeliveryFailure(err)) throw err;
+    console.warn(
+      "sendVerificationEmail function failed; falling back to Firebase sender",
+      err,
+    );
+    await sendEmailVerification(user);
+  }
+}
+
 export async function signUpEmail(
   email: string,
   password: string,
@@ -92,7 +135,7 @@ export async function signUpEmail(
   }
   await afterAuthSession(cred.user);
   try {
-    await callSendVerificationEmail();
+    await sendVerificationWithFallback(cred.user);
   } catch {
     // Non-blocking — user can resend on /verify-email
   }
@@ -120,9 +163,24 @@ export async function signInApple(): Promise<UserCredential> {
   return cred;
 }
 
-/** Uses deployed Cloud Function `sendPasswordReset`. */
+/** Uses deployed Cloud Function `sendPasswordReset`, with Firebase fallback. */
 export async function sendPasswordReset(email: string): Promise<void> {
-  await callSendPasswordReset(email);
+  const trimmed = email.trim().toLowerCase();
+  try {
+    await callSendPasswordReset(trimmed);
+  } catch (err) {
+    if (!isDeliveryFailure(err)) throw err;
+    console.warn(
+      "sendPasswordReset function failed; falling back to Firebase sender",
+      err,
+    );
+    try {
+      await sendPasswordResetEmail(auth, trimmed);
+    } catch (fallback) {
+      // Keep the no-enumeration guarantee of the Cloud Function.
+      if (errorCode(fallback) !== "auth/user-not-found") throw fallback;
+    }
+  }
 }
 
 export async function confirmPasswordReset(
@@ -130,6 +188,12 @@ export async function confirmPasswordReset(
   newPassword: string,
 ): Promise<void> {
   await firebaseConfirmPasswordReset(auth, oobCode, newPassword);
+}
+
+export async function resendVerificationEmail(): Promise<void> {
+  const user = auth.currentUser;
+  if (!user) throw new Error("You must be signed in to verify your email.");
+  await sendVerificationWithFallback(user);
 }
 
 export async function signOut(): Promise<void> {
@@ -162,6 +226,57 @@ export async function updateDisplayName(displayName: string): Promise<void> {
   }
 }
 
+/**
+ * Sends a verification link to the new email. Current email stays until verified.
+ * Returns false when unchanged.
+ */
+export async function requestEmailChange(email: string): Promise<boolean> {
+  const trimmed = email.trim().toLowerCase();
+  if (!trimmed || !trimmed.includes("@")) {
+    throw Object.assign(new Error("Please enter a valid email address."), {
+      code: "auth/invalid-email",
+    });
+  }
+  const user = auth.currentUser;
+  if (!user) {
+    throw Object.assign(new Error("Sign out and sign in again, then retry."), {
+      code: "auth/requires-recent-login",
+    });
+  }
+  const current = (user.email ?? "").trim().toLowerCase();
+  if (trimmed === current) return false;
+
+  const canChange = user.providerData.some((p) => p.providerId === "password");
+  if (!canChange) {
+    throw Object.assign(
+      new Error("Email for this account cannot be changed here."),
+      { code: "auth/operation-not-allowed" },
+    );
+  }
+
+  await verifyBeforeUpdateEmail(user, trimmed);
+  return true;
+}
+
+export async function deleteAccount(): Promise<void> {
+  const user = auth.currentUser;
+  if (!user) {
+    throw Object.assign(new Error("Sign out and sign in again, then retry."), {
+      code: "auth/requires-recent-login",
+    });
+  }
+  await deleteUser(user);
+}
+
+export function isPasswordProvider(user: User | null | undefined): boolean {
+  return Boolean(user?.providerData.some((p) => p.providerId === "password"));
+}
+
+export function needsEmailVerification(user: User | null | undefined): boolean {
+  if (!user) return false;
+  return isPasswordProvider(user) && !user.emailVerified;
+}
+
 function localOnboardingComplete(): boolean {
   if (typeof window === "undefined") return false;
   try {
@@ -177,12 +292,7 @@ function localOnboardingComplete(): boolean {
 /** Prefer Firestore onboardingComplete when present; else localStorage. */
 export async function postAuthPath(): Promise<string> {
   const user = auth.currentUser;
-  if (user && !user.emailVerified) {
-    const isPasswordUser = user.providerData.some(
-      (p) => p.providerId === "password",
-    );
-    if (isPasswordUser) return "/verify-email";
-  }
+  if (needsEmailVerification(user)) return "/verify-email";
 
   const uid = user?.uid;
   if (uid) {

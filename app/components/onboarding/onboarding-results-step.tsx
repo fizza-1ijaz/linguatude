@@ -11,6 +11,7 @@ import {
   ONBOARDING_ROUTES,
   readOnboardingState,
 } from "@/app/components/onboarding/onboarding-state";
+import { useDiagnosticSession } from "@/app/components/diagnostic/diagnostic-session-context";
 
 const IELTS_SKILLS = [
   {
@@ -113,6 +114,7 @@ const TONE_CLASS = {
 
 export function OnboardingResultsStep() {
   const router = useRouter();
+  const session = useDiagnosticSession();
   const [exam, setExam] = useState<ExamChoice>(null);
   const [ready, setReady] = useState(false);
 
@@ -142,6 +144,61 @@ export function OnboardingResultsStep() {
   }
 
   const isPte = exam === "pte";
+  const live = session.result;
+
+  const mid = (range: { low: number; high: number } | null | undefined) =>
+    range ? (range.low + range.high) / 2 : null;
+  const num = (v: number | null | undefined, fallback: number) =>
+    typeof v === "number" ? v : fallback;
+
+  const ieltsBands = {
+    reading: num(
+      mid(live?.skills.reading) ?? DIAGNOSTIC_ESTIMATED_BANDS.reading,
+      6,
+    ),
+    writing: num(
+      mid(live?.skills.writing) ?? DIAGNOSTIC_ESTIMATED_BANDS.writing,
+      6,
+    ),
+    listening: num(
+      mid(live?.skills.listening) ?? DIAGNOSTIC_ESTIMATED_BANDS.listening,
+      6,
+    ),
+    speaking: num(
+      mid(live?.skills.speaking) ?? DIAGNOSTIC_ESTIMATED_BANDS.speaking,
+      6,
+    ),
+  };
+
+  const pteScores = {
+    overall: num(
+      mid(live?.overall) ?? DIAGNOSTIC_ESTIMATED_PTE_SCORES.overall,
+      65,
+    ),
+    reading: num(
+      mid(live?.skills.reading) ?? DIAGNOSTIC_ESTIMATED_PTE_SCORES.reading,
+      65,
+    ),
+    writing: num(
+      mid(live?.skills.writing) ?? DIAGNOSTIC_ESTIMATED_PTE_SCORES.writing,
+      65,
+    ),
+    listening: num(
+      mid(live?.skills.listening) ?? DIAGNOSTIC_ESTIMATED_PTE_SCORES.listening,
+      65,
+    ),
+    speaking: num(
+      mid(live?.skills.speaking) ?? DIAGNOSTIC_ESTIMATED_PTE_SCORES.speaking,
+      65,
+    ),
+  };
+
+  const strength =
+    live?.strengths[0] ??
+    "Listening is currently your strongest skill.";
+  const weakness =
+    live?.weaknesses[0] ??
+    "Writing is the area where focused practice can make the biggest difference.";
 
   return (
     <OnboardingWideShell step={8} contentClassName="bg-[#F3F5F9]">
@@ -154,9 +211,20 @@ export function OnboardingResultsStep() {
           <h1 className="mt-4 text-balance text-[1.75rem] font-bold leading-tight text-[#111827] sm:text-[2rem]">
             Here&apos;s where you stand
           </h1>
+          {live?.summary ? (
+            <p className="mt-3 text-sm leading-6 text-[#64748B]">{live.summary}</p>
+          ) : null}
         </header>
 
-        {isPte ? <PteResults /> : <IeltsResults />}
+        {isPte ? (
+          <PteResults scores={pteScores} />
+        ) : (
+          <IeltsResults
+            bands={ieltsBands}
+            strength={strength}
+            weakness={weakness}
+          />
+        )}
 
         <div className="mt-5 rounded-2xl border border-[#EEF0F5] bg-white p-5 shadow-[0_4px_16px_rgba(15,23,42,0.05)] sm:p-6">
           <button
@@ -178,7 +246,21 @@ export function OnboardingResultsStep() {
   );
 }
 
-function PteResults() {
+function PteResults({
+  scores,
+}: {
+  scores: {
+    overall: number;
+    reading: number;
+    writing: number;
+    listening: number;
+    speaking: number;
+  };
+}) {
+  const rows = PTE_ROWS.map((row) => ({
+    ...row,
+    score: Math.round(scores[row.key]),
+  }));
   return (
     <div className="mt-6 flex flex-col gap-3">
       <div className="flex items-start gap-2.5 rounded-2xl bg-[#E8F0FE] px-4 py-3.5">
@@ -188,7 +270,7 @@ function PteResults() {
         </p>
       </div>
 
-      {PTE_ROWS.map((row) => {
+      {rows.map((row) => {
         const tone = TONE_CLASS[row.tone];
         const fill = Math.min(100, Math.max(0, (row.score / 90) * 100));
         return (
@@ -229,7 +311,20 @@ function PteResults() {
   );
 }
 
-function IeltsResults() {
+function IeltsResults({
+  bands,
+  strength,
+  weakness,
+}: {
+  bands: {
+    reading: number;
+    writing: number;
+    listening: number;
+    speaking: number;
+  };
+  strength: string;
+  weakness: string;
+}) {
   return (
     <>
       <p className="mx-auto mt-3 max-w-2xl text-center text-sm leading-6 text-[#64748B]">
@@ -239,7 +334,7 @@ function IeltsResults() {
 
       <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
         {IELTS_SKILLS.map((skill) => {
-          const band = DIAGNOSTIC_ESTIMATED_BANDS[skill.key] ?? 0;
+          const band = bands[skill.key] ?? 0;
           const fill = Math.min(100, Math.max(0, (band / 9) * 100));
           return (
             <article
@@ -280,9 +375,7 @@ function IeltsResults() {
             <p className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-[#15803D]">
               Your strength
             </p>
-            <p className="mt-1 text-sm leading-6 text-[#334155]">
-              Listening is currently your strongest skill.
-            </p>
+            <p className="mt-1 text-sm leading-6 text-[#334155]">{strength}</p>
           </div>
         </article>
 
@@ -294,10 +387,7 @@ function IeltsResults() {
             <p className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-[#C2410C]">
               Focus area
             </p>
-            <p className="mt-1 text-sm leading-6 text-[#334155]">
-              Writing is the area where focused practice can make the biggest
-              difference.
-            </p>
+            <p className="mt-1 text-sm leading-6 text-[#334155]">{weakness}</p>
           </div>
         </article>
       </div>

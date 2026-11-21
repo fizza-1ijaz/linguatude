@@ -70,6 +70,12 @@ export function OnboardingFocusStep() {
   function continueNext() {
     if (!focus) return;
     writeOnboardingState({ focus, focusDone: true });
+    const exam = readOnboardingState().exam;
+    if (exam) {
+      void import("@/lib/onboarding-answers").then(({ saveFocus }) => {
+        saveFocus(exam, focus);
+      });
+    }
     router.push(ONBOARDING_ROUTES.diagnostic);
   }
 

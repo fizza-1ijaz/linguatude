@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
 import {
@@ -8,10 +9,15 @@ import {
   BackToAccount,
   Toggle,
 } from "@/app/components/dashboard/account-shared";
+import { deleteAccount, mapAuthError } from "@/lib/auth";
 import { updateUserProfileFields } from "@/lib/user-profile";
 
 export function AccountPrivacy() {
+  const router = useRouter();
   const [personalised, setPersonalised] = useState(true);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   async function handlePersonalised(next: boolean) {
     setPersonalised(next);
@@ -21,6 +27,19 @@ export function AccountPrivacy() {
       });
     } catch {
       /* local toggle still updates UX */
+    }
+  }
+
+  async function handleDelete() {
+    if (deleting) return;
+    setDeleting(true);
+    setDeleteError(null);
+    try {
+      await deleteAccount();
+      router.replace("/login");
+    } catch (err) {
+      setDeleteError(mapAuthError(err));
+      setDeleting(false);
     }
   }
 
@@ -107,8 +126,82 @@ export function AccountPrivacy() {
             </p>
           </div>
         </section>
+
+        <section className="rounded-2xl border border-[#FECACA] bg-white p-4 shadow-sm sm:p-5">
+          <div className="flex items-start gap-3">
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#FEE2E2] text-[#DC2626]">
+              <TrashIcon />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-bold text-[#141B2B]">Delete my account</p>
+              <p className="mt-0.5 text-sm text-[#64748B]">
+                Permanently delete your account and all data.
+              </p>
+            </div>
+          </div>
+
+          {!confirmDelete ? (
+            <button
+              type="button"
+              onClick={() => setConfirmDelete(true)}
+              className="mt-4 inline-flex h-11 w-full items-center justify-center rounded-xl border border-[#FECACA] bg-[#FEF2F2] text-sm font-semibold text-[#B91C1C] transition hover:bg-[#FEE2E2]"
+            >
+              Delete account
+            </button>
+          ) : (
+            <div className="mt-4 rounded-xl border border-[#FECACA] bg-[#FEF2F2] p-4">
+              <p className="text-sm font-bold text-[#991B1B]">
+                Delete your account?
+              </p>
+              <p className="mt-1 text-sm text-[#7F1D1D]">
+                This cannot be undone. You may need to sign in again if Firebase
+                requires a recent login.
+              </p>
+              {deleteError ? (
+                <p className="mt-3 rounded-lg border border-red-200 bg-white px-3 py-2 text-sm text-red-700">
+                  {deleteError}
+                </p>
+              ) : null}
+              <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+                <button
+                  type="button"
+                  disabled={deleting}
+                  onClick={() => void handleDelete()}
+                  className="inline-flex h-11 flex-1 items-center justify-center rounded-xl bg-[#DC2626] text-sm font-semibold text-white transition hover:bg-[#B91C1C] disabled:opacity-60"
+                >
+                  {deleting ? "Deleting…" : "Yes, delete permanently"}
+                </button>
+                <button
+                  type="button"
+                  disabled={deleting}
+                  onClick={() => {
+                    setConfirmDelete(false);
+                    setDeleteError(null);
+                  }}
+                  className="inline-flex h-11 flex-1 items-center justify-center rounded-xl border border-[#E2E8F0] bg-white text-sm font-semibold text-[#141B2B] transition hover:bg-[#F8FAFC] disabled:opacity-60"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+        </section>
       </div>
     </DashboardShell>
+  );
+}
+
+function TrashIcon() {
+  return (
+    <svg viewBox="0 0 20 20" className="size-5" fill="none" aria-hidden>
+      <path
+        d="M4.5 6.5h11M8 6.5V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1.5M6.5 6.5l.6 9a1.5 1.5 0 0 0 1.5 1.4h3.8a1.5 1.5 0 0 0 1.5-1.4l.6-9"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
 

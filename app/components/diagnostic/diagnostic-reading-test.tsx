@@ -13,8 +13,8 @@ import {
 import {
   ONBOARDING_ROUTES,
   readOnboardingState,
-  writeOnboardingState,
 } from "@/app/components/onboarding/onboarding-state";
+import { useDiagnosticSession } from "@/app/components/diagnostic/diagnostic-session-context";
 
 const SECTION_SECONDS = 3 * 60;
 
@@ -68,18 +68,24 @@ type Answers = Record<string, number | null>;
 
 export function DiagnosticReadingTest() {
   const router = useRouter();
+  const session = useDiagnosticSession();
   const [ready, setReady] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [sectionLeft, setSectionLeft] = useState(SECTION_SECONDS);
   const [answers, setAnswers] = useState<Answers>({
     q1: null,
     q2: null,
     q3: null,
   });
+  const [liveSelected, setLiveSelected] = useState<string | null>(null);
   const endedRef = useRef(false);
 
   useHideScrollbar();
 
-  const allAnswered = QUESTIONS.every((q) => answers[q.id] != null);
+  const live = session.readingContent;
+  const allAnswered = live
+    ? Boolean(liveSelected)
+    : QUESTIONS.every((q) => answers[q.id] != null);
 
   useEffect(() => {
     const state = readOnboardingState();
@@ -105,9 +111,13 @@ export function DiagnosticReadingTest() {
     return () => window.clearInterval(id);
   }, [ready]);
 
-  function submitSection() {
+  async function submitSection() {
+    if (!allAnswered || submitting) return;
+    setSubmitting(true);
     endedRef.current = true;
-    writeOnboardingState({ completed: true });
+    if (session.isLive && liveSelected) {
+      await session.submitReading(liveSelected);
+    }
     router.push(ONBOARDING_ROUTES.diagnosticWriting);
   }
 
@@ -123,8 +133,8 @@ export function DiagnosticReadingTest() {
     <DiagnosticTestShell
       activeSkill="reading"
       sectionLeft={sectionLeft}
-      canSubmit
-      onSubmit={submitSection}
+      canSubmit={allAnswered && !submitting}
+      onSubmit={() => void submitSection()}
     >
       <DiagnosticSectionHeading skill="Reading" section="Section 2 of 4" />
 
@@ -139,15 +149,20 @@ export function DiagnosticReadingTest() {
         <div className="flex flex-col gap-4">
           <article className="rounded-xl border border-[#E5E7EB] bg-white p-5 shadow-sm sm:p-6">
             <h2 className="text-lg font-bold tracking-tight text-[#111827] sm:text-xl">
-              The Rise of Urban Green Spaces
+              {live ? "Reading passage" : "The Rise of Urban Green Spaces"}
             </h2>
             <div className="mt-4 space-y-4 text-sm leading-7 text-[#374151] sm:text-[0.9375rem] sm:leading-7">
-              {PASSAGE_PARAGRAPHS.map((p) => (
-                <p key={p.slice(0, 24)}>{p}</p>
-              ))}
+              {live?.passage
+                ? live.passage.split(/\n\n+/).map((p) => <p key={p.slice(0, 32)}>{p}</p>)
+                : PASSAGE_PARAGRAPHS.map((p) => (
+                    <p key={p.slice(0, 24)}>{p}</p>
+                  ))}
             </div>
             <p className="mt-5 text-xs font-medium text-[#9CA3AF]">
-              Word count: {WORD_COUNT}
+              Word count:{" "}
+              {live?.passage
+                ? live.passage.trim().split(/\s+/).length
+                : WORD_COUNT}
             </p>
           </article>
 
@@ -175,7 +190,9 @@ export function DiagnosticReadingTest() {
                   <QuestionMini className="size-4 shrink-0 text-[#6B7280]" />
                   Questions
                 </span>
-                <span className="font-bold text-[#111827]">3 questions</span>
+                <span className="font-bold text-[#111827]">
+                  {live ? "1 question" : "3 questions"}
+                </span>
               </li>
               <li className="flex items-start justify-between gap-3">
                 <span className="inline-flex items-center gap-2 text-[#374151]">
@@ -204,7 +221,50 @@ export function DiagnosticReadingTest() {
             </p>
 
             <div className="mt-5 flex flex-col gap-6">
-              {QUESTIONS.map((q, qi) => (
+              {live ? (
+                <div>
+                  <div className="flex items-start gap-3">
+                    <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#DBEAFE] text-sm font-bold text-[#1E40AF]">
+                      1
+                    </span>
+                    <p className="pt-0.5 text-sm font-bold leading-6 text-[#111827] sm:text-base">
+                      {live.question}
+                    </p>
+                  </div>
+                  <div className="mt-3 overflow-hidden rounded-xl border border-[#E5E7EB] bg-white">
+                    {live.options.map((opt, oi) => {
+                      const selected = liveSelected === opt.id;
+                      return (
+                        <button
+                          key={opt.id}
+                          type="button"
+                          onClick={() => setLiveSelected(opt.id)}
+                          className={`flex w-full items-center gap-3 px-3.5 py-3.5 text-left transition first:pt-3.5 last:pb-3.5 hover:bg-[#F9FAFB] ${
+                            oi > 0 ? "border-t border-[#E5E7EB]" : ""
+                          } ${selected ? "bg-[#F8FAFF]" : "bg-white"}`}
+                        >
+                          <span
+                            className={`flex size-4 shrink-0 items-center justify-center rounded-full border-2 ${
+                              selected
+                                ? "border-[#2b5ce6] bg-[#2b5ce6]"
+                                : "border-[#CBD5E1] bg-white"
+                            }`}
+                          >
+                            {selected ? (
+                              <span className="size-1.5 rounded-full bg-white" />
+                            ) : null}
+                          </span>
+                          <span className="mr-1 text-sm font-bold text-[#64748B]">
+                            {OPTION_LETTERS[oi] ?? String.fromCharCode(65 + oi)}
+                          </span>
+                          <span className="text-sm text-[#141B2B]">{opt.text}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : (
+              QUESTIONS.map((q, qi) => (
                 <div key={q.id}>
                   <div className="flex items-start gap-3">
                     <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#DBEAFE] text-sm font-bold text-[#1E40AF]">
@@ -248,7 +308,8 @@ export function DiagnosticReadingTest() {
                     })}
                   </div>
                 </div>
-              ))}
+              ))
+              )}
             </div>
           </div>
         </section>

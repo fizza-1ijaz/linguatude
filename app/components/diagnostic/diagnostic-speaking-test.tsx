@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   DiagnosticSectionHeading,
@@ -14,6 +14,7 @@ import {
   ONBOARDING_ROUTES,
   readOnboardingState,
 } from "@/app/components/onboarding/onboarding-state";
+import { useDiagnosticSession } from "@/app/components/diagnostic/diagnostic-session-context";
 
 const SECTION_SECONDS = 2 * 60;
 const PREP_SECONDS = 10;
@@ -23,11 +24,17 @@ type Phase = "prep" | "recording" | "done";
 
 export function DiagnosticSpeakingTest() {
   const router = useRouter();
+  const session = useDiagnosticSession();
   const [ready, setReady] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [sectionLeft, setSectionLeft] = useState(SECTION_SECONDS);
   const [phase, setPhase] = useState<Phase>("prep");
   const [prepLeft, setPrepLeft] = useState(PREP_SECONDS);
   const [recordLeft, setRecordLeft] = useState(RECORD_SECONDS);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<BlobPart[]>([]);
+  const recordedBlobRef = useRef<Blob | null>(null);
+  const recordStartedAt = useRef<number>(0);
 
   useHideScrollbar();
 
@@ -90,20 +97,67 @@ export function DiagnosticSpeakingTest() {
 
   useEffect(() => {
     if (!ready || phase !== "recording") return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        if (cancelled) {
+          stream.getTracks().forEach((t) => t.stop());
+          return;
+        }
+        chunksRef.current = [];
+        const recorder = new MediaRecorder(stream);
+        mediaRecorderRef.current = recorder;
+        recorder.ondataavailable = (e) => {
+          if (e.data.size > 0) chunksRef.current.push(e.data);
+        };
+        recorder.onstop = () => {
+          stream.getTracks().forEach((t) => t.stop());
+          recordedBlobRef.current = new Blob(chunksRef.current, {
+            type: recorder.mimeType || "audio/webm",
+          });
+        };
+        recordStartedAt.current = Date.now();
+        recorder.start();
+      } catch (err) {
+        console.warn("mic permission:", err);
+      }
+    })();
+
     const id = window.setInterval(() => {
       setRecordLeft((t) => {
         if (t <= 1) {
           window.clearInterval(id);
+          mediaRecorderRef.current?.stop();
           setPhase("done");
           return 0;
         }
         return t - 1;
       });
     }, 1000);
-    return () => window.clearInterval(id);
+    return () => {
+      cancelled = true;
+      window.clearInterval(id);
+      if (mediaRecorderRef.current?.state === "recording") {
+        mediaRecorderRef.current.stop();
+      }
+    };
   }, [ready, phase]);
 
-  function finishDiagnostic() {
+  async function finishDiagnostic() {
+    if (submitting) return;
+    setSubmitting(true);
+    if (mediaRecorderRef.current?.state === "recording") {
+      mediaRecorderRef.current.stop();
+      await new Promise((r) => setTimeout(r, 250));
+    }
+    if (session.isLive && recordedBlobRef.current) {
+      const durationMs = Math.max(
+        500,
+        Date.now() - (recordStartedAt.current || Date.now()),
+      );
+      await session.submitSpeaking(recordedBlobRef.current, durationMs);
+    }
     router.push(ONBOARDING_ROUTES.diagnosticAnalysing);
   }
 
@@ -116,13 +170,17 @@ export function DiagnosticSpeakingTest() {
   }
 
   const recording = phase === "recording";
+  const speakingPrompt =
+    session.speakingContent?.question ||
+    session.speakingContent?.readAloud ||
+    "Describe a book that has had a significant impact on your life.";
 
   return (
     <DiagnosticTestShell
       activeSkill="speaking"
       sectionLeft={sectionLeft}
-      canSubmit
-      onSubmit={finishDiagnostic}
+      canSubmit={!submitting}
+      onSubmit={() => void finishDiagnostic()}
       submitLabel="Submit section"
     >
       <DiagnosticSectionHeading skill="Speaking" section="Section 4 of 4" />
@@ -136,8 +194,15 @@ export function DiagnosticSpeakingTest() {
               Speaking Question
             </p>
             <h2 className="mt-2 text-lg font-bold leading-snug text-[#111827] sm:text-xl">
-              Describe a book that has had a significant impact on your life.
+              {speakingPrompt}
             </h2>
+            {session.speakingContent?.points?.length ? (
+              <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-[#64748B]">
+                {session.speakingContent.points.map((p) => (
+                  <li key={p}>{p}</li>
+                ))}
+              </ul>
+            ) : null}
           </div>
 
           <div className="relative grid gap-0 sm:grid-cols-2">

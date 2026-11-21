@@ -9,40 +9,61 @@ import {
 } from "@/app/components/dashboard/account-shared";
 import {
   getUserDisplayName,
+  isPasswordProvider,
   mapAuthError,
+  requestEmailChange,
   updateDisplayName,
 } from "@/lib/auth";
 
 export function AccountProfile() {
   const { user, refreshUser } = useAuth();
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">(
     "idle",
   );
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
 
-  const email = user?.email ?? "";
+  const canChangeEmail = isPasswordProvider(user);
 
   useEffect(() => {
     if (!user) return;
     setName(user.displayName?.trim() || getUserDisplayName(user));
+    setEmail(user.email ?? "");
   }, [user]);
 
   async function handleSave() {
-    const next = name.trim();
-    if (!next) {
+    const nextName = name.trim();
+    const nextEmail = email.trim().toLowerCase();
+    if (!nextName) {
       setErrorMessage("Please enter your full name.");
       setStatus("error");
       return;
     }
 
     setErrorMessage(null);
+    setInfoMessage(null);
     setStatus("saving");
     try {
-      await updateDisplayName(next);
+      const currentName = user?.displayName?.trim() || getUserDisplayName(user);
+      const currentEmail = (user?.email ?? "").trim().toLowerCase();
+      if (nextName !== currentName) {
+        await updateDisplayName(nextName);
+      }
+      let emailLinkSent = false;
+      if (canChangeEmail && nextEmail && nextEmail !== currentEmail) {
+        emailLinkSent = await requestEmailChange(nextEmail);
+      }
       await refreshUser();
+      if (emailLinkSent) {
+        setInfoMessage(
+          `We've sent a verification link to ${nextEmail}. Your current email stays active until you verify.`,
+        );
+        setEmail(currentEmail);
+      }
       setStatus("saved");
-      window.setTimeout(() => setStatus("idle"), 2000);
+      window.setTimeout(() => setStatus("idle"), 2500);
     } catch (err) {
       setStatus("error");
       setErrorMessage(mapAuthError(err));
@@ -90,7 +111,15 @@ export function AccountProfile() {
               {errorMessage}
             </p>
           ) : null}
-          {status === "saved" ? (
+          {infoMessage ? (
+            <p
+              className="mb-4 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-sm text-blue-800"
+              role="status"
+            >
+              {infoMessage}
+            </p>
+          ) : null}
+          {status === "saved" && !infoMessage ? (
             <p
               className="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800"
               role="status"
@@ -119,12 +148,22 @@ export function AccountProfile() {
             <input
               type="email"
               value={email}
-              readOnly
-              className="mt-2 h-11 w-full cursor-not-allowed rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3.5 text-sm text-[#64748B] outline-none"
+              readOnly={!canChangeEmail}
+              onChange={(e) => {
+                if (!canChangeEmail) return;
+                setEmail(e.target.value);
+                if (status === "saved" || status === "error") setStatus("idle");
+              }}
+              className={`mt-2 h-11 w-full rounded-xl border border-[#E2E8F0] px-3.5 text-sm outline-none transition ${
+                canChangeEmail
+                  ? "text-[#141B2B] focus:border-[#2b5ce6]"
+                  : "cursor-not-allowed bg-[#F8FAFC] text-[#64748B]"
+              }`}
             />
             <span className="mt-1.5 block text-xs text-[#94A3B8]">
-              Email comes from your sign-in method and can&apos;t be changed here
-              yet.
+              {canChangeEmail
+                ? "Changing email sends a verification link. Your current email stays active until you verify."
+                : "Email comes from your social sign-in and can’t be changed here."}
             </span>
           </label>
         </section>

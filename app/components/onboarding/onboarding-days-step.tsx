@@ -58,6 +58,12 @@ export function OnboardingDaysStep() {
   function continueNext() {
     if (!days.length) return;
     writeOnboardingState({ studyDays: days, studyDaysDone: true });
+    const exam = readOnboardingState().exam;
+    if (exam) {
+      void import("@/lib/onboarding-answers").then(({ saveStudyDays }) => {
+        saveStudyDays(exam, days);
+      });
+    }
     router.push(ONBOARDING_ROUTES.focus);
   }
 

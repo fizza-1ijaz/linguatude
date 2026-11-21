@@ -2,10 +2,18 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/app/components/auth-provider";
 import { DashboardShell } from "@/app/components/dashboard/dashboard-shell";
 import { AccountHeaderRight } from "@/app/components/dashboard/account-shared";
+import { useDashboardExam } from "@/app/components/dashboard/use-dashboard-exam";
 import { getUserDisplayName } from "@/lib/auth";
+import {
+  ensureEntitlement,
+  entitlementLabel,
+  watchEntitlement,
+} from "@/lib/entitlements";
+import { toExamId } from "@/lib/exam-ids";
 
 const LINKS = [
   { href: "/dashboard/account/profile", label: "Profile", Icon: UserIcon },
@@ -20,10 +28,22 @@ const LINKS = [
 export function AccountSettings() {
   const router = useRouter();
   const { user, signOut } = useAuth();
+  const exam = useDashboardExam();
+  const [planLabel, setPlanLabel] = useState("Loading…");
   const displayName =
     user ? getUserDisplayName(user) : "Your account";
   const email = user?.email ?? "";
   const initial = displayName.charAt(0).toUpperCase();
+  const examId = toExamId(exam === "pte" ? "pte" : "academic") ?? "ielts_ac";
+  const examName = exam === "pte" ? "PTE" : "IELTS";
+
+  useEffect(() => {
+    void ensureEntitlement(examId);
+    const unsub = watchEntitlement(examId, (ent) => {
+      setPlanLabel(`${examName} · ${entitlementLabel(ent)}`);
+    });
+    return () => unsub?.();
+  }, [examId, examName]);
 
   async function handleSignOut() {
     await signOut();
@@ -58,7 +78,7 @@ export function AccountSettings() {
             ) : null}
             <p className="mt-1.5 inline-flex items-center gap-1.5 text-sm font-semibold text-[#2b5ce6]">
               <CrownTiny />
-              IELTS Premium · Annual
+              {planLabel}
             </p>
           </div>
         </section>

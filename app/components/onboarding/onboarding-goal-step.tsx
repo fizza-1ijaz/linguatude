@@ -133,6 +133,28 @@ export function OnboardingGoalStep() {
       previousPteOverall: takenBefore ? pteOverall : null,
       experienceDone: true,
     });
+    const exam = readOnboardingState().exam;
+    if (exam) {
+      const scoresMap: Record<string, number> = {};
+      if (takenBefore) {
+        for (const [k, v] of Object.entries(scores)) {
+          if (typeof v === "number") scoresMap[k] = v;
+        }
+        if (exam === "pte" && pteOverall != null) {
+          scoresMap.overall = pteOverall;
+        }
+        if (exam !== "pte") {
+          const overall = calculatedOverall ?? ieltsOverall;
+          if (overall != null) scoresMap.overall = overall;
+        }
+      }
+      void import("@/lib/onboarding-answers").then(({ savePreviousScore }) => {
+        savePreviousScore(exam, {
+          hadPriorTest: takenBefore,
+          scores: takenBefore && Object.keys(scoresMap).length ? scoresMap : null,
+        });
+      });
+    }
     router.push(ONBOARDING_ROUTES.schedule);
   }
 
